@@ -81,6 +81,27 @@ h2.grp{font-size:17px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid 
 .bc-x{display:flex;gap:6px;margin-top:4px}
 .bc-x span{flex:1;min-width:0;text-align:center;font-size:12px;color:var(--muted)}
 @media (max-width:520px){.bc-v{font-size:10.5px}.bc-plot,.bc-x{gap:3px}}
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
+.fx{flex:1 1 140px;min-width:0;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
+.fx .l{font-size:12.5px;color:var(--muted)}
+.fx .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.fx .s{font-size:12px;color:var(--muted)}
+.fx.hl{background:var(--accent-soft);border-color:var(--accent)}
+.fx.hl .v{color:var(--accent)}
+.fop{flex:none;align-self:center;font-size:22px;font-weight:600;color:var(--muted);width:18px;text-align:center}
+.flow+.flow{margin-top:10px}
+.tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tl{border-left:4px solid var(--oc);padding:4px 0 4px 12px;min-width:0}
+.tl .h{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.tl p{margin:4px 0 0;font-size:15px;line-height:1.55}
+.tl b{font-weight:700}
+.gnote{margin:-6px 0 0 14px;color:var(--muted);font-size:13.5px}
+.jump{display:flex;gap:8px;flex-wrap:wrap}
+@media (max-width:900px){.tldr{grid-template-columns:minmax(0,1fr)}.fop{width:100%;text-align:left;padding-left:8px;font-size:18px}}
+.tip{position:fixed;z-index:30;max-width:300px;background:var(--hero2);color:#fff;font-size:13px;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .12s}
+.tip.on{opacity:1}
+[data-tip]{cursor:help}
+td[data-tip]:hover,.kpi[data-tip]:hover .v,.fx[data-tip]:hover .v{text-decoration:underline dotted;text-underline-offset:4px}
 .g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
@@ -266,26 +287,35 @@ function stackBar(lines,total){
 const capPill=M=>M.plugsSteady>S.plugCap?`<span class="pill bad">Over plug capacity</span>`:M.plugsSteady>S.plugCap*0.85?`<span class="pill warn">Near capacity</span>`:`<span class="pill ok">Within capacity</span>`;
 function opTable(lines,total,unitLabel,div){
   return `<div class="tw"><table><thead><tr><th>Cost element</th><th class="n">Per day</th><th class="n">${unitLabel}</th><th class="n">Share</th></tr></thead>
-    <tbody>${lines.map(l=>`<tr><td><i class="sw" style="background:${l.c}"></i>${l.n}</td><td class="n">${money(l.v,2)}</td><td class="n">${money(div?l.v/div:0,2)}</td><td class="n">${pct(total?l.v/total:0)}</td></tr>`).join('')}</tbody>
+    <tbody>${lines.map(l=>`<tr><td><i class="sw" style="background:${l.c}"></i>${l.n}</td><td class="n" data-tip="${esc(l.n+' for one day')}">${money(l.v,2)}</td><td class="n" data-tip="${esc(money(l.v,2)+' ÷ '+num(div||0,0)+(unitLabel==='Per MT'?' MT a day':' reefers plugged in'))}">${money(div?l.v/div:0,2)}</td><td class="n" data-tip="${esc(money(l.v,2)+' ÷ '+money(total,2)+' total')}">${pct(total?l.v/total:0)}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Total</td><td class="n">${money(total,2)}</td><td class="n">${money(div?total/div:0,2)}</td><td class="n">100.0%</td></tr></tfoot></table></div>`;
+}
+function flow(parts){
+  // parts: boxes {l,v,s,hl} and operator strings ('+','×','÷','=','−')
+  return `<div class="flow">${parts.map(x=>typeof x==='string'?`<span class="fop" aria-hidden="true">${x}</span>`:`<div class="fx${x.hl?' hl':''}" data-tip="${esc(x.t||(x.l+(x.s?': '+x.s:'')))}"><div class="l">${x.l}</div><div class="v">${x.v}</div>${x.s?`<div class="s">${x.s}</div>`:''}</div>`).join('')}</div>`;
 }
 function vSummary(M){
   const T=M.T,R=M.R;
   return `<div><h1 style='font-size:20px'>Two operations on the dock</h1>
   <p class="lede">Transshipment moves ${num(S.mtPerDay,0)} MT a day with ${M.L.n} employees (${M.L.nE} expat, ${M.L.nL} local) over ${S.hoursPerDay} hours. The reefer plug operation keeps ${num(S.reeferMT,0)} MT in ${M.boxes} containers frozen at ${SP()} for ${M.prof.length} days. Each operation carries its own costs and is priced on its own unit.</p></div>
+  ${(()=>{const has=S.pricePerMT>0,beM=has?sumM(T.lines)/S.pricePerMT:0,capM=S.mtPerDay*S.opDaysMonth;return `<section class="panel"><div class="ph"><h2>At a glance</h2><span class="sub">what the numbers below are saying</span></div><div class="tldr">
+    <div class="tl" style="--oc:var(--t1)"><div class="h">Transshipment</div><p>Moving <b>${num(S.mtPerDay,0)} MT</b> a day costs <b>${money(T.total,2)}</b>, which is <b>${money(T.perMT,2)} per MT</b>. Charge at least this per MT to cover crew, dock and equipment.</p></div>
+    <div class="tl" style="--oc:var(--t3)"><div class="h">Reefer plug</div><p>Keeping <b>${M.boxes} reefers</b> frozen for ${M.prof.length} days costs <b>${money(R.batch)}</b>, which is <b>${money(R.perPlugDay,2)} per container per day</b>. ${M.plugsSteady>S.plugCap?'<b>This is more reefers than the '+S.plugCap+' plug points.</b>':'This uses '+M.plugsSteady+' of the '+S.plugCap+' plug points.'}</p></div>
+    <div class="tl" style="--oc:var(--t4)"><div class="h">Break-even</div><p>${has?`At <b>${money(S.pricePerMT,2)} per MT</b>, transshipment breaks even at <b>${num(beM,0)} MT a month</b> (${num(beM*12,0)} MT a year), or ${pct(capM?beM/capM:0)} of capacity.`:`Enter your transshipment price on the <b>Pricing</b> tab to see how many MT a month you need to break even.`}</p></div>
+  </div></section>`})()}
   <div class="g2">
     <section class="panel op" style="--oc:var(--t1)"><div class="ph"><h2>Transshipment operation</h2><span class="sub">priced per MT handled</span></div>
       <div class="kpis kp2">
-        <div class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">labor, depreciation, other</div><button class="go" data-go="trans">View details →</button></div>
-        <div class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${money(T.month,0)} a month</div><button class="go" data-go="trans">View details →</button></div>
+        <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">labor, depreciation, other</div><button class="go" data-go="trans">View details →</button></div>
+        <div data-tip="${esc('Labor '+money(T.lines[0].v,2)+' + depreciation '+money(T.lines[1].v,2)+' + other '+money(T.lines[2].v,2))}" class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${money(T.month,0)} a month</div><button class="go" data-go="trans">View details →</button></div>
       </div>
       ${stackBar(T.lines,T.total)}
       ${opTable(T.lines,T.total,'Per MT',S.mtPerDay)}
     </section>
     <section class="panel op" style="--oc:var(--t3)"><div class="ph"><h2>Reefer plug operation</h2><span class="sub">priced per container per day plugged in</span></div>
       <div class="kpis kp2">
-        <div class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">per day: ${money(M.pullDayCost,2)} pull-down · ${money(M.holdDayCost,2)} frozen</div><button class="go" data-go="reefer">View details →</button></div>
-        <div class="kpi k4"><div class="l">Reefers plugged in</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT · ${capPill(M)}</div><button class="go" data-go="settings">View details →</button></div>
+        <div data-tip="${esc(money(R.total,2)+' average cost per day ÷ '+M.boxes+' reefers plugged in')}" class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">per day: ${money(M.pullDayCost,2)} pull-down · ${money(M.holdDayCost,2)} frozen</div><button class="go" data-go="reefer">View details →</button></div>
+        <div data-tip="${esc(num(S.reeferMT,0)+' MT ÷ '+S.mtPerBox+' MT per 40-ft reefer, rounded up = '+M.boxes+' reefers, against '+S.plugCap+' plug points')}" class="kpi k4"><div class="l">Reefers plugged in</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT · ${capPill(M)}</div><button class="go" data-go="settings">View details →</button></div>
       </div>
       ${stackBar(R.lines,R.total)}
       ${opTable(R.lines,R.total,'Per plug-day',M.plugsSteady)}
@@ -309,7 +339,7 @@ function barChart(rows,valKey,labelFn,colorFn,fmt,unit){
 function assetTable(M,op){
   const rows=M.assets.filter(a=>(a.op||'t')===op);
   return `<div class="tw"><table><thead><tr><th>Asset</th><th class="n">Cost</th><th class="n">Life</th><th class="n">Per year</th><th class="n">Share</th><th class="n">Per day</th></tr></thead><tbody>
-    ${rows.map(a=>`<tr><td>${esc(a.n||'Unnamed')}</td><td class="n">${money(+a.cost||0,0)}</td><td class="n">${a.life} yrs</td><td class="n">${money(a.yr)}</td><td class="n">${a.share??100}%</td><td class="n">${money(a.day,2)}</td></tr>`).join('')||'<tr><td colspan="6" class="sub">No assets assigned to this operation</td></tr>'}
+    ${rows.map(a=>`<tr><td>${esc(a.n||'Unnamed')}</td><td class="n">${money(+a.cost||0,0)}</td><td class="n">${a.life} yrs</td><td class="n" data-tip="${esc('('+money(+a.cost||0)+' − '+money(+a.salvage||0)+' salvage) ÷ '+a.life+' years')}">${money(a.yr)}</td><td class="n">${a.share??100}%</td><td class="n" data-tip="${esc(money(a.yr)+' ÷ '+S.dockDays+' days × '+(a.share??100)+'%')}">${money(a.day,2)}</td></tr>`).join('')||'<tr><td colspan="6" class="sub">No assets assigned to this operation</td></tr>'}
   </tbody><tfoot><tr><td colspan="3">Total</td><td class="n">${money(rows.reduce((t,a)=>t+a.yr,0))}</td><td></td><td class="n">${money(rows.reduce((t,a)=>t+a.day,0),2)}</td></tr></tfoot></table></div>`;
 }
 function otherTable(op){
@@ -319,17 +349,20 @@ function otherTable(op){
 }
 function totalsTable(lines,total,unit,div){
   return `<div class="tw"><table><thead><tr><th>Element</th><th class="n">Per day</th><th class="n">Per month</th><th class="n">Per year</th><th class="n">${unit}</th></tr></thead>
-    <tbody>${lines.map(l=>`<tr><td>${l.n}</td><td class="n">${money(l.v,2)}</td><td class="n">${money(lineM(l))}</td><td class="n">${money(lineM(l)*12)}</td><td class="n">${money(div?l.v/div:0,2)}</td></tr>`).join('')}</tbody>
+    <tbody>${lines.map(l=>`<tr><td>${l.n}</td><td class="n">${money(l.v,2)}</td><td class="n" data-tip="${esc(l.dep?money(l.v*S.dockDays)+' a year ÷ 12':money(l.v,2)+' a day × '+S.opDaysMonth+' operating days')}">${money(lineM(l))}</td><td class="n" data-tip="${esc(money(lineM(l))+' a month × 12')}">${money(lineM(l)*12)}</td><td class="n">${money(div?l.v/div:0,2)}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Total</td><td class="n">${money(total,2)}</td><td class="n">${money(sumM(lines))}</td><td class="n">${money(sumM(lines)*12)}</td><td class="n">${money(div?total/div:0,2)}</td></tr></tfoot></table></div>`;
 }
 function vTrans(M){
   const L=M.L,T=M.T;
   return `<div><h1>Transshipment operation</h1><p class="lede">Moving ${num(S.mtPerDay,0)} MT a day across the dock: crew, the dock and handling equipment. Costed per MT handled.</p></div>
+  <section class="panel"><div class="ph"><h2>How the cost per MT is worked out</h2><span class="sub">per operating day</span></div>
+    ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'fuel, utilities…'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
+  </section>
   <div class="kpis">
-    <div class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">break-even transshipment price</div></div>
-    <div class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${num(S.mtPerDay,0)} MT · ${S.hoursPerDay} hrs</div></div>
-    <div class="kpi k3"><div class="l">Labor per day</div><div class="v">${money(L.perDay,2)}</div><div class="s">${L.nE} expat + ${L.nL} local × ${S.hoursPerDay} hrs</div></div>
-    <div class="kpi k5"><div class="l">Depreciation per day</div><div class="v">${money(T.lines[1].v,2)}</div><div class="s">dock and handling equipment</div></div>
+    <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">break-even transshipment price</div></div>
+    <div data-tip="${esc('Labor '+money(T.lines[0].v,2)+' + depreciation '+money(T.lines[1].v,2)+' + other '+money(T.lines[2].v,2))}" class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${num(S.mtPerDay,0)} MT · ${S.hoursPerDay} hrs</div></div>
+    <div data-tip="${esc(L.nE+' expat × '+S.hoursPerDay+' hrs × '+money(L.rateE,4)+' + '+L.nL+' local × '+S.hoursPerDay+' hrs × '+money(L.rateL,4)+(L.otPremium?' + overtime premium '+money(L.otPremium,2):''))}" class="kpi k3"><div class="l">Labor per day</div><div class="v">${money(L.perDay,2)}</div><div class="s">${L.nE} expat + ${L.nL} local × ${S.hoursPerDay} hrs</div></div>
+    <div data-tip="${esc('Each asset: (cost − salvage) ÷ useful life ÷ '+S.dockDays+' days × share charged to transshipment')}" class="kpi k5"><div class="l">Depreciation per day</div><div class="v">${money(T.lines[1].v,2)}</div><div class="s">dock and handling equipment</div></div>
   </div>
   <div class="g2">
   <section class="panel"><div class="ph"><h2>Labor</h2><span class="sub">PII Shipping fully burdened crew rate</span></div>
@@ -353,17 +386,21 @@ function vReefer(M){
   const ph=r=>r.phase==='pull'?'var(--t5)':r.phase==='hold'?'var(--c-power)':'var(--c-mute)';
   return `<div><h1>Reefer plug operation</h1>
   <p class="lede">Keeping containers frozen on the dock until the carrier loads them. A 40-ft reefer draws the most power in its first days, while the compressor pulls the fish down to ${SP()}. Once it reaches set point the compressor cycles and the draw drops. Costed per container per day plugged in.</p></div>
+  <section class="panel"><div class="ph"><h2>How the reefer plug charge is worked out</h2><span class="sub">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT per 40-ft = ${M.boxes} containers, ${M.prof.length} days each</span></div>
+    ${flow([{l:'Power per container',v:money(M.costBox),s:`${num(M.kwhBox,0)} kWh over ${M.prof.length} days`},'×',{l:'Containers',v:M.boxes,s:'plugged in together'},'+',{l:'Depreciation & other',v:money(R.batch-M.powerBatch),s:`for ${M.prof.length} days`},'=',{l:'Cost of the batch',v:money(R.batch)}])}
+    ${flow([{l:'Cost of the batch',v:money(R.batch)},'÷',{l:'Plug-days',v:M.boxes*M.prof.length,s:`${M.boxes} containers × ${M.prof.length} days`},'=',{l:'Cost per plug-day',v:money(R.perPlugDay,2),s:'break-even plug charge',hl:1}])}
+  </section>
   <div class="kpis">
-    <div class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">break-even plug charge (average)</div></div>
-    <div class="kpi k1"><div class="l">Cost per container</div><div class="v">${money(R.perBox)}</div><div class="s">for the full ${M.prof.length}-day stay</div></div>
-    <div class="kpi k2"><div class="l">Cost of the batch</div><div class="v">${money(R.batch)}</div><div class="s">${M.boxes} containers × ${M.prof.length} days · ${money(R.total,2)} a day on average</div></div>
-    <div class="kpi k4"><div class="l">Plug points used</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${capPill(M)}</div></div>
+    <div data-tip="${esc(money(R.total,2)+' average cost per day ÷ '+M.boxes+' reefers plugged in')}" class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">break-even plug charge (average)</div></div>
+    <div data-tip="${esc('Batch cost '+money(R.batch)+' ÷ '+M.boxes+' containers. Power alone is '+money(M.costBox)+' per container')}" class="kpi k1"><div class="l">Cost per container</div><div class="v">${money(R.perBox)}</div><div class="s">for the full ${M.prof.length}-day stay</div></div>
+    <div data-tip="${esc('Average '+money(R.total,2)+' a day × '+M.prof.length+' days on plug')}" class="kpi k2"><div class="l">Cost of the batch</div><div class="v">${money(R.batch)}</div><div class="s">${M.boxes} containers × ${M.prof.length} days · ${money(R.total,2)} a day on average</div></div>
+    <div data-tip="${esc(M.plugsSteady+' reefers on plug compared with the '+S.plugCap+' plug points on the dock')}" class="kpi k4"><div class="l">Plug points used</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${capPill(M)}</div></div>
   </div>
   <section class="panel"><div class="ph"><h2>Daily power cost per container, by day on plug</h2><span class="sub">each bar = cost for one full day (24 hours) · ${num(M.kwhBox,0)} kWh · ${money(M.costBox)} per container · MEC ${money(S.rate,4)}/kWh</span></div>
     ${barChart(M.prof,'cost',r=>'Day '+r.d,ph,v=>money(v,0),'Power cost per day, one container')}
     <div class="legend" style="margin-top:6px"><span><i class="sw" style="background:var(--t5)"></i>Pull-down</span><span><i class="sw" style="background:var(--c-mute)"></i>Cooling to ${SP()}</span><span><i class="sw" style="background:var(--c-power)"></i>Holding at ${SP()}</span></div>
     <div class="tw" style="margin-top:12px"><table><thead><tr><th>Day</th><th>Stage</th><th class="n">Power draw<br>kW (per hour)</th><th class="n">Power cost<br>per hour</th><th class="n">Energy per day<br>kWh (24 hrs, incl. ${S.lossPct}% losses)</th><th class="n">Power cost<br>per day</th></tr></thead>
-    <tbody>${M.prof.map(r=>`<tr><td>Day ${r.d}</td><td>${r.label}</td><td class="n">${num(r.kw,2)}</td><td class="n">${money(r.cost/24,2)}</td><td class="n">${num(r.kwh,0)}</td><td class="n">${money(r.cost,2)}</td></tr>`).join('')}</tbody>
+    <tbody>${M.prof.map(r=>`<tr><td>Day ${r.d}</td><td>${r.label}</td><td class="n" data-tip="${esc(r.label+': average power drawn each hour')}">${num(r.kw,2)}</td><td class="n" data-tip="${esc(num(r.kw,2)+' kW × (1 + '+S.lossPct+'% losses) × '+money(S.rate,4)+' per kWh')}">${money(r.cost/24,2)}</td><td class="n" data-tip="${esc(num(r.kw,2)+' kW × 24 hrs × (1 + '+S.lossPct+'% losses)')}">${num(r.kwh,0)}</td><td class="n" data-tip="${esc(num(r.kwh,1)+' kWh × '+money(S.rate,4)+' per kWh')}">${money(r.cost,2)}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td colspan="4">Per container, full ${M.prof.length}-day stay</td><td class="n">${num(M.kwhBox,0)}</td><td class="n">${money(M.costBox)}</td></tr></tfoot></table></div>
   </section>
   <section class="panel"><div class="ph"><h2>Daily power cost for all ${M.boxes} containers</h2><span class="sub">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT per 40-ft = ${M.boxes} containers, plugged in together · each bar = one full day</span></div>
@@ -389,13 +426,13 @@ function beVolume(M){
   const has=S.pricePerMT>0, x=be(S.pricePerMT), minPrice=capM?costM/capM:0;
   return `<section class="panel" style="border-top:3px solid var(--t1)"><div class="ph"><h2>Transshipment break-even</h2><span class="sub">based on estimated operating cost${has?' · at your price of '+money(S.pricePerMT,2)+'/MT':''}</span></div>
     <div class="kpis">
-      <div class="kpi k2"><div class="l">Operating cost</div><div class="v">${money(costM)} <span class="sub">/ month</span></div><div class="s">${money(costY)} a year · labor ${money(lab*12)} · depreciation ${money(dep*12)}${oth?' · other '+money(oth*12):''} a year</div></div>
-      <div class="kpi k1"><div class="l">Break-even per month</div><div class="v">${has?num(x,0)+' MT':'—'}</div><div class="s">${has?num(x/days,0)+' MT a day over '+days+' days':'enter a transshipment price on Pricing'}</div></div>
-      <div class="kpi k3"><div class="l">Break-even per year</div><div class="v">${has?num(x*12,0)+' MT':'—'}</div><div class="s">${has?pct(util(x))+' of '+num(capY,0)+' MT capacity · '+pill(x):'capacity '+num(capY,0)+' MT a year'}</div></div>
-      <div class="kpi k5"><div class="l">Lowest price at full capacity</div><div class="v">${money(minPrice,2)}</div><div class="s">per MT, moving ${num(capM,0)} MT a month</div></div>
+      <div data-tip="${esc('Labor '+money(lab)+' + depreciation '+money(dep)+' + other '+money(oth)+' a month. × 12 = '+money(costY)+' a year')}" class="kpi k2"><div class="l">Operating cost</div><div class="v">${money(costM)} <span class="sub">/ month</span></div><div class="s">${money(costY)} a year · labor ${money(lab*12)} · depreciation ${money(dep*12)}${oth?' · other '+money(oth*12):''} a year</div></div>
+      <div data-tip="${esc(has?money(costM)+' monthly cost ÷ '+money(S.pricePerMT,2)+' per MT':'Monthly cost ÷ your price per MT')}" class="kpi k1"><div class="l">Break-even per month</div><div class="v">${has?num(x,0)+' MT':'—'}</div><div class="s">${has?num(x/days,0)+' MT a day over '+days+' days':'enter a transshipment price on Pricing'}</div></div>
+      <div data-tip="${esc(has?num(x,0)+' MT a month × 12':'Break-even per month × 12')}" class="kpi k3"><div class="l">Break-even per year</div><div class="v">${has?num(x*12,0)+' MT':'—'}</div><div class="s">${has?pct(util(x))+' of '+num(capY,0)+' MT capacity · '+pill(x):'capacity '+num(capY,0)+' MT a year'}</div></div>
+      <div data-tip="${esc(money(costM)+' monthly cost ÷ '+num(capM,0)+' MT capacity a month')}" class="kpi k5"><div class="l">Lowest price at full capacity</div><div class="v">${money(minPrice,2)}</div><div class="s">per MT, moving ${num(capM,0)} MT a month</div></div>
     </div>
     <div class="tw" style="margin-top:14px"><table><thead><tr><th>Price per MT</th><th class="n">Break-even MT / month</th><th class="n">Break-even MT / year</th><th class="n">MT / day</th><th class="n">Share of capacity</th><th></th></tr></thead><tbody>
-      ${prices.map(p=>{const v=be(p);return `<tr${p===+S.pricePerMT?' style="background:var(--accent-soft)"':''}><td>${money(p,2)}${p===+S.pricePerMT?' <span class="sub">your price</span>':''}</td><td class="n">${num(v,0)}</td><td class="n">${num(v*12,0)}</td><td class="n">${num(v/days,0)}</td><td class="n">${pct(util(v))}</td><td class="n">${pill(v)}</td></tr>`}).join('')}
+      ${prices.map(p=>{const v=be(p);return `<tr${p===+S.pricePerMT?' style="background:var(--accent-soft)"':''}><td>${money(p,2)}${p===+S.pricePerMT?' <span class="sub">your price</span>':''}</td><td class="n" data-tip="${esc(money(costM)+' monthly cost ÷ '+money(p,2)+' per MT')}">${num(v,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT a month × 12')}">${num(v*12,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT ÷ '+days+' operating days')}">${num(v/days,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT ÷ '+num(capM,0)+' MT capacity a month')}">${pct(util(v))}</td><td class="n">${pill(v)}</td></tr>`}).join('')}
     </tbody></table></div>
     <p class="sub" style="margin:10px 0 0">The crew, dock and equipment cost the same however much cargo moves, so break-even tonnage = operating cost ÷ price per MT. Labor and other costs use ${days} operating days a month; depreciation is the full annual amount (÷ 12 for a month). Capacity is ${num(S.mtPerDay,0)} MT a day. Reefer plug income is separate and not counted here.</p>
   </section>`;
@@ -414,8 +451,8 @@ function vPricing(M){
   const card=(k,title,unit,be,price,has,marginDay,rev,beNote)=>`<section class="panel" style="border-top:3px solid var(--${k})">
     <div class="ph"><h2>${title}</h2><span class="sub">${unit}</span></div>
     <div class="kpis" style="grid-template-columns:repeat(2,minmax(0,1fr))">
-      <div class="kpi k1"><div class="l">Break-even price</div><div class="v">${money(be,2)}</div><div class="s">${beNote}</div></div>
-      <div class="kpi k4"><div class="l">Margin per day</div><div class="v ${has?cls(marginDay):''}">${has?money(marginDay,2):'—'}</div><div class="s">${has?mp(marginDay,rev)+' of '+money(rev,0)+' revenue':'enter a price above'}</div></div>
+      <div data-tip="${esc(beNote)}" class="kpi k1"><div class="l">Break-even price</div><div class="v">${money(be,2)}</div><div class="s">${beNote}</div></div>
+      <div data-tip="${esc('(Your price − break-even price) × units a day')}" class="kpi k4"><div class="l">Margin per day</div><div class="v ${has?cls(marginDay):''}">${has?money(marginDay,2):'—'}</div><div class="s">${has?mp(marginDay,rev)+' of '+money(rev,0)+' revenue':'enter a price above'}</div></div>
     </div>
   </section>`;
   return `<div><h1>Pricing &amp; margin</h1><p class="lede">Transshipment and the reefer plug charge are costed and priced separately. Transshipment carries its labor, assets and other costs per MT. The reefer plug charge carries MEC power plus its own assets and other costs for each day a container is plugged in.</p></div>
@@ -426,11 +463,18 @@ function vPricing(M){
       ${field('vesselMT','Vessel to quote','MT','1')}
     </div>
   </section>
+  <section class="panel"><div class="ph"><h2>Margin at a glance</h2><span class="sub">your price less the cost</span></div>
+    ${flow([{l:'Transshipment price',v:hasT?money(S.pricePerMT,2):'—',s:'per MT'},'−',{l:'Cost',v:money(tBE,2),s:'per MT'},'=',{l:'Margin per MT',v:hasT?money(S.pricePerMT-tBE,2):'—',s:hasT?mp(S.pricePerMT-tBE,S.pricePerMT)+' of price':'enter a price',hl:1},'×',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'a day'},'=',{l:'Margin per day',v:hasT?money(tM,2):'—'}])}
+    ${flow([{l:'Reefer plug charge',v:hasR?money(S.plugPricePerDay,2):'—',s:'per plug-day'},'−',{l:'Cost',v:money(rBE,2),s:'per plug-day'},'=',{l:'Margin per plug-day',v:hasR?money(S.plugPricePerDay-rBE,2):'—',s:hasR?mp(S.plugPricePerDay-rBE,S.plugPricePerDay)+' of price':'enter a price',hl:1},'×',{l:'Reefers',v:plugDays,s:'plugged in'},'=',{l:'Margin per day',v:hasR?money(rM,2):'—'}])}
+  </section>
+  <h2 class="grp" style="--oc:var(--t1)">Break-even price by operation</h2>
   <div class="g2">
     ${card('t1','Transshipment','per MT handled',tBE,S.pricePerMT,hasT,tM,tRev,'transshipment operation cost per MT')}
     ${card('t3','Reefer plug charge','per plug-day',rBE,S.plugPricePerDay,hasR,rM,rRev,'reefer plug operation cost per container per day')}
   </div>
+<h2 class="grp" style="--oc:var(--t4)">Break-even volume</h2>
 ${beVolume(M)}
+  <h2 class="grp" style="--oc:var(--t2)">Margin, target prices and quotes</h2>
   <section class="panel"><div class="ph"><h2>Margin by service</h2><span class="sub">steady operation, ${num(S.mtPerDay,0)} MT and ${plugDays} plug-days a day</span></div>
     <div class="tw"><table><thead><tr><th></th><th class="n">Transshipment</th><th class="n">Reefer plug charge</th><th class="n">Combined</th></tr></thead><tbody>
       <tr><td>Billing unit</td><td class="n">${num(S.mtPerDay,0)} MT a day</td><td class="n">${plugDays} plug-days a day (${M.boxes} containers)</td><td class="n"></td></tr>
@@ -469,7 +513,9 @@ function vSettings(M){
   return `<div class="ph" style="margin:0"><div><h1>Considerations</h1><p class="lede">Every assumption behind the costing. Changes apply immediately and are kept in this browser.</p></div>
     <div class="bar"><button class="btn pri" id="saveDefBtn">Save current as my defaults</button><button class="btn" id="resetBtn">Reset to defaults</button></div></div>
   <div id="resetConfirm" hidden class="note">Reset every consideration to its default? <button class="btn sm pri" id="resetYes">Reset</button> <button class="btn sm" id="resetNo">Cancel</button></div>
-  <h2 class="grp" style="--oc:var(--t1)">Transshipment operation</h2>
+  <div class="jump"><span class="sub" style="align-self:center">Go to:</span><button class="btn sm" data-jump="g-trans">Transshipment operation</button><button class="btn sm" data-jump="g-reefer">Reefer plug operation</button><button class="btn sm" data-jump="g-shared">Shared</button></div>
+  <h2 class="grp" id="g-trans" style="--oc:var(--t1)">Transshipment operation</h2>
+  <p class="gnote">These drive the cost per MT: tonnage, crew, labor rates, dock and equipment.</p>
   <section class="panel"><div class="ph"><h2>Operations</h2></div><div class="fgrid">
     ${field('mtPerDay','Tonnage transshipped','MT / day','1')}
     ${field('hoursPerDay','Working hours','hrs / day','0.5')}
@@ -491,7 +537,8 @@ function vSettings(M){
   </div></section>
   ${assetPanel(M,'t')}
   ${otherPanel('t')}
-  <h2 class="grp" style="--oc:var(--t3)">Reefer plug operation</h2>
+  <h2 class="grp" id="g-reefer" style="--oc:var(--t3)">Reefer plug operation</h2>
+  <p class="gnote">These drive the cost per plug-day: how much fish is on plug, for how long, how cold, and MEC's rate.</p>
   <section class="panel"><div class="ph"><h2>Reefer plug power</h2><span class="sub">per 40-ft reefer, frozen at ${SP()}</span></div><div class="fgrid">
     ${field('rate','MEC power rate','$ / kWh','0.0001','Commercial rate from PII MEC Power Billing')}
     ${field('reeferMT','Reefer cargo on plug','MT','1','Total fish held in reefers at one time; '+M.boxes+' containers')}
@@ -508,7 +555,8 @@ function vSettings(M){
   </div></section>
   ${assetPanel(M,'r')}
   ${otherPanel('r')}
-  <h2 class="grp" style="--oc:var(--muted)">Shared</h2>
+  <h2 class="grp" id="g-shared" style="--oc:var(--muted)">Shared</h2>
+  <p class="gnote">Applies to both operations.</p>
   <section class="panel"><div class="ph"><h2>Depreciation basis</h2></div><div class="fgrid">${field('dockDays','Days a year','days','1','365 spreads depreciation over calendar days; enter operating days to recover it all from operations')}</div></section>`;
 }
 function assetPanel(M,op){
@@ -573,6 +621,7 @@ $('#app').addEventListener('change',e=>{
 $('#app').addEventListener('click',e=>{
   const go=e.target.closest('[data-go]');if(go){view=go.dataset.go;render();window.scrollTo(0,0);return}
   const nm=()=>($('#saveName')?.value||'').trim();
+  if(e.target.dataset.jump){document.getElementById(e.target.dataset.jump)?.scrollIntoView({behavior:'smooth',block:'start'});return}
   if(e.target.id==='saveNew'){saveComputation(nm());return}
   if(e.target.id==='saveOver'&&loaded){saveComputation(nm()||loaded.name,loaded.id);return}
   if(e.target.dataset.load){loadComputation(e.target.dataset.load);return}
@@ -667,6 +716,14 @@ function copyCosting(){
 $('#saveCompBtn').addEventListener('click',()=>{view='saved';render();window.scrollTo(0,0);setTimeout(()=>$('#saveName')?.focus(),0)});
 $('#copyBtn').addEventListener('click',copyCosting);$('#copyBtn2').addEventListener('click',copyCosting);
 $('#themeBtn').addEventListener('click',()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('pii-transship-theme',r.dataset.theme)}catch(e){}render()});
+/* hover explanations for numbers */
+const TIP=document.createElement('div');TIP.className='tip';TIP.setAttribute('role','tooltip');document.body.appendChild(TIP);
+let tipEl=null;
+function placeTip(x,y){const r=TIP.getBoundingClientRect(),W=innerWidth,H=innerHeight;let l=x+14,t=y+16;if(l+r.width>W-8)l=W-r.width-8;if(t+r.height>H-8)t=y-r.height-12;TIP.style.left=Math.max(8,l)+'px';TIP.style.top=Math.max(8,t)+'px'}
+document.addEventListener('mouseover',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');if(el===tipEl)return;tipEl=el;if(!el||!el.dataset.tip){TIP.classList.remove('on');return}TIP.textContent=el.dataset.tip;TIP.classList.add('on');placeTip(e.clientX,e.clientY)});
+document.addEventListener('mousemove',e=>{if(tipEl)placeTip(e.clientX,e.clientY)});
+document.addEventListener('scroll',()=>{tipEl=null;TIP.classList.remove('on')},true);
+document.addEventListener('touchstart',e=>{const el=e.target.closest&&e.target.closest('[data-tip]');if(!el){TIP.classList.remove('on');tipEl=null;return}const t=e.touches[0];tipEl=el;TIP.textContent=el.dataset.tip;TIP.classList.add('on');placeTip(t.clientX,t.clientY)},{passive:true});
 let tt;function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('on'),2600)}
 render();
 </script>
