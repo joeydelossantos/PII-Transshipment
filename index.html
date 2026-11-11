@@ -38,6 +38,8 @@ header{padding-block:14px 0}
 .hside{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:0}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .tab{background:transparent;border:1px solid rgba(255,255,255,.75);color:#fff;font:600 14.5px var(--font);padding:6px 12px;border-radius:7px;cursor:pointer;white-space:nowrap}
+.tg{align-self:center;font-size:11.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--hero-muted);margin-left:8px}
+.tg:first-child{margin-left:0}
 .tab[aria-selected="true"]{background:#fff;color:#1A1850;border-color:#fff}
 .hmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:14px;color:var(--hero-muted)}
 .chip{font-size:13px;font-weight:600;color:#4ADE80;border:1px solid #4ADE80;border-radius:99px;padding:1px 9px}
@@ -81,6 +83,16 @@ h2.grp{font-size:17px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid 
 .bc-x{display:flex;gap:6px;margin-top:4px}
 .bc-x span{flex:1;min-width:0;text-align:center;font-size:12px;color:var(--muted)}
 @media (max-width:520px){.bc-v{font-size:10.5px}.bc-plot,.bc-x{gap:3px}}
+.filters{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end}
+.filters label.f{flex:0 1 300px}
+.filters>.bar{margin-left:auto}
+.steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.step{display:flex;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--fg)}
+.step:hover{border-color:var(--accent)}
+.step b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:700}
+.step span{font-size:13px;color:var(--muted);line-height:1.35;min-width:0}
+.step strong{display:block;font-size:14.5px;color:var(--fg);font-weight:600}
+@media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
 .fx{flex:1 1 140px;min-width:0;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
 .fx .l{font-size:12.5px;color:var(--muted)}
@@ -169,21 +181,24 @@ input[type=number]{text-align:right}
       </div>
       <div class="hside">
         <nav class="tabs" role="tablist">
+          <span class="tg">Estimate</span>
           <button class="tab" role="tab" data-v="summary" aria-selected="true">Dashboard</button>
           <button class="tab" role="tab" data-v="trans">Transshipment</button>
           <button class="tab" role="tab" data-v="reefer">Reefer Plug</button>
           <button class="tab" role="tab" data-v="pricing">Pricing</button>
-          <button class="tab" role="tab" data-v="settings">Considerations</button>
+          <span class="tg">Actual</span>
           <button class="tab" role="tab" data-v="history">Billing History</button>
-          <button class="tab" role="tab" data-v="histcost">Historical Cost</button>
           <button class="tab" role="tab" data-v="customers">Customers</button>
+          <button class="tab" role="tab" data-v="histcost">Historical Cost</button>
+          <span class="tg">Setup</span>
+          <button class="tab" role="tab" data-v="settings">Considerations</button>
           <button class="tab" role="tab" data-v="saved">Saved</button>
         </nav>
         <div class="hmeta"><span class="chip">Live</span><span id="hstat"></span></div>
-        <div class="hmeta"><button class="hbtn" id="themeBtn">Dark mode</button><button class="hlink" id="copyBtn">Copy costing for Excel</button></div>
+        <div class="hmeta"><button class="hbtn" id="themeBtn">Dark mode</button></div>
       </div>
     </div>
-    <div class="ctx"><b>Basis</b><span class="sel" id="basis"></span><span class="sub" id="basis2"></span><span class="dash" id="loadedTag">Estimate</span><span class="grow"></span><button class="btn" id="saveCompBtn">Save computation</button><button class="lav" id="copyBtn2">Copy costing for Excel</button></div>
+    <div class="ctx"><b id="basisLbl">Basis</b><span class="sel" id="basis"></span><span class="sub" id="basis2"></span><span class="dash" id="loadedTag">Estimate</span><span class="grow"></span><button class="btn" id="saveCompBtn">Save computation</button><button class="lav" id="copyBtn2">Copy costing for Excel</button></div>
   </div>
 </header>
 
@@ -319,15 +334,31 @@ function flow(parts){
   // parts: boxes {l,v,s,hl} and operator strings ('+','×','÷','=','−')
   return `<div class="flow">${parts.map(x=>typeof x==='string'?`<span class="fop" aria-hidden="true">${x}</span>`:`<div class="fx${x.hl?' hl':''}" data-tip="${esc(x.t||(x.l+(x.s?': '+x.s:'')))}"><div class="l">${x.l}</div><div class="v">${x.v}</div>${x.s?`<div class="s">${x.s}</div>`:''}</div>`).join('')}</div>`;
 }
+function actualPanel(M){
+  const H=hcModel(M), f=FY_LAST-1, rs=H.list.filter(m=>m.fy===f), a=sumH(rs);
+  const tot=a.tf+a.rp+a.ot, cost=a.tCost+a.rCost, mg=tot-cost;
+  const box=(t,b,c,col)=>`<div class="tl" style="--oc:${col}"><div class="h">${t}</div><p>Billed <b>${money(b)}</b> · estimated cost <b>${money(c)}</b><br>Margin <b class="${b-c>=0?'pos':'neg'}">${money(b-c)}</b> (${b?pct((b-c)/b):'—'})</p></div>`;
+  return `<section class="panel"><div class="ph"><h2>Actual results, FY${f}</h2><span class="sub">${fyRange(f)} · latest complete fiscal year · <button class="lnk" data-go="histcost"><u>see every year</u></button></span></div>
+    <div class="tldr">${box('Transshipment',a.tf,a.tCost,'var(--t1)')}${box('Reefer plug',a.rp,a.rCost,'var(--t3)')}${box('All billing (incl. others '+money(a.ot)+')',tot,cost,'var(--t4)')}</div>
+  </section>`;
+}
 function vSummary(M){
   const T=M.T,R=M.R;
-  return `<div><h1 style='font-size:20px'>Two operations on the dock</h1>
+  return `<div><h1>Dashboard</h1>
   <p class="lede">Transshipment moves ${num(S.mtPerDay,0)} MT a day with ${M.L.n} employees (${M.L.nE} expat, ${M.L.nL} local) over ${S.hoursPerDay} hours. The reefer plug operation keeps ${num(S.reeferMT,0)} MT in ${M.boxes} containers frozen at ${SP()} for ${M.prof.length} days. Each operation carries its own costs and is priced on its own unit.</p></div>
-  ${(()=>{const has=S.pricePerMT>0,beM=has?sumM(T.lines)/S.pricePerMT:0,capM=S.mtPerDay*S.opDaysMonth;return `<section class="panel"><div class="ph"><h2>At a glance</h2><span class="sub">what the numbers below are saying</span></div><div class="tldr">
+  <div class="steps">
+    <button class="step" data-go="settings"><b>1</b><span><strong>Set the considerations</strong>tonnage, crew, reefer settings, assets</span></button>
+    <button class="step" data-go="trans"><b>2</b><span><strong>Review the cost</strong>per MT and per reefer plug-day</span></button>
+    <button class="step" data-go="pricing"><b>3</b><span><strong>Check prices</strong>margin and break-even tonnage</span></button>
+    <button class="step" data-go="histcost"><b>4</b><span><strong>Compare with actual</strong>what was billed against the cost</span></button>
+  </div>
+  ${(()=>{const has=S.pricePerMT>0,beM=has?sumM(T.lines)/S.pricePerMT:0,capM=S.mtPerDay*S.opDaysMonth;return `<section class="panel"><div class="ph"><h2>At a glance</h2><span class="sub">estimate from the current considerations</span></div><div class="tldr">
     <div class="tl" style="--oc:var(--t1)"><div class="h">Transshipment</div><p>Moving <b>${num(S.mtPerDay,0)} MT</b> a day costs <b>${money(T.total,2)}</b>, which is <b>${money(T.perMT,2)} per MT</b>. Charge at least this per MT to cover crew, dock and equipment.</p></div>
     <div class="tl" style="--oc:var(--t3)"><div class="h">Reefer plug</div><p>Keeping <b>${M.boxes} reefers</b> frozen for ${M.prof.length} days costs <b>${money(R.batch)}</b>, which is <b>${money(R.perPlugDay,2)} per container per day</b>. ${M.plugsSteady>S.plugCap?'<b>This is more reefers than the '+S.plugCap+' plug points.</b>':'This uses '+M.plugsSteady+' of the '+S.plugCap+' plug points.'}</p></div>
     <div class="tl" style="--oc:var(--t4)"><div class="h">Break-even</div><p>${has?`At <b>${money(S.pricePerMT,2)} per MT</b>, transshipment breaks even at <b>${num(beM,0)} MT a month</b> (${num(beM*12,0)} MT a year), or ${pct(capM?beM/capM:0)} of capacity.`:`Enter your transshipment price on the <b>Pricing</b> tab to see how many MT a month you need to break even.`}</p></div>
   </div></section>`})()}
+  ${actualPanel(M)}
+  <h2 class="grp" style="--oc:var(--t2)">Estimated cost by operation</h2>
   <div class="g2">
     <section class="panel op" style="--oc:var(--t1)"><div class="ph"><h2>Transshipment operation</h2><span class="sub">priced per MT handled</span></div>
       <div class="kpis kp2">
@@ -380,15 +411,15 @@ function totalsTable(lines,total,unit,div){
 function vTrans(M){
   const L=M.L,T=M.T;
   return `<div><h1>Transshipment operation</h1><p class="lede">Moving ${num(S.mtPerDay,0)} MT a day across the dock: crew, the dock and handling equipment. Costed per MT handled.</p></div>
-  <section class="panel"><div class="ph"><h2>How the cost per MT is worked out</h2><span class="sub">per operating day</span></div>
-    ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'fuel, utilities…'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
-  </section>
   <div class="kpis">
-    <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">break-even transshipment price</div></div>
+    <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">at a full ${num(S.mtPerDay,0)} MT a day · at actual volumes it was ${money(hcRates(M,'all').tPerMT,2)} (Historical Cost)</div></div>
     <div data-tip="${esc('Labor '+money(T.lines[0].v,2)+' + depreciation '+money(T.lines[1].v,2)+' + other '+money(T.lines[2].v,2))}" class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${num(S.mtPerDay,0)} MT · ${S.hoursPerDay} hrs</div></div>
     <div data-tip="${esc(L.nE+' expat × '+S.hoursPerDay+' hrs × '+money(L.rateE,4)+' + '+L.nL+' local × '+S.hoursPerDay+' hrs × '+money(L.rateL,4)+(L.otPremium?' + overtime premium '+money(L.otPremium,2):''))}" class="kpi k3"><div class="l">Labor per day</div><div class="v">${money(L.perDay,2)}</div><div class="s">${L.nE} expat + ${L.nL} local × ${S.hoursPerDay} hrs</div></div>
     <div data-tip="${esc('Each asset: (cost − salvage) ÷ useful life ÷ '+S.dockDays+' days × share charged to transshipment')}" class="kpi k5"><div class="l">Depreciation per day</div><div class="v">${money(T.lines[1].v,2)}</div><div class="s">dock and handling equipment</div></div>
   </div>
+  <section class="panel"><div class="ph"><h2>How the cost per MT is worked out</h2><span class="sub">per operating day</span></div>
+    ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'fuel, utilities…'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
+  </section>
   <div class="g2">
   <section class="panel"><div class="ph"><h2>Labor</h2><span class="sub">PII Shipping fully burdened crew rate</span></div>
     <div class="tw"><table><thead><tr><th>Per hour</th><th class="n">Expat</th><th class="n">Local</th></tr></thead><tbody>${L.items.map(i=>`<tr><td>${esc(i[0])}</td><td class="n mono">${num(i[1],4)}</td><td class="n mono">${i[2]?num(i[2],4):'—'}</td></tr>`).join('')}</tbody>
@@ -411,16 +442,16 @@ function vReefer(M){
   const ph=r=>r.phase==='pull'?'var(--t5)':r.phase==='hold'?'var(--c-power)':'var(--c-mute)';
   return `<div><h1>Reefer plug operation</h1>
   <p class="lede">Keeping containers frozen on the dock until the carrier loads them. A 40-ft reefer draws the most power in its first days, while the compressor pulls the fish down to ${SP()}. Once it reaches set point the compressor cycles and the draw drops. Costed per container per day plugged in.</p></div>
-  <section class="panel"><div class="ph"><h2>How the reefer plug charge is worked out</h2><span class="sub">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT per 40-ft = ${M.boxes} containers, ${M.prof.length} days each</span></div>
-    ${flow([{l:'Power per container',v:money(M.costBox),s:`${num(M.kwhBox,0)} kWh over ${M.prof.length} days`},'×',{l:'Containers',v:M.boxes,s:'plugged in together'},'+',{l:'Depreciation & other',v:money(R.batch-M.powerBatch),s:`for ${M.prof.length} days`},'=',{l:'Cost of the batch',v:money(R.batch)}])}
-    ${flow([{l:'Cost of the batch',v:money(R.batch)},'÷',{l:'Plug-days',v:M.boxes*M.prof.length,s:`${M.boxes} containers × ${M.prof.length} days`},'=',{l:'Cost per plug-day',v:money(R.perPlugDay,2),s:'break-even plug charge',hl:1}])}
-  </section>
   <div class="kpis">
     <div data-tip="${esc(money(R.total,2)+' average cost per day ÷ '+M.boxes+' reefers plugged in')}" class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">break-even plug charge (average)</div></div>
     <div data-tip="${esc('Batch cost '+money(R.batch)+' ÷ '+M.boxes+' containers. Power alone is '+money(M.costBox)+' per container')}" class="kpi k1"><div class="l">Cost per container</div><div class="v">${money(R.perBox)}</div><div class="s">for the full ${M.prof.length}-day stay</div></div>
     <div data-tip="${esc('Average '+money(R.total,2)+' a day × '+M.prof.length+' days on plug')}" class="kpi k2"><div class="l">Cost of the batch</div><div class="v">${money(R.batch)}</div><div class="s">${M.boxes} containers × ${M.prof.length} days · ${money(R.total,2)} a day on average</div></div>
     <div data-tip="${esc(M.plugsSteady+' reefers on plug compared with the '+S.plugCap+' plug points on the dock')}" class="kpi k4"><div class="l">Plug points used</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${capPill(M)}</div></div>
   </div>
+  <section class="panel"><div class="ph"><h2>How the reefer plug charge is worked out</h2><span class="sub">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT per 40-ft = ${M.boxes} containers, ${M.prof.length} days each</span></div>
+    ${flow([{l:'Power per container',v:money(M.costBox),s:`${num(M.kwhBox,0)} kWh over ${M.prof.length} days`},'×',{l:'Containers',v:M.boxes,s:'plugged in together'},'+',{l:'Depreciation & other',v:money(R.batch-M.powerBatch),s:`for ${M.prof.length} days`},'=',{l:'Cost of the batch',v:money(R.batch)}])}
+    ${flow([{l:'Cost of the batch',v:money(R.batch)},'÷',{l:'Plug-days',v:M.boxes*M.prof.length,s:`${M.boxes} containers × ${M.prof.length} days`},'=',{l:'Cost per plug-day',v:money(R.perPlugDay,2),s:'break-even plug charge',hl:1}])}
+  </section>
   <section class="panel"><div class="ph"><h2>Daily power cost per container, by day on plug</h2><span class="sub">each bar = cost for one full day (24 hours) · ${num(M.kwhBox,0)} kWh · ${money(M.costBox)} per container · MEC ${money(S.rate,4)}/kWh</span></div>
     ${barChart(M.prof,'cost',r=>'Day '+r.d,ph,v=>money(v,0),'Power cost per day, one container')}
     <div class="legend" style="margin-top:6px"><span><i class="sw" style="background:var(--t5)"></i>Pull-down</span><span><i class="sw" style="background:var(--c-mute)"></i>Cooling to ${SP()}</span><span><i class="sw" style="background:var(--c-power)"></i>Holding at ${SP()}</span></div>
@@ -614,13 +645,16 @@ function otherPanel(op){
 function render(){
   const M=model();
   const fn={summary:vSummary,trans:vTrans,reefer:vReefer,pricing:vPricing,settings:vSettings,history:vHistory,histcost:vHistCost,customers:vCustomers,saved:vSaved}[view]||vSummary;
-  const lt=$('#loadedTag');lt.textContent=loaded?('Loaded: '+loaded.name+(loaded.dirty?' (changed)':'')):'Estimate';
+  const lt=$('#loadedTag');lt.textContent=['history','customers','histcost'].includes(view)?'Actual':loaded?('Loaded: '+loaded.name+(loaded.dirty?' (changed)':'')):'Estimate';
   const active=document.activeElement?.id;const pos=active&&document.activeElement.selectionStart;
   $('#app').innerHTML=`<div class="view">${fn(M)}</div>`;
   document.querySelectorAll('.tab').forEach(t=>t.setAttribute('aria-selected',t.dataset.v===view));
   $('#hstat').textContent=`${num(S.reeferMT,0)} MT in ${M.boxes} reefers · ${M.prof.length} days on plug · MEC $${S.rate.toFixed(4)}/kWh`;
-  $('#basis').textContent=`${num(S.mtPerDay,0)} MT a day`;
-  $('#basis2').textContent=`Transshipment ${money(M.T.perMT,2)} per MT · Reefer plug ${money(M.R.perPlugDay,2)} per plug-day · ${M.plugsSteady} plugged`;
+  const actual=['history','customers','histcost'].includes(view);
+  $('#basisLbl').textContent=actual?'Actual billing':'Estimate basis';
+  $('#saveCompBtn').hidden=actual;$('#copyBtn2').hidden=actual;
+  $('#basis').textContent=actual?`${fmtD(BILL[0][2])} – ${fmtD(BILL[BILL.length-1][2])}`:`${num(S.mtPerDay,0)} MT a day`;
+  $('#basis2').textContent=actual?`${BILL.length} invoices · fiscal year 1 October – 30 September`:`Transshipment ${money(M.T.perMT,2)} per MT · Reefer plug ${money(M.R.perPlugDay,2)} per plug-day · ${M.plugsSteady} plugged`;
   $('#themeBtn').textContent=document.documentElement.dataset.theme==='dark'?'Light mode':'Dark mode';
   if(active){const el=document.getElementById(active);if(el){el.focus();try{if(el.type==='text')el.setSelectionRange(pos,pos)}catch(e){}}}
 }
@@ -769,7 +803,7 @@ function copyCosting(){
   navigator.clipboard.writeText(txt).then(()=>toast('Copied, stamped '+stamp()+'. Paste into Excel.')).catch(()=>toast('Copy was blocked by this browser'));
 }
 $('#saveCompBtn').addEventListener('click',()=>{view='saved';render();window.scrollTo(0,0);setTimeout(()=>$('#saveName')?.focus(),0)});
-$('#copyBtn').addEventListener('click',copyCosting);$('#copyBtn2').addEventListener('click',copyCosting);
+$('#copyBtn2').addEventListener('click',copyCosting);
 $('#themeBtn').addEventListener('click',()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';try{localStorage.setItem('pii-transship-theme',r.dataset.theme)}catch(e){}render()});
 /* hover explanations for numbers */
 const TIP=document.createElement('div');TIP.className='tip';TIP.setAttribute('role','tooltip');document.body.appendChild(TIP);
@@ -817,7 +851,7 @@ function histAll(M){
     <td class="n">${money(a.ot)}</td><td class="n"><b>${money(a.total)}</b></td></tr>`};
   const T=agg(BILL.filter(inC));
   return `<div><h1>Billing history</h1><p class="lede">What PII actually billed for transshipment from ${fmtD(BILL[0][2])} to ${fmtD(BILL[BILL.length-1][2])}, by fiscal year (1 October – 30 September), customer, tonnage and containers. Source: ${BILL_SRC}.</p></div>
-  <section class="panel"><div class="fgrid" style="align-items:end">
+  <section class="panel"><div class="filters">
     <label class="f">Fiscal year<div class="inp"><select id="histFY">
       <option value="all"${histFY==='all'?' selected':''}>All fiscal years</option>
       ${fys.slice().reverse().map(f=>`<option value="${f}"${histFY==String(f)?' selected':''}>FY${f} (${fyRange(f)})</option>`).join('')}</select></div></label>
@@ -855,9 +889,8 @@ function histAll(M){
     <tfoot><tr><td>Total</td>${fys.map(f=>`<td class="n">${num(BILL.filter(r=>fyOf(r[2])===f).reduce((t,r)=>t+r[4],0),0)}</td>`).join('')}<td class="n">${num(BILL.reduce((t,r)=>t+r[4],0),0)}</td></tr></tfoot></table></div>
   </section>
   <section class="panel"><div class="ph"><h2>Compared with the costing</h2><span class="sub">actual average rates against the current cost estimate</span></div>
-    ${flow([{l:'Average billed per MT',v:rate(A.tf,A.mt),s:label},'vs',{l:'Estimated cost per MT',v:money(M.T.perMT,2),s:'Transshipment tab'},'=',{l:'Margin per MT',v:A.mt?money(A.tf/A.mt-M.T.perMT,2):'—',s:A.mt&&A.tf?pct((A.tf/A.mt-M.T.perMT)/(A.tf/A.mt))+' of the rate':'',hl:1}])}
-    ${flow([{l:'Average billed per plug-day',v:rate(A.rp,A.pd),s:label},'vs',{l:'Estimated cost per plug-day',v:money(M.R.perPlugDay,2),s:'Reefer Plug tab'},'=',{l:'Margin per plug-day',v:A.pd?money(A.rp/A.pd-M.R.perPlugDay,2):'—',s:A.pd&&A.rp?pct((A.rp/A.pd-M.R.perPlugDay)/(A.rp/A.pd))+' of the rate':'',hl:1}])}
-    <p class="sub" style="margin:10px 0 0">The estimate uses today's considerations (labor, assets, MEC rate, ${M.prof.length} days on plug). Average plug-days per reefer billed: ${A.rc?num(A.pd/A.rc,1):'—'} days.</p>
+    ${(()=>{const C=hcRates(M,histFY),bt=A.mt?A.tf/A.mt:0,br=A.pd?A.rp/A.pd:0;return flow([{l:'Average billed per MT',v:rate(A.tf,A.mt),s:label},'vs',{l:'Cost per MT at actual volume',v:money(C.tPerMT,2),s:'labor + depreciation (Historical Cost)'},'=',{l:'Margin per MT',v:A.mt?money(bt-C.tPerMT,2):'—',s:bt?pct((bt-C.tPerMT)/bt)+' of the rate':'',hl:1}])+flow([{l:'Average billed per plug-day',v:rate(A.rp,A.pd),s:label},'vs',{l:'Cost per plug-day',v:money(C.rPerPD,2),s:'MEC power at the rate of the month'},'=',{l:'Margin per plug-day',v:A.pd?money(br-C.rPerPD,2):'—',s:br?pct((br-C.rPerPD)/br)+' of the rate':'',hl:1}])})()}
+    <p class="sub" style="margin:10px 0 0">Costs come from the Historical Cost tab: actual volumes, the MEC rate and minimum wage of each month, and today's crew, reefer and asset considerations. The Transshipment and Reefer Plug tabs show cost at a full ${num(S.mtPerDay,0)} MT a day instead, which is why their cost per MT is lower. Average plug-days per reefer billed: ${A.rc?num(A.pd/A.rc,1):'—'} days.</p>
   </section>
   <section class="panel"><div class="ph"><h2>Transactions</h2><span class="sub">${num(list.length,0)} invoice${list.length===1?'':'s'} · ${label} · newest first</span></div>
     <div class="tw"><table><thead><tr><th>Date</th><th>FY</th><th>Invoice</th><th>Customer</th><th class="n">MT</th><th class="n">Containers</th><th class="n">Transfer fee</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">Reefer plug</th><th class="n">Others</th><th class="n">Total</th></tr></thead>
@@ -936,8 +969,8 @@ function custProfile(x,D,M){
     <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">
       <div class="kpi k2"><div class="l">Total billed</div><div class="v">${money(x.a.total)}</div><div class="s">${pct(x.share)} of all billing · ${x.a.inv} invoices</div></div>
       <div class="kpi k1"><div class="l">Tonnage</div><div class="v">${num(x.a.mt,0)} MT</div><div class="s">${num(x.a.tc,0)} containers · ${x.a.tc?num(x.a.mt/x.a.tc,1):'–'} MT each</div></div>
-      <div class="kpi k3" data-tip="${esc('Estimated cost per MT today: '+money(M.T.perMT,2))}"><div class="l">Average $/MT</div><div class="v">${x.a.mt?money(x.rateMT,2):'–'}</div><div class="s">${x.a.mt?'margin '+money(x.rateMT-M.T.perMT,2)+' per MT vs cost':'no transfer fees'}</div></div>
-      <div class="kpi k4" data-tip="${esc('Estimated cost per plug-day today: '+money(M.R.perPlugDay,2))}"><div class="l">Reefer plug</div><div class="v">${x.a.pd?money(x.ratePD,2):'–'} <span class="sub">/ plug-day</span></div><div class="s">${num(x.a.rc,0)} reefers · ${x.a.rc?num(x.dwell,1):'–'} days on plug on average</div></div>
+      ${(()=>{const C=hcRates(M,'all');return `<div class="kpi k3" data-tip="${esc('Cost per MT at actual volume, all years: '+money(C.tPerMT,2))}"><div class="l">Average $/MT</div><div class="v">${x.a.mt?money(x.rateMT,2):'–'}</div><div class="s">${x.a.mt?'cost at actual volume '+money(C.tPerMT,2)+' per MT':'no transfer fees'}</div></div>`})()}
+      <div class="kpi k4" data-tip="${esc('Cost per plug-day at historical MEC rates: '+money(hcRates(M,'all').rPerPD,2))}"><div class="l">Reefer plug</div><div class="v">${x.a.pd?money(x.ratePD,2):'–'} <span class="sub">/ plug-day</span></div><div class="s">${num(x.a.rc,0)} reefers · ${x.a.rc?num(x.dwell,1):'–'} days on plug on average</div></div>
       <div class="kpi k5"><div class="l">Customer since</div><div class="v" style="font-size:21px">${fmtD(x.first)}</div><div class="s">last invoice ${fmtD(x.last)} · ${x.fys} fiscal years</div></div>
     </div>
     <div class="g2" style="margin-top:14px">
@@ -967,7 +1000,7 @@ function repBar(){
 }
 function vHistory(M){
   const base=histAll(M);
-  if(histRep==='all')return base.replace('<section class="panel"><div class="fgrid" style="align-items:end">',repBar()+'\n  <section class="panel"><div class="fgrid" style="align-items:end">');
+  if(histRep==='all')return base.replace('<section class="panel"><div class="filters">',repBar()+'\n  <section class="panel"><div class="filters">');
   return histReport(M,histRep);
 }
 function histReport(M,k){
@@ -979,7 +1012,7 @@ function histReport(M,k){
   const label=(histFY==='all'?'All fiscal years':'FY'+histFY+' ('+fyRange(+histFY)+')')+(histCust==='all'?'':' · '+histCust);
   const sum=(rs,i)=>rs.reduce((t,r)=>t+(typeof i==='function'?i(r):r[i]),0);
   const tot=rs=>sum(rs,R.amt), billAll=rs=>sum(rs,r=>r[3]+r[6]+r[9]);
-  const filters=`<section class="panel"><div class="fgrid" style="align-items:end">
+  const filters=`<section class="panel"><div class="filters">
     <label class="f">Fiscal year<div class="inp"><select id="histFY"><option value="all"${histFY==='all'?' selected':''}>All fiscal years</option>${fys.slice().reverse().map(f=>`<option value="${f}"${histFY==String(f)?' selected':''}>FY${f} (${fyRange(f)})</option>`).join('')}</select></div></label>
     <label class="f">Customer<div class="inp"><select id="histCust"><option value="all"${histCust==='all'?' selected':''}>All customers</option>${custs.map(c=>`<option value="${esc(c)}"${histCust===c?' selected':''}>${esc(c)}</option>`).join('')}</select></div></label>
     <div class="bar" style="justify-content:flex-end"><button class="btn" id="histReset">Clear filters</button><button class="btn pri" id="repCopy">Copy for Excel</button></div></div></section>`;
@@ -992,14 +1025,14 @@ function histReport(M,k){
   if(k==='tf'){
     const mt=sum(rows,4),tc=sum(rows,5);
     lede='Transfer fees billed for moving fish across the dock, with tonnage and containers.';
-    kpis=[['k2','Transfer fees billed',money(T),label],['k1','Tonnage',num(mt,0)+' MT',mt?money(T/mt,2)+' average per MT':''],['k3','Containers',num(tc,0),tc?num(mt/tc,1)+' MT per container':''],['k4','Margin vs cost',mt?money(T/mt-M.T.perMT,2)+' / MT':'—','estimated cost '+money(M.T.perMT,2)+' per MT'],['k5','Share of all billing',pct(share?T/share:0),rows.length+' invoices']];
+    kpis=[['k2','Transfer fees billed',money(T),label],['k1','Tonnage',num(mt,0)+' MT',mt?money(T/mt,2)+' average per MT':''],['k3','Containers',num(tc,0),tc?num(mt/tc,1)+' MT per container':''],(()=>{const C=hcRates(M,histFY);return ['k4','Margin vs cost',mt?money(T/mt-C.tPerMT,2)+' / MT':'—','cost at actual volume '+money(C.tPerMT,2)+' per MT']})(),['k5','Share of all billing',pct(share?T/share:0),rows.length+' invoices']];
     cols=['Invoices','MT','Containers','MT / container','Avg $/MT','Transfer fees','Share'];
     cell=rs=>{const mt=sum(rs,4),tc=sum(rs,5),t=tot(rs);return [rs.length,num(mt,0),num(tc,0),tc?num(mt/tc,1):'–',`<span data-tip="${esc(money(t)+' ÷ '+num(mt,0)+' MT')}">${mt?money(t/mt,2):'–'}</span>`,money(t),pct(T?t/T:0)]};
     tcols=['MT','Containers','$/MT','Transfer fee'];tcell=r=>[r[4]?num(r[4],1):'–',r[5]||'–',r[4]?money(r[3]/r[4],2):'–',money(r[3])];
   }else if(k==='rp'){
     const pd=sum(rows,7),rc=sum(rows,8);
     lede='Reefer plug charges billed for keeping containers frozen on the dock, with reefers and plug-days.';
-    kpis=[['k2','Reefer plug billed',money(T),label],['k1','Reefers plugged',num(rc,0),rows.length+' invoices'],['k3','Plug-days',num(pd,0),rc?num(pd/rc,1)+' days on plug per reefer':''],['k4','Average per plug-day',pd?money(T/pd,2):'—','estimated cost '+money(M.R.perPlugDay,2)+' · margin '+(pd?money(T/pd-M.R.perPlugDay,2):'—')],['k5','Share of all billing',pct(share?T/share:0),'']];
+    kpis=[['k2','Reefer plug billed',money(T),label],['k1','Reefers plugged',num(rc,0),rows.length+' invoices'],['k3','Plug-days',num(pd,0),rc?num(pd/rc,1)+' days on plug per reefer':''],(()=>{const C=hcRates(M,histFY);return ['k4','Average per plug-day',pd?money(T/pd,2):'—','cost '+money(C.rPerPD,2)+' · margin '+(pd?money(T/pd-C.rPerPD,2):'—')]})(),['k5','Share of all billing',pct(share?T/share:0),'']];
     cols=['Invoices','Reefers','Plug-days','Days on plug','Avg $/plug-day','Reefer plug','Share'];
     cell=rs=>{const pd=sum(rs,7),rc=sum(rs,8),t=tot(rs);return [rs.length,num(rc,0),num(pd,0),`<span data-tip="${esc(num(pd,0)+' plug-days ÷ '+num(rc,0)+' reefers')}">${rc?num(pd/rc,1):'–'}</span>`,`<span data-tip="${esc(money(t)+' ÷ '+num(pd,0)+' plug-days')}">${pd?money(t/pd,2):'–'}</span>`,money(t),pct(T?t/T:0)]};
     tcols=['Reefers','Plug-days','$/plug-day','Reefer plug'];tcell=r=>[r[8]||'–',r[7]?num(r[7],0):'–',r[7]?money(r[6]/r[7],2):'–',money(r[6])];
@@ -1078,6 +1111,7 @@ function hcModel(M){
   });
   return {list,holdKwh,extraKwh,hrsPerMT,depT,depR};
 }
+function hcRates(M,fy){const H=hcModel(M),a=sumH(H.list.filter(m=>fy==='all'||m.fy===+fy));return {tPerMT:a.mt?a.tCost/a.mt:0,rPerPD:a.pd?a.rCost/a.pd:0,pPerPD:a.pd?a.power/a.pd:0}}
 function sumH(rs){const a={tf:0,mt:0,rp:0,pd:0,rc:0,ot:0,kwh:0,power:0,labor:0,depT:0,depR:0,tCost:0,rCost:0,tM:0,rM:0,n:rs.length};rs.forEach(m=>{for(const k in a)if(k!=='n')a[k]+=m[k]});return a}
 function vHistCost(M){
   const H=hcModel(M), fys=[...new Set(H.list.map(m=>m.fy))];
@@ -1090,11 +1124,24 @@ function vHistCost(M){
   const label=hcFY==='all'?'All fiscal years':'FY'+hcFY+' ('+fyRange(+hcFY)+')';
   const assumed=S.rateHist.filter(x=>x.note&&/assum/i.test(x.note));
   return `<div><h1>Historical cost</h1><p class="lede">What the billed volumes cost PII each month, using the MEC commercial rate and the minimum wage in force at the time, with today's reefer and crew considerations. Months follow the invoice date. Fiscal year runs 1 October – 30 September.</p></div>
-  <section class="panel"><div class="fgrid" style="align-items:end">
+  <section class="panel"><div class="filters">
     <label class="f">Fiscal year<div class="inp"><select id="hcFY"><option value="all"${hcFY==='all'?' selected':''}>All fiscal years</option>${fys.slice().reverse().map(f=>`<option value="${f}"${hcFY==String(f)?' selected':''}>FY${f} (${fyRange(f)})</option>`).join('')}</select></div></label>
     <div class="bar" style="justify-content:flex-end"><button class="btn" data-go="settings" data-jumpafter="g-hist">Edit rate and wage history</button><button class="btn pri" id="hcCopy">Copy for Excel</button></div>
   </div></section>
   ${assumed.length?`<p class="note" style="margin:0"><b>Rates before ${assumed.map(x=>x.until||'').join('')}${(()=>{const k=S.rateHist.slice().sort((a,b)=>a.from<b.from?-1:1).find(x=>!/assum/i.test(x.note||''));return k?fmtYM(k.from):''})()} are assumed</b> at ${assumed.map(x=>money(x.rate,4)).join(', ')} per kWh because PII MEC Power Billing has no bills before then. Enter the actual MEC commercial rates under Considerations → Rate and wage history to sharpen FY2019–FY2024.</p>`:''}
+  ${(()=>{const fy2=[...new Set(H.list.map(m=>m.fy))].map(f=>({f,a:sumH(H.list.filter(m=>m.fy===f))}));const T2=sumH(H.list);
+    const row=(l,a,b)=>{const tot=a.tf+a.rp+a.ot,c=a.tCost+a.rCost;return `<tr${b?' style="background:var(--accent-soft)"':''}><td>${l}</td><td class="n">${money(a.tf)}</td><td class="n">${money(a.tCost)}</td><td class="n ${a.tM>=0?'pos':'neg'}">${money(a.tM)}</td><td class="n">${money(a.rp)}</td><td class="n">${money(a.rCost)}</td><td class="n ${a.rM>=0?'pos':'neg'}">${money(a.rM)}</td><td class="n">${money(a.ot)}</td><td class="n"><b class="${tot-c>=0?'pos':'neg'}">${money(tot-c)}</b></td></tr>`};
+    const best=fy2.filter(x=>x.a.n>=12).sort((x,y)=>(y.a.tf+y.a.rp+y.a.ot-y.a.tCost-y.a.rCost)-(x.a.tf+x.a.rp+x.a.ot-x.a.tCost-x.a.rCost))[0];
+    return `<section class="panel"><div class="ph"><h2>Overview: billed against estimated cost</h2><span class="sub">all fiscal years · click a year in the sections below to see its months</span></div>
+    <div class="tldr" style="margin-bottom:14px">
+      <div class="tl" style="--oc:var(--t1)"><div class="h">Transshipment</div><p>Over all years, transfer fees of <b>${money(T2.tf)}</b> against labor and depreciation of <b>${money(T2.tCost)}</b>. Depreciation of ${money(H.depT*12)} a year is ${pct(T2.tCost?T2.depT/T2.tCost:0)} of the cost.</p></div>
+      <div class="tl" style="--oc:var(--t3)"><div class="h">Reefer plug</div><p>Billed <b>${money(T2.pd?T2.rp/T2.pd:0,2)}</b> per plug-day on average against an estimated power cost of <b>${money(T2.pd?T2.power/T2.pd:0,2)}</b>, a margin of <b class="${T2.rM>=0?'pos':'neg'}">${money(T2.rM)}</b>.</p></div>
+      <div class="tl" style="--oc:var(--t4)"><div class="h">Best year</div><p>${best?`<b>FY${best.f}</b> came closest to covering cost, with a total margin of <b>${money(best.a.tf+best.a.rp+best.a.ot-best.a.tCost-best.a.rCost)}</b>.`:'—'}</p></div>
+    </div>
+    <div class="tw"><table><thead><tr><th rowspan="2">Fiscal year</th><th class="n" colspan="3" style="text-align:center">Transshipment</th><th class="n" colspan="3" style="text-align:center">Reefer plug</th><th class="n">Others</th><th class="n">Total</th></tr><tr><th class="n">Billed</th><th class="n">Cost</th><th class="n">Margin</th><th class="n">Billed</th><th class="n">Cost</th><th class="n">Margin</th><th class="n">Billed</th><th class="n">Margin</th></tr></thead>
+    <tbody>${fy2.map(x=>row('<b>FY'+x.f+'</b>'+(fyPartial(x.f)?' <span class="pill warn">partial</span>':''),x.a,hcFY==String(x.f))).join('')}</tbody>
+    <tfoot>${row('Total',T2,false).replace('<tr>','<tr>')}</tfoot></table></div>
+    <p class="sub" style="margin:10px 0 0">Cost = estimated labor and depreciation for transshipment; MEC power${H.depR?' and plug assets':''} for reefer plug. Others carry no estimated cost.</p></section>`})()}
   <h2 class="grp" style="--oc:var(--t3)">Reefer plug: power cost per month and per year</h2>
   <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">
     <div class="kpi k3" data-tip="${esc(num(A.pd,0)+' plug-days × '+num(H.holdKwh,1)+' kWh + '+num(A.rc,0)+' reefers × '+num(H.extraKwh,0)+' kWh pull-down')}"><div class="l">Power used</div><div class="v">${num(A.kwh,0)} kWh</div><div class="s">${label}</div></div>
