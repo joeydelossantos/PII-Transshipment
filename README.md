@@ -1,10 +1,10 @@
-# PII Transshipment Costing
+# Tuna Transshipment and Reefer Plug
 
 Web app that estimates Pacific International, Inc.'s cost of transshipment over the dock in Majuro, Marshall Islands, as two separate operations:
 
 - **Transshipment operation** — fully burdened labor (expat and local crew, from the PII Shipping rate sheet), depreciation of the dock, reach stacker, Starloader and other assets, and other daily costs. Costed per MT, with monthly and yearly break-even tonnage.
 - **Reefer plug operation** — MEC power for reefers held at the set point (default −25°C), including the higher draw while the cargo is pulled down, plus plug assets and other costs. Costed per container per plug-day.
 
-Tabs: Dashboard, Transshipment, Reefer Plug, Pricing, Considerations (all assumptions editable), Saved (saved computations). Light mode by default, dark mode by toggle.
+Tabs: Dashboard, Transshipment, Reefer Plug, Pricing, Considerations (all assumptions editable), Billing History (PII transshipment invoices May 2019 – Nov 2026 by fiscal year, customer, tonnage and containers; fiscal year ends 30 September), Customers (customer analysis), Saved (saved computations). Light mode by default, dark mode by toggle.
 
 `index.html` is a single self-contained page. It is published as a claude.ai artifact, which provides the shared storage used by the Saved tab; opened elsewhere, saved computations fall back to the browser.
