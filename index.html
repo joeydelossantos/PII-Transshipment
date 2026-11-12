@@ -26,29 +26,29 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:17px;line-height:1.5}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5}
 .wrap{max-width:2008px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{padding-block:14px 0}
 .hero{background:linear-gradient(120deg,var(--hero1),var(--hero2));border:1px solid var(--hero-line);border-radius:12px;color:var(--hero-fg);padding:16px 18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .brand{display:flex;gap:14px;align-items:flex-start;min-width:0;flex:1 1 360px}
 .logo{flex:none;width:54px;height:54px;border-radius:50%;display:block}
-.eyebrow{font-size:14px;color:var(--hero-muted)}
-.brand h1{font-size:23px;font-weight:600;margin:2px 0 4px;color:#fff}
-.brand p{margin:0;font-size:16px;color:var(--hero-muted);max-width:62ch}
+.eyebrow{font-size:13px;color:var(--hero-muted)}
+.brand h1{font-size:22px;font-weight:600;margin:2px 0 4px;color:#fff}
+.brand p{margin:0;font-size:15px;color:var(--hero-muted);max-width:62ch}
 .hside{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:0}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .tab{background:transparent;border:1px solid rgba(255,255,255,.75);color:#fff;font:600 14.5px var(--font);padding:6px 12px;border-radius:7px;cursor:pointer;white-space:nowrap}
-.tg{align-self:center;font-size:12.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--hero-muted);margin-left:8px}
+.tg{align-self:center;font-size:11.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--hero-muted);margin-left:8px}
 .tg:first-child{margin-left:0}
 .tab[aria-selected="true"]{background:#fff;color:#1A1850;border-color:#fff}
-.hmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:15px;color:var(--hero-muted)}
-.chip{font-size:14px;font-weight:600;color:#4ADE80;border:1px solid #4ADE80;border-radius:99px;padding:1px 9px}
+.hmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:14px;color:var(--hero-muted)}
+.chip{font-size:13px;font-weight:600;color:#4ADE80;border:1px solid #4ADE80;border-radius:99px;padding:1px 9px}
 .hbtn{display:inline-flex;gap:6px;align-items:center;background:#fff;color:#1A1850;border:0;border-radius:99px;font:600 14.5px var(--font);padding:7px 14px;cursor:pointer}
 .hlink{background:none;border:0;color:#fff;font:600 14.5px var(--font);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 0}
 .ctx{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.ctx b{font-size:16px;font-weight:600}
-.ctx .sel{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-weight:600;font-size:16px}
-.dash{border:1px dashed var(--muted);color:var(--muted);border-radius:99px;font-size:14px;font-weight:600;padding:1px 9px}
+.ctx b{font-size:15px;font-weight:600}
+.ctx .sel{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-weight:600;font-size:15px}
+.dash{border:1px dashed var(--muted);color:var(--muted);border-radius:99px;font-size:13px;font-weight:600;padding:1px 9px}
 .ctx .grow{flex:1}
 .ctx #basis2{flex:1 1 220px;min-width:0}
 .ctxb{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
@@ -56,9 +56,9 @@ header{padding-block:14px 0}
 .tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--t1);outline-offset:2px}
 main{padding-block:16px 48px}
 .view{display:flex;flex-direction:column;gap:16px}
-h1{font-size:23px;font-weight:600;margin:0;text-wrap:balance}
-h2{font-size:17px;font-weight:600;margin:0}
-.lede{color:var(--muted);margin:2px 0 0;max-width:72ch;font-size:16px}
+h1{font-size:22px;font-weight:600;margin:0;text-wrap:balance}
+h2{font-size:16px;font-weight:600;margin:0}
+.lede{color:var(--muted);margin:2px 0 0;max-width:72ch;font-size:15px}
 details.more{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
 details.more>summary{list-style:none;cursor:pointer;padding:12px 16px;font-weight:600;display:flex;align-items:center;gap:10px;color:var(--fg)}
 details.more>summary::-webkit-details-marker{display:none}
@@ -68,38 +68,38 @@ details.more>summary:hover{background:var(--surface2);border-radius:10px}
 .more-in>.panel{border:0;padding:0;background:none}
 .more-in{padding:4px 16px 16px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
-.gl div{display:flex;flex-direction:column;gap:2px}.gl span{color:var(--muted);font-size:15px}
+.gl div{display:flex;flex-direction:column;gap:2px}.gl span{color:var(--muted);font-size:14px}
 @media (max-width:700px){.gl{grid-template-columns:minmax(0,1fr)}}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.sub{color:var(--muted);font-size:15px}
+.sub{color:var(--muted);font-size:14px}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--kc,var(--t1));border-radius:10px;padding:12px 14px;min-width:0;display:flex;flex-direction:column}
 .kpi .go{margin-top:auto!important;padding-top:6px;align-self:flex-start}
 .kpis{align-items:stretch}
 .kpi.k1{--kc:var(--t1)} .kpi.k2{--kc:var(--t2)} .kpi.k3{--kc:var(--t3)} .kpi.k4{--kc:var(--t4)} .kpi.k5{--kc:var(--t5)}
-.kpi .l{font-size:15.5px;color:var(--fg);font-weight:500}
-.kpi .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:2px}
-.kpi .s{font-size:15px;color:var(--muted);margin-top:2px}
-.kpi .go{display:inline-block;margin-top:6px;font-size:15px;color:var(--fg);background:none;border:0;padding:0;font-family:var(--font);cursor:pointer}
+.kpi .l{font-size:14.5px;color:var(--fg);font-weight:500}
+.kpi .v{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:2px}
+.kpi .s{font-size:14px;color:var(--muted);margin-top:2px}
+.kpi .go{display:inline-block;margin-top:6px;font-size:14px;color:var(--fg);background:none;border:0;padding:0;font-family:var(--font);cursor:pointer}
 .kpi .go:hover{color:var(--accent)}
 .arow{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr)) auto;gap:10px;align-items:end;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .arow-end{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 @media (max-width:900px){.arow{grid-template-columns:repeat(2,minmax(0,1fr))}.arow>label:first-child{grid-column:1/-1}.arow-end{flex-direction:row;justify-content:space-between;align-items:center}}
 .op{border-top:3px solid var(--oc)}
 .kp2{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:12px}
-h2.grp{font-size:18px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid var(--oc)}
+h2.grp{font-size:17px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid var(--oc)}
 .bc{max-width:760px}
-.bc-unit{font-size:14px;color:var(--muted);margin-bottom:6px}
+.bc-unit{font-size:13px;color:var(--muted);margin-bottom:6px}
 .bc-plot{display:flex;align-items:flex-end;gap:6px;height:150px;border-bottom:1px solid var(--line);padding-top:18px}
 .bc-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
 .bc-col i{display:block;width:100%;max-width:38px;border-radius:3px 3px 0 0}
-.bc-v{font-size:13px;font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bc-v{font-size:12px;font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
 .bc-x{display:flex;gap:6px;margin-top:4px}
-.bc-x span{flex:1;min-width:0;text-align:center;font-size:13px;color:var(--muted)}
-@media (max-width:520px){.bc-v{font-size:11.5px}.bc-plot,.bc-x{gap:3px}}
+.bc-x span{flex:1;min-width:0;text-align:center;font-size:12px;color:var(--muted)}
+@media (max-width:520px){.bc-v{font-size:10.5px}.bc-plot,.bc-x{gap:3px}}
 .filters{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end}
-.chk{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--fg);cursor:pointer;padding:8px 0}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--fg);cursor:pointer;padding:8px 0}
 .chk input{width:16px;height:16px;accent-color:var(--accent)}
 .filters label.f{flex:0 1 300px;display:flex;flex-direction:column;gap:4px}
 .arow label.f{display:flex;flex-direction:column;gap:4px}
@@ -108,32 +108,32 @@ h2.grp{font-size:18px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid 
 .step{display:flex;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--fg)}
 .step:hover{border-color:var(--accent)}
 .step b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:700}
-.step span{font-size:14px;color:var(--muted);line-height:1.35;min-width:0}
-.step strong{display:block;font-size:15.5px;color:var(--fg);font-weight:600}
+.step span{font-size:13px;color:var(--muted);line-height:1.35;min-width:0}
+.step strong{display:block;font-size:14.5px;color:var(--fg);font-weight:600}
 @media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pht{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
 .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
 .fx{flex:1 1 140px;min-width:0;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
-.fx .l{font-size:13.5px;color:var(--muted)}
-.fx .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
-.fx .s{font-size:13px;color:var(--muted)}
+.fx .l{font-size:12.5px;color:var(--muted)}
+.fx .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.fx .s{font-size:12px;color:var(--muted)}
 .fx.hl{background:var(--accent-soft);border-color:var(--accent)}
 .fx.hl .v{color:var(--accent)}
-.fop{flex:none;align-self:center;font-size:23px;font-weight:600;color:var(--muted);width:18px;text-align:center}
+.fop{flex:none;align-self:center;font-size:22px;font-weight:600;color:var(--muted);width:18px;text-align:center}
 .flow+.flow{margin-top:10px}
 .tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .tl{border-left:4px solid var(--oc);padding:4px 0 4px 12px;min-width:0}
-.tl .h{font-size:13.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
-.tl p{margin:4px 0 0;font-size:16px;line-height:1.55}
+.tl .h{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.tl p{margin:4px 0 0;font-size:15px;line-height:1.55}
 .tl b{font-weight:700}
-.gnote{margin:-6px 0 0 14px;color:var(--muted);font-size:14.5px}
+.gnote{margin:-6px 0 0 14px;color:var(--muted);font-size:13.5px}
 .jump{display:flex;gap:8px;flex-wrap:wrap}
-@media (max-width:900px){.tldr{grid-template-columns:minmax(0,1fr)}.fop{width:100%;text-align:left;padding-left:8px;font-size:19px}}
-.tip{position:fixed;z-index:30;max-width:300px;background:var(--hero2);color:#fff;font-size:14px;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .12s}
+@media (max-width:900px){.tldr{grid-template-columns:minmax(0,1fr)}.fop{width:100%;text-align:left;padding-left:8px;font-size:18px}}
+.tip{position:fixed;z-index:30;max-width:300px;background:var(--hero2);color:#fff;font-size:13px;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .12s}
 .tip.on{opacity:1}
 [data-tip]{cursor:help}
 td[data-tip]:hover,.kpi[data-tip]:hover .v,.fx[data-tip]:hover .v{text-decoration:underline dotted;text-underline-offset:4px}
-.sc{font-size:15px}
+.sc{font-size:14px}
 .sc td,.sc th{padding:8px 6px}
 .sc th{letter-spacing:.3px}
 .sc td:first-child{min-width:190px}
@@ -146,10 +146,10 @@ input[type=month]{width:100%;min-width:0;border:0;background:transparent;color:v
 .hb{display:flex;flex-direction:column;gap:5px}
 .hbr{display:grid;grid-template-columns:62px minmax(0,1fr) 92px;align-items:center;gap:8px;background:none;border:0;padding:2px 0;font:inherit;color:var(--fg);cursor:pointer;text-align:left}
 .hbr:hover .hl{color:var(--accent)}
-.hl{font-size:14px;font-weight:600}
+.hl{font-size:13px;font-weight:600}
 .ht{display:flex;height:16px;background:var(--surface2);border-radius:3px;overflow:hidden}
 .ht i{display:block;height:100%}
-.hv{font-size:14px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.hv{font-size:13px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .beline{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--bad)}
 .lnk{background:none;border:0;padding:0;font:inherit;color:var(--fg);cursor:pointer;text-align:left}
 .lnk:hover{color:var(--accent);text-decoration:underline}
@@ -159,42 +159,42 @@ select{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);fo
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600;white-space:nowrap}
+th{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600;white-space:nowrap}
 td.n,th.n{text-align:right;white-space:nowrap}
 /* finance-table layout: number columns hug their content on the right, the label column takes the spare width */
 table td.n,table th.n{width:1%;padding-left:clamp(14px,2.2vw,40px)}
 table th[colspan].n{width:auto}
 td.n:last-child,th.n:last-child{padding-right:12px}
 tfoot td{font-weight:600;border-top:2px solid var(--fg);border-bottom:0}
-.mono{font-family:var(--mono);font-size:15.5px}
+.mono{font-family:var(--mono);font-size:14.5px}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
 .stack{display:flex;height:14px;border-radius:4px;overflow:hidden;margin:6px 0 12px;background:var(--line)}
 .stack i{display:block;height:100%}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
 .fl{align-self:end}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px 16px}
-label.f{display:grid;grid-template-rows:subgrid;grid-row:span 3;align-content:start;row-gap:4px;font-size:15px;font-weight:500;color:var(--fg);min-width:0}
-label.f small{font-weight:400;color:var(--muted);font-size:14px}
+label.f{display:grid;grid-template-rows:subgrid;grid-row:span 3;align-content:start;row-gap:4px;font-size:14px;font-weight:500;color:var(--fg);min-width:0}
+label.f small{font-weight:400;color:var(--muted);font-size:13px}
 .inp{display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;background:var(--surface2);overflow:hidden}
-.inp span{padding:0 9px;color:var(--muted);font-size:15px;white-space:nowrap}
+.inp span{padding:0 9px;color:var(--muted);font-size:14px;white-space:nowrap}
 input[type=number],input[type=text]{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);font:500 16px var(--font);font-variant-numeric:tabular-nums;padding:8px 10px}
-input[type=number]{text-align:right}
+input[type=number],input.numin{text-align:right}
 .btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 14.5px var(--font);border-radius:7px;padding:7px 13px;cursor:pointer}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
-.btn.sm{padding:5px 10px;font-size:15px}
+.btn.sm{padding:5px 10px;font-size:14px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.note{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:16px;color:var(--fg)}
+.note{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:15px;color:var(--fg)}
 .note b{font-weight:600}
-.pill{display:inline-block;white-space:nowrap;font-size:14px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
+.pill{display:inline-block;white-space:nowrap;font-size:13px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
 .pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
 .chart text{fill:var(--muted);font:13px var(--font)}
 .chart .vl{fill:var(--fg);font-weight:600}
 .chart .grid{stroke:var(--line)}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--hero2);color:#fff;padding:10px 16px;border-radius:8px;font-size:16px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--hero2);color:#fff;padding:10px 16px;border-radius:8px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
 .toast.on{opacity:1}
 .pos{color:var(--ok)} .neg{color:var(--bad)}
 @media (max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}.hside{align-items:flex-start}.tabs,.hmeta{justify-content:flex-start}}
-@media (max-width:420px){.kpi .v{font-size:23px}}
+@media (max-width:420px){.kpi .v{font-size:22px}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 
@@ -641,7 +641,7 @@ function vPricing(M){
   </div>`)}`;
 }
 function field(k,label,unit,step,hint){
-  return `<label class="f"><span class="fl">${label}</span><div class="inp"><input type="number" id="${k}" data-k="${k}" step="${step||'any'}" value="${S[k]}"><span>${unit}</span></div>${hint?`<small>${hint}</small>`:'<small></small>'}</label>`;
+  return `<label class="f"><span class="fl">${label}</span><div class="inp"><input type="text" inputmode="${k==='setpoint'||k==='ambient'?'text':'decimal'}" autocomplete="off" class="numin" id="${k}" data-k="${k}" value="${fmtIn(S[k])}"><span>${unit}</span></div>${hint?`<small>${hint}</small>`:'<small></small>'}</label>`;
 }
 function vSettings(M){
   return `<div class="ph" style="margin:0"><div><h1>Considerations</h1><p class="lede">Every assumption behind the costing. Changes apply immediately. <b>Save as default</b> makes the current figures the starting point for everyone who opens the app; <b>Reset to default</b> brings them back after you experiment.</p>${APPDEF?`<p class="sub" style="margin:4px 0 0">Default last saved ${esc(APPDEF_STAMP||'')}</p>`:''}</div>
@@ -701,10 +701,10 @@ function assetPanel(M,op){
   return `<section class="panel"><div class="ph"><div class="pht"><h2>${name} assets for depreciation</h2><span class="sub">${money(perDay,2)} a day</span></div><button class="btn sm" data-addasset="${op}">Add an asset</button></div>
     <div style="display:flex;flex-direction:column;gap:10px">${rows.map(([a,i])=>`<div class="arow">
       <label class="f">Asset<div class="inp"><input type="text" id="an${i}" data-a="${i}" data-f="n" value="${esc(a.n)}" style="text-align:left"></div></label>
-      <label class="f">Cost<div class="inp"><span>$</span><input type="number" id="ac${i}" data-a="${i}" data-f="cost" step="1000" value="${a.cost}"></div></label>
-      <label class="f">Useful life<div class="inp"><input type="number" id="al${i}" data-a="${i}" data-f="life" step="1" value="${a.life}"><span>yrs</span></div></label>
-      <label class="f">Salvage value<div class="inp"><span>$</span><input type="number" id="as${i}" data-a="${i}" data-f="salvage" step="1000" value="${a.salvage}"></div></label>
-      <label class="f">Share charged here<div class="inp"><input type="number" id="ap${i}" data-a="${i}" data-f="share" step="1" value="${a.share??100}"><span>%</span></div></label>
+      <label class="f">Cost<div class="inp"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="ac${i}" data-a="${i}" data-f="cost" value="${fmtIn(a.cost)}"></div></label>
+      <label class="f">Useful life<div class="inp"><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="al${i}" data-a="${i}" data-f="life" value="${fmtIn(a.life)}"><span>yrs</span></div></label>
+      <label class="f">Salvage value<div class="inp"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="as${i}" data-a="${i}" data-f="salvage" value="${fmtIn(a.salvage)}"></div></label>
+      <label class="f">Share charged here<div class="inp"><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="ap${i}" data-a="${i}" data-f="share" value="${fmtIn(a.share??100)}"><span>%</span></div></label>
       <div class="f arow-end"><span class="sub">${money(M.assets[i].day,2)} a day</span><div class="bar"><button class="btn sm" data-amove="${i}">Move to ${op==='t'?'reefer plug':'transshipment'}</button><button class="btn sm" data-adel="${i}" aria-label="Remove ${esc(a.n)}">Remove</button></div></div></div>`).join('')||`<p class="sub">No assets yet for the ${name.toLowerCase()} operation.</p>`}</div>
   </section>`;
 }
@@ -714,7 +714,7 @@ function otherPanel(op){
   return `<section class="panel"><div class="ph"><h2>${name} other daily costs</h2><button class="btn sm" data-addother="${op}">Add a cost line</button></div>
     <div style="display:flex;flex-direction:column;gap:8px">${rows.map(([o,i])=>`<div class="bar" style="flex-wrap:nowrap">
       <div class="inp" style="flex:2;min-width:0"><input type="text" id="on${i}" data-o="${i}" data-f="n" value="${esc(o.n)}" style="text-align:left"></div>
-      <div class="inp" style="flex:1;min-width:0"><span>$</span><input type="number" id="ov${i}" data-o="${i}" data-f="v" step="0.01" value="${o.v}"><span>/day</span></div>
+      <div class="inp" style="flex:1;min-width:0"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="ov${i}" data-o="${i}" data-f="v" value="${fmtIn(o.v)}"><span>/day</span></div>
       <button class="btn sm" data-del="${i}" aria-label="Remove ${esc(o.n)}">Remove</button></div>`).join('')||`<p class="sub">No other costs yet.</p>`}</div>
   </section>`;
 }
@@ -737,24 +737,26 @@ function render(){
   if(active){const el=document.getElementById(active);if(el){el.focus();try{if(el.type==='text')el.setSelectionRange(pos,pos)}catch(e){}}}
 }
 document.querySelector('.tabs').addEventListener('click',e=>{const t=e.target.closest('.tab');if(!t)return;view=t.dataset.v;try{localStorage.setItem(KEY+'-tab',view)}catch(e){}render();window.scrollTo(0,0)});
+const fmtIn=v=>{const n=+v;return v===''||v==null||isNaN(n)?(v??''):n.toLocaleString('en-US',{maximumFractionDigits:6})};
+const pnum=t=>parseFloat(String(t).replace(/[,\s$]/g,'').replace(/\u2212/g,'-'));
 $('#app').addEventListener('change',e=>{
   const el=e.target;
-  if(el.dataset.k==='setpoint'||el.dataset.k==='ambient'){const v=parseFloat(el.value);
+  if(el.dataset.k==='setpoint'||el.dataset.k==='ambient'){const v=pnum(el.value);
     if(isNaN(v)){toast('Enter a temperature');render();return}
     const oldDiff=S.ambient-S.setpoint;S[el.dataset.k]=v;const newDiff=S.ambient-S.setpoint;
     if(oldDiff>0&&newDiff>0){S.holdKW=Math.round(S.holdKW*newDiff/oldDiff*100)/100;toast('Holding draw adjusted to '+S.holdKW+' kW for '+SP())}
     else toast('Set point must be colder than the outside temperature');
     save();render();return}
-  if(el.dataset.k){const v=parseFloat(el.value);if(!isNaN(v)&&v>=0){S[el.dataset.k]=v}else{toast('Enter a number of zero or more');}
+  if(el.dataset.k){const v=pnum(el.value);if(!isNaN(v)&&v>=0){S[el.dataset.k]=v}else{toast('Enter a number of zero or more');}
     if(['mtPerDay','mtPerBox','reeferMT','dockDays','periods','periodHours'].includes(el.dataset.k)&&!(S[el.dataset.k]>0)){S[el.dataset.k]=DEFAULTS[el.dataset.k];toast('This value must be above zero; restored the default')}
     if(el.dataset.k==='dwell')S.dwell=Math.max(1,Math.round(S.dwell));
     save();render();}
   else if(el.dataset.a!=null){const a=S.assets[+el.dataset.a],f=el.dataset.f;
-    if(f==='n')a.n=el.value;else{let v=parseFloat(el.value);if(isNaN(v)||v<0){v=0;toast('Enter a number of zero or more')}
+    if(f==='n')a.n=el.value;else{let v=pnum(el.value);if(isNaN(v)||v<0){v=0;toast('Enter a number of zero or more')}
       if(f==='life'&&!(v>0)){v=a.life||1;toast('Useful life must be above zero')} if(f==='share')v=Math.min(100,v);a[f]=v}
     save();render();}
-  else if(el.dataset.o!=null){const o=S.others[+el.dataset.o];o[el.dataset.f]=el.dataset.f==='v'?(parseFloat(el.value)||0):el.value;save();render();}
-  else if(el.dataset.hk){const L=el.dataset.hk==='r'?S.rateHist:S.wageHist,x=L[+el.dataset.hi],f=el.dataset.hf;if(f==='from'||f==='note')x[f]=el.value;else{const v=parseFloat(el.value);if(isNaN(v)||v<0){toast('Enter a number of zero or more');render();return}x[f]=v}save();render();}
+  else if(el.dataset.o!=null){const o=S.others[+el.dataset.o];o[el.dataset.f]=el.dataset.f==='v'?(pnum(el.value)||0):el.value;save();render();}
+  else if(el.dataset.hk){const L=el.dataset.hk==='r'?S.rateHist:S.wageHist,x=L[+el.dataset.hi],f=el.dataset.hf;if(f==='from'||f==='note')x[f]=el.value;else{const v=pnum(el.value);if(isNaN(v)||v<0){toast('Enter a number of zero or more');render();return}x[f]=v}save();render();}
   else if(el.id==='othChk'){setOthers(el.checked);histShowAll=false;render();toast(el.checked?'Others included':'Others excluded');}
   else if(el.id==='hcFY'){hcFY=el.value;render();}
   else if(el.id==='histFY'){histFY=el.value;histShowAll=false;render();}
@@ -932,7 +934,7 @@ function histAll(M){
   const mx=custs.map(c=>({c,v:fys.map(f=>BILL.filter(r=>r[0]===c&&fyOf(r[2])===f).reduce((t,r)=>t+r[4],0))})).filter(x=>x.v.some(v=>Math.abs(v)>0.5)).sort((a,b)=>b.v.reduce((t,v)=>t+v,0)-a.v.reduce((t,v)=>t+v,0));
   const list=rows.slice().reverse(), shown=histShowAll?list:list.slice(0,25);
   const beY=S.pricePerMT>0?sumM(M.T.lines)*12/S.pricePerMT:0;
-  const fyRow=(x)=>{const a=x.a,p=fyPartial(x.f);return `<tr${histFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td style="white-space:nowrap"><b>FY${x.f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td>
+  const fyRow=(x)=>{const a=x.a,p=fyPartial(x.f);return `<tr${histFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td style="white-space:nowrap"><b>FY${x.f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td>
     <td class="n">${a.inv}</td><td class="n" data-tip="Sum of transfer-fee quantities billed per MT">${num(a.mt,0)}</td><td class="n" data-tip="Transfer-fee lines billed per container">${num(a.tc,0)}</td>
     <td class="n" data-tip="${esc(money(a.tf)+' transfer fees ÷ '+num(a.mt,0)+' MT')}">${rate(a.tf,a.mt)}</td><td class="n">${money(a.tf)}</td>
     <td class="n">${num(a.rc,0)}</td><td class="n">${num(a.pd,0)}</td><td class="n" data-tip="${esc(money(a.rp)+' reefer plug ÷ '+num(a.pd,0)+' plug-days')}">${rate(a.rp,a.pd)}</td><td class="n">${money(a.rp)}</td>
@@ -1062,7 +1064,7 @@ function custProfile(x,D,M){
       <div class="kpi k1"><div class="l">Tonnage</div><div class="v">${num(x.a.mt,0)} MT</div><div class="s">${num(x.a.tc,0)} containers · ${x.a.tc?num(x.a.mt/x.a.tc,0):'–'} MT each</div></div>
       ${(()=>{const C=hcRates(M,'all');return `<div class="kpi k3" data-tip="${esc('Cost per MT at actual volume, all years: '+money(C.tPerMT,2))}"><div class="l">Average $/MT (transshipment)</div><div class="v">${x.a.cmt?money(x.rateMT,2):'–'}</div><div class="s">${x.a.mt?'cost at actual volume '+money(C.tPerMT,2)+' per MT':'no transfer fees'}</div></div>`})()}
       <div class="kpi k4" data-tip="${esc('Cost per plug-day at historical MEC rates: '+money(hcRates(M,'all').rPerPD,2))}"><div class="l">Reefer plug</div><div class="v">${x.a.pd?money(x.ratePD,2):'–'} <span class="sub">/ plug-day</span></div><div class="s">${num(x.a.rc,0)} reefers · ${x.a.rc?num(x.dwell,0):'–'} days on plug on average</div></div>
-      <div class="kpi k5"><div class="l">Customer since</div><div class="v" style="font-size:22px">${fmtD(x.first)}</div><div class="s">last invoice ${fmtD(x.last)} · ${x.fys} fiscal years</div></div>
+      <div class="kpi k5"><div class="l">Customer since</div><div class="v" style="font-size:21px">${fmtD(x.first)}</div><div class="s">last invoice ${fmtD(x.last)} · ${x.fys} fiscal years</div></div>
     </div>
     <div class="g2" style="margin-top:14px">
       <div><div class="bc-unit">Billed by fiscal year</div><div class="hb">${by.map(y=>`<div class="hbr" style="cursor:default" data-tip="${esc('FY'+y.f+': transfer '+money(y.a.tf)+' · reefer '+money(y.a.rp)+' · others '+money(y.a.ot))}"><span class="hl">FY${y.f}</span><span class="ht"><i style="width:${y.a.tf/maxT*100}%;background:var(--c-labor)"></i><i style="width:${y.a.rp/maxT*100}%;background:var(--c-power)"></i><i style="width:${Math.max(0,y.a.ot)/maxT*100}%;background:var(--c-other)"></i></span><span class="hv">${y.a.total?money(y.a.total):'–'}</span></div>`).join('')}</div></div>
@@ -1112,7 +1114,7 @@ function histReport(M,k){
   const byC=custs.map(c=>({c,rs:all.filter(r=>r[0]===c&&inFY(r))})).filter(x=>x.rs.length).sort((a,b)=>tot(b.rs)-tot(a.rs));
   const T=tot(rows), share=billAll(BILL_RAW.filter(r=>inFY(r)&&inC(r)));
   const maxF=Math.max(...byFY.map(x=>tot(x.rs)),1);
-  const fyLbl=f=>{const p=fyPartial(f);return `<b>FY${f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:13.5px">${fyRange(f)}</div>`};
+  const fyLbl=f=>{const p=fyPartial(f);return `<b>FY${f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:12.5px">${fyRange(f)}</div>`};
   let kpis,cols,cell,tcols,tcell,extra='',lede;
   if(k==='tf'){
     const mt=sum(rows,4),tc=sum(rows,5);
@@ -1144,7 +1146,7 @@ function histReport(M,k){
   return `<div><h1>${R.name} report</h1><p class="lede">${lede} Fiscal year runs 1 October – 30 September. Source: ${BILL_SRC}.</p></div>
   ${repBar()}
   ${filters}
-  <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">${kpis.map(x=>`<div class="kpi ${x[0]}"><div class="l">${x[1]}</div><div class="v"${String(x[2]).length>14?' style="font-size:21px"':''}>${x[2]}</div><div class="s">${x[3]}</div></div>`).join('')}</div>
+  <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">${kpis.map(x=>`<div class="kpi ${x[0]}"><div class="l">${x[1]}</div><div class="v"${String(x[2]).length>14?' style="font-size:20px"':''}>${x[2]}</div><div class="s">${x[3]}</div></div>`).join('')}</div>
   <section class="panel"><div class="ph"><h2>${R.name} billed by fiscal year</h2><span class="sub">${histCust==='all'?'all customers':esc(histCust)} · click a year to filter</span></div>
     <div class="hb">${byFY.map(x=>`<button class="hbr" data-hfy="${x.f}"><span class="hl">FY${x.f}</span><span class="ht"><i style="width:${Math.max(0,tot(x.rs))/maxF*100}%;background:${R.color}"></i></span><span class="hv">${money(tot(x.rs))}</span></button>`).join('')}</div>
   </section>
@@ -1248,7 +1250,7 @@ function vHistCost(M){
   </section>
   <section class="panel"><div class="ph"><h2>Reefer plug by fiscal year</h2><span class="sub">per year</span></div>
     <div class="tw"><table><thead><tr><th>Fiscal year</th><th class="n">MEC rate / kWh</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">kWh</th><th class="n">Power cost</th>${H.depR?'<th class="n">Plug assets</th>':''}<th class="n">Billed</th><th class="n">Margin</th><th class="n">Margin %</th><th class="n">Avg / month</th></tr></thead>
-    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td><td class="n">${rateRange(x.rs)}</td><td class="n">${num(x.a.rc,0)}</td><td class="n">${num(x.a.pd,0)}</td><td class="n">${num(x.a.kwh,0)}</td><td class="n">${money(x.a.power)}</td>${H.depR?`<td class="n">${money(x.a.depR)}</td>`:''}<td class="n">${money(x.a.rp)}</td><td class="n ${x.a.rM>=0?'pos':'neg'}">${money(x.a.rM)}</td><td class="n">${mPct(x.a.rM,x.a.rp)}</td><td class="n" data-tip="${esc(money(x.a.power)+' power ÷ '+x.a.n+' months')}">${money(x.a.power/x.a.n)}</td></tr>`).join('')}</tbody>
+    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td><td class="n">${rateRange(x.rs)}</td><td class="n">${num(x.a.rc,0)}</td><td class="n">${num(x.a.pd,0)}</td><td class="n">${num(x.a.kwh,0)}</td><td class="n">${money(x.a.power)}</td>${H.depR?`<td class="n">${money(x.a.depR)}</td>`:''}<td class="n">${money(x.a.rp)}</td><td class="n ${x.a.rM>=0?'pos':'neg'}">${money(x.a.rM)}</td><td class="n">${mPct(x.a.rM,x.a.rp)}</td><td class="n" data-tip="${esc(money(x.a.power)+' power ÷ '+x.a.n+' months')}">${money(x.a.power/x.a.n)}</td></tr>`).join('')}</tbody>
     ${(()=>{const t=sumH(H.list);return `<tfoot><tr><td>Total</td><td></td><td class="n">${num(t.rc,0)}</td><td class="n">${num(t.pd,0)}</td><td class="n">${num(t.kwh,0)}</td><td class="n">${money(t.power)}</td>${H.depR?`<td class="n">${money(t.depR)}</td>`:''}<td class="n">${money(t.rp)}</td><td class="n">${money(t.rM)}</td><td class="n">${mPct(t.rM,t.rp)}</td><td class="n">${money(t.power/t.n)}</td></tr></tfoot>`})()}</table></div>
   </section>
   ${more('hc-rm','Show reefer plug month by month',`  <section class="panel"><div class="ph"><h2>Reefer plug by month</h2><span class="sub">${label}</span></div>
@@ -1264,7 +1266,7 @@ function vHistCost(M){
   </div>
   <section class="panel"><div class="ph"><h2>Transshipment by fiscal year</h2><span class="sub">${num(H.hrsPerMT,2)} crew-hours per MT (${(+S.expats||0)+(+S.locals||0)} crew × ${S.hoursPerDay} hrs ÷ ${num(S.mtPerDay,0)} MT)</span></div>
     <div class="tw"><table><thead><tr><th>Fiscal year</th><th class="n">Min. wage</th><th class="n">Burdened / hr</th><th class="n">MT</th><th class="n">Labor</th><th class="n">Depreciation</th><th class="n">Billed</th><th class="n">Margin</th><th class="n">Margin %</th></tr></thead>
-    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td><td class="n">${wageRange(x.rs)}</td><td class="n">${(()=>{const v=[...new Set(x.rs.map(m=>m.burden.toFixed(4)))];return v.length===1?money(+v[0],4):money(Math.min(...v),2)+'–'+money(Math.max(...v),2)})()}</td><td class="n">${num(x.a.mt,0)}</td><td class="n">${money(x.a.labor)}</td><td class="n">${money(x.a.depT)}</td><td class="n">${money(x.a.tf)}</td><td class="n ${x.a.tM>=0?'pos':'neg'}">${money(x.a.tM)}</td><td class="n">${mPct(x.a.tM,x.a.tf)}</td></tr>`).join('')}</tbody>
+    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td><td class="n">${wageRange(x.rs)}</td><td class="n">${(()=>{const v=[...new Set(x.rs.map(m=>m.burden.toFixed(4)))];return v.length===1?money(+v[0],4):money(Math.min(...v),2)+'–'+money(Math.max(...v),2)})()}</td><td class="n">${num(x.a.mt,0)}</td><td class="n">${money(x.a.labor)}</td><td class="n">${money(x.a.depT)}</td><td class="n">${money(x.a.tf)}</td><td class="n ${x.a.tM>=0?'pos':'neg'}">${money(x.a.tM)}</td><td class="n">${mPct(x.a.tM,x.a.tf)}</td></tr>`).join('')}</tbody>
     ${(()=>{const t=sumH(H.list);return `<tfoot><tr><td>Total</td><td></td><td></td><td class="n">${num(t.mt,0)}</td><td class="n">${money(t.labor)}</td><td class="n">${money(t.depT)}</td><td class="n">${money(t.tf)}</td><td class="n">${money(t.tM)}</td><td class="n">${mPct(t.tM,t.tf)}</td></tr></tfoot>`})()}</table></div>
     <p class="sub" style="margin:10px 0 0">Depreciation is charged in every month from ${fmtYM(H.list[0].ym)}, including months with no transshipment. If an asset was bought later, adjust it under Considerations. Others ($${num(sumH(H.list).ot,0)}) carry no estimated cost here.</p>
   </section>`;
@@ -1274,14 +1276,14 @@ function histPanel(){
   const R=S.rateHist.map((x,i)=>[x,i]).sort((a,b)=>a[0].from<b[0].from?-1:1), W=S.wageHist.map((x,i)=>[x,i]).sort((a,b)=>a[0].from<b[0].from?-1:1);
   const row=(kind,x,i,f,unit,step)=>`<div class="bar" style="flex-wrap:nowrap">
     <div class="inp" style="flex:1;min-width:0"><span>From</span><input type="month" id="${kind}f${i}" data-hk="${kind}" data-hi="${i}" data-hf="from" value="${x.from}"></div>
-    <div class="inp" style="flex:1;min-width:0"><span>$</span><input type="number" id="${kind}v${i}" data-hk="${kind}" data-hi="${i}" data-hf="${f}" step="${step}" value="${x[f]}"><span>${unit}</span></div>
+    <div class="inp" style="flex:1;min-width:0"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="${kind}v${i}" data-hk="${kind}" data-hi="${i}" data-hf="${f}" value="${fmtIn(x[f])}"><span>${unit}</span></div>
     ${kind==='r'?`<div class="inp" style="flex:1.3;min-width:0"><input type="text" id="rn${i}" data-hk="r" data-hi="${i}" data-hf="note" value="${esc(x.note||'')}" placeholder="Source" style="text-align:left"></div>`:''}
     <button class="btn sm" data-hdel="${kind}" data-hi="${i}" aria-label="Remove">Remove</button></div>`;
   return `<section class="panel" id="g-hist"><div class="ph"><h2>Rate and wage history</h2><span class="sub">used by the Historical cost tab · each value applies from its month until the next row</span></div>
     <div class="g2">
-      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:16px">MEC commercial rate</h2><button class="btn sm" data-hadd="r">Add a rate</button></div><div style="display:flex;flex-direction:column;gap:8px">${R.map(([x,i])=>row('r',x,i,'rate','/ kWh','0.0001')).join('')}</div>
+      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:15px">MEC commercial rate</h2><button class="btn sm" data-hadd="r">Add a rate</button></div><div style="display:flex;flex-direction:column;gap:8px">${R.map(([x,i])=>row('r',x,i,'rate','/ kWh','0.0001')).join('')}</div>
         <p class="sub" style="margin:8px 0 0">From PII MEC Power Billing (commercial = the higher rate each month). Rows marked "assumed" have no MEC bill on record.</p></div>
-      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:16px">Minimum wage</h2><button class="btn sm" data-hadd="w">Add a wage</button></div><div style="display:flex;flex-direction:column;gap:8px">${W.map(([x,i])=>row('w',x,i,'wage','/ hr','0.01')).join('')}</div>
+      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:15px">Minimum wage</h2><button class="btn sm" data-hadd="w">Add a wage</button></div><div style="display:flex;flex-direction:column;gap:8px">${W.map(([x,i])=>row('w',x,i,'wage','/ hr','0.01')).join('')}</div>
         <p class="sub" style="margin:8px 0 0">Social Security and leave scale with the wage; permits, visa, recruitment and food stay as set in Labor.</p></div>
     </div></section>`;
 }
