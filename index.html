@@ -26,67 +26,80 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:17px;line-height:1.5}
 .wrap{max-width:2008px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 header{padding-block:14px 0}
 .hero{background:linear-gradient(120deg,var(--hero1),var(--hero2));border:1px solid var(--hero-line);border-radius:12px;color:var(--hero-fg);padding:16px 18px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .brand{display:flex;gap:14px;align-items:flex-start;min-width:0;flex:1 1 360px}
 .logo{flex:none;width:54px;height:54px;border-radius:50%;display:block}
-.eyebrow{font-size:13px;color:var(--hero-muted)}
-.brand h1{font-size:22px;font-weight:600;margin:2px 0 4px;color:#fff}
-.brand p{margin:0;font-size:15px;color:var(--hero-muted);max-width:62ch}
+.eyebrow{font-size:14px;color:var(--hero-muted)}
+.brand h1{font-size:23px;font-weight:600;margin:2px 0 4px;color:#fff}
+.brand p{margin:0;font-size:16px;color:var(--hero-muted);max-width:62ch}
 .hside{display:flex;flex-direction:column;align-items:flex-end;gap:10px;min-width:0}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .tab{background:transparent;border:1px solid rgba(255,255,255,.75);color:#fff;font:600 14.5px var(--font);padding:6px 12px;border-radius:7px;cursor:pointer;white-space:nowrap}
-.tg{align-self:center;font-size:11.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--hero-muted);margin-left:8px}
+.tg{align-self:center;font-size:12.5px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--hero-muted);margin-left:8px}
 .tg:first-child{margin-left:0}
 .tab[aria-selected="true"]{background:#fff;color:#1A1850;border-color:#fff}
-.hmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:14px;color:var(--hero-muted)}
-.chip{font-size:13px;font-weight:600;color:#4ADE80;border:1px solid #4ADE80;border-radius:99px;padding:1px 9px}
+.hmeta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;font-size:15px;color:var(--hero-muted)}
+.chip{font-size:14px;font-weight:600;color:#4ADE80;border:1px solid #4ADE80;border-radius:99px;padding:1px 9px}
 .hbtn{display:inline-flex;gap:6px;align-items:center;background:#fff;color:#1A1850;border:0;border-radius:99px;font:600 14.5px var(--font);padding:7px 14px;cursor:pointer}
 .hlink{background:none;border:0;color:#fff;font:600 14.5px var(--font);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:4px 0}
 .ctx{margin-top:12px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.ctx b{font-size:15px;font-weight:600}
-.ctx .sel{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-weight:600;font-size:15px}
-.dash{border:1px dashed var(--muted);color:var(--muted);border-radius:99px;font-size:13px;font-weight:600;padding:1px 9px}
+.ctx b{font-size:16px;font-weight:600}
+.ctx .sel{border:1px solid var(--line);background:var(--surface2);border-radius:7px;padding:5px 10px;font-weight:600;font-size:16px}
+.dash{border:1px dashed var(--muted);color:var(--muted);border-radius:99px;font-size:14px;font-weight:600;padding:1px 9px}
 .ctx .grow{flex:1}
+.ctx #basis2{flex:1 1 220px;min-width:0}
+.ctxb{display:flex;gap:8px;flex-wrap:wrap;margin-left:auto;justify-content:flex-end}
 .lav{background:var(--accent);color:var(--accent-fg);border:0;border-radius:7px;font:600 14.5px var(--font);padding:7px 12px;cursor:pointer}
 .tab:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--t1);outline-offset:2px}
 main{padding-block:16px 48px}
 .view{display:flex;flex-direction:column;gap:16px}
-h1{font-size:22px;font-weight:600;margin:0;text-wrap:balance}
-h2{font-size:16px;font-weight:600;margin:0}
-.lede{color:var(--muted);margin:2px 0 0;max-width:72ch;font-size:15px}
+h1{font-size:23px;font-weight:600;margin:0;text-wrap:balance}
+h2{font-size:17px;font-weight:600;margin:0}
+.lede{color:var(--muted);margin:2px 0 0;max-width:72ch;font-size:16px}
+details.more{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
+details.more>summary{list-style:none;cursor:pointer;padding:12px 16px;font-weight:600;display:flex;align-items:center;gap:10px;color:var(--fg)}
+details.more>summary::-webkit-details-marker{display:none}
+details.more>summary::before{content:"▸";color:var(--muted);transition:transform .15s}
+details.more[open]>summary::before{transform:rotate(90deg)}
+details.more>summary:hover{background:var(--surface2);border-radius:10px}
+.more-in>.panel{border:0;padding:0;background:none}
+.more-in{padding:4px 16px 16px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.gl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px}
+.gl div{display:flex;flex-direction:column;gap:2px}.gl span{color:var(--muted);font-size:15px}
+@media (max-width:700px){.gl{grid-template-columns:minmax(0,1fr)}}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0}
 .ph{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
-.sub{color:var(--muted);font-size:14px}
+.sub{color:var(--muted);font-size:15px}
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .kpi{background:var(--surface);border:1px solid var(--line);border-top:3px solid var(--kc,var(--t1));border-radius:10px;padding:12px 14px;min-width:0;display:flex;flex-direction:column}
 .kpi .go{margin-top:auto!important;padding-top:6px;align-self:flex-start}
 .kpis{align-items:stretch}
 .kpi.k1{--kc:var(--t1)} .kpi.k2{--kc:var(--t2)} .kpi.k3{--kc:var(--t3)} .kpi.k4{--kc:var(--t4)} .kpi.k5{--kc:var(--t5)}
-.kpi .l{font-size:14.5px;color:var(--fg);font-weight:500}
-.kpi .v{font-size:27px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:2px}
-.kpi .s{font-size:14px;color:var(--muted);margin-top:2px}
-.kpi .go{display:inline-block;margin-top:6px;font-size:14px;color:var(--fg);background:none;border:0;padding:0;font-family:var(--font);cursor:pointer}
+.kpi .l{font-size:15.5px;color:var(--fg);font-weight:500}
+.kpi .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.25;margin-top:2px}
+.kpi .s{font-size:15px;color:var(--muted);margin-top:2px}
+.kpi .go{display:inline-block;margin-top:6px;font-size:15px;color:var(--fg);background:none;border:0;padding:0;font-family:var(--font);cursor:pointer}
 .kpi .go:hover{color:var(--accent)}
 .arow{display:grid;grid-template-columns:minmax(0,1.6fr) repeat(4,minmax(0,1fr)) auto;gap:10px;align-items:end;padding-bottom:10px;border-bottom:1px solid var(--line)}
 .arow-end{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
 @media (max-width:900px){.arow{grid-template-columns:repeat(2,minmax(0,1fr))}.arow>label:first-child{grid-column:1/-1}.arow-end{flex-direction:row;justify-content:space-between;align-items:center}}
 .op{border-top:3px solid var(--oc)}
 .kp2{grid-template-columns:repeat(2,minmax(0,1fr));margin-bottom:12px}
-h2.grp{font-size:17px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid var(--oc)}
+h2.grp{font-size:18px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid var(--oc)}
 .bc{max-width:760px}
-.bc-unit{font-size:13px;color:var(--muted);margin-bottom:6px}
+.bc-unit{font-size:14px;color:var(--muted);margin-bottom:6px}
 .bc-plot{display:flex;align-items:flex-end;gap:6px;height:150px;border-bottom:1px solid var(--line);padding-top:18px}
 .bc-col{flex:1;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px}
 .bc-col i{display:block;width:100%;max-width:38px;border-radius:3px 3px 0 0}
-.bc-v{font-size:12px;font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
+.bc-v{font-size:13px;font-weight:600;color:var(--fg);font-variant-numeric:tabular-nums;white-space:nowrap}
 .bc-x{display:flex;gap:6px;margin-top:4px}
-.bc-x span{flex:1;min-width:0;text-align:center;font-size:12px;color:var(--muted)}
-@media (max-width:520px){.bc-v{font-size:10.5px}.bc-plot,.bc-x{gap:3px}}
+.bc-x span{flex:1;min-width:0;text-align:center;font-size:13px;color:var(--muted)}
+@media (max-width:520px){.bc-v{font-size:11.5px}.bc-plot,.bc-x{gap:3px}}
 .filters{display:flex;flex-wrap:wrap;gap:12px 16px;align-items:flex-end}
-.chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--fg);cursor:pointer;padding:8px 0}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:15px;color:var(--fg);cursor:pointer;padding:8px 0}
 .chk input{width:16px;height:16px;accent-color:var(--accent)}
 .filters label.f{flex:0 1 300px;display:flex;flex-direction:column;gap:4px}
 .arow label.f{display:flex;flex-direction:column;gap:4px}
@@ -95,32 +108,32 @@ h2.grp{font-size:17px;margin:8px 0 -4px;padding-left:10px;border-left:4px solid 
 .step{display:flex;gap:10px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;cursor:pointer;font:inherit;color:var(--fg)}
 .step:hover{border-color:var(--accent)}
 .step b{flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent);font-weight:700}
-.step span{font-size:13px;color:var(--muted);line-height:1.35;min-width:0}
-.step strong{display:block;font-size:14.5px;color:var(--fg);font-weight:600}
+.step span{font-size:14px;color:var(--muted);line-height:1.35;min-width:0}
+.step strong{display:block;font-size:15.5px;color:var(--fg);font-weight:600}
 @media (max-width:900px){.steps{grid-template-columns:repeat(2,minmax(0,1fr))}}
 .pht{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;min-width:0}
 .flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:8px}
 .fx{flex:1 1 140px;min-width:0;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:10px 12px}
-.fx .l{font-size:12.5px;color:var(--muted)}
-.fx .v{font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
-.fx .s{font-size:12px;color:var(--muted)}
+.fx .l{font-size:13.5px;color:var(--muted)}
+.fx .v{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.3}
+.fx .s{font-size:13px;color:var(--muted)}
 .fx.hl{background:var(--accent-soft);border-color:var(--accent)}
 .fx.hl .v{color:var(--accent)}
-.fop{flex:none;align-self:center;font-size:22px;font-weight:600;color:var(--muted);width:18px;text-align:center}
+.fop{flex:none;align-self:center;font-size:23px;font-weight:600;color:var(--muted);width:18px;text-align:center}
 .flow+.flow{margin-top:10px}
 .tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .tl{border-left:4px solid var(--oc);padding:4px 0 4px 12px;min-width:0}
-.tl .h{font-size:12.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
-.tl p{margin:4px 0 0;font-size:15px;line-height:1.55}
+.tl .h{font-size:13.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px}
+.tl p{margin:4px 0 0;font-size:16px;line-height:1.55}
 .tl b{font-weight:700}
-.gnote{margin:-6px 0 0 14px;color:var(--muted);font-size:13.5px}
+.gnote{margin:-6px 0 0 14px;color:var(--muted);font-size:14.5px}
 .jump{display:flex;gap:8px;flex-wrap:wrap}
-@media (max-width:900px){.tldr{grid-template-columns:minmax(0,1fr)}.fop{width:100%;text-align:left;padding-left:8px;font-size:18px}}
-.tip{position:fixed;z-index:30;max-width:300px;background:var(--hero2);color:#fff;font-size:13px;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .12s}
+@media (max-width:900px){.tldr{grid-template-columns:minmax(0,1fr)}.fop{width:100%;text-align:left;padding-left:8px;font-size:19px}}
+.tip{position:fixed;z-index:30;max-width:300px;background:var(--hero2);color:#fff;font-size:14px;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 20px rgba(0,0,0,.25);pointer-events:none;opacity:0;transition:opacity .12s}
 .tip.on{opacity:1}
 [data-tip]{cursor:help}
 td[data-tip]:hover,.kpi[data-tip]:hover .v,.fx[data-tip]:hover .v{text-decoration:underline dotted;text-underline-offset:4px}
-.sc{font-size:14px}
+.sc{font-size:15px}
 .sc td,.sc th{padding:8px 6px}
 .sc th{letter-spacing:.3px}
 .sc td:first-child{min-width:190px}
@@ -133,51 +146,55 @@ input[type=month]{width:100%;min-width:0;border:0;background:transparent;color:v
 .hb{display:flex;flex-direction:column;gap:5px}
 .hbr{display:grid;grid-template-columns:62px minmax(0,1fr) 92px;align-items:center;gap:8px;background:none;border:0;padding:2px 0;font:inherit;color:var(--fg);cursor:pointer;text-align:left}
 .hbr:hover .hl{color:var(--accent)}
-.hl{font-size:13px;font-weight:600}
+.hl{font-size:14px;font-weight:600}
 .ht{display:flex;height:16px;background:var(--surface2);border-radius:3px;overflow:hidden}
 .ht i{display:block;height:100%}
-.hv{font-size:13px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.hv{font-size:14px;font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
 .beline{position:absolute;top:-3px;bottom:-3px;border-left:2px dashed var(--bad)}
 .lnk{background:none;border:0;padding:0;font:inherit;color:var(--fg);cursor:pointer;text-align:left}
 .lnk:hover{color:var(--accent);text-decoration:underline}
 select{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);font:500 15px var(--font);padding:8px 10px;cursor:pointer}
-@media (max-width:900px){.kpis[style*="repeat(5"]{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media (max-width:900px){.kpis[style]{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
 .g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
 .tw{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
 th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
-th{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600;white-space:nowrap}
+th{font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600;white-space:nowrap}
 td.n,th.n{text-align:right;white-space:nowrap}
+/* finance-table layout: number columns hug their content on the right, the label column takes the spare width */
+table td.n,table th.n{width:1%;padding-left:clamp(14px,2.2vw,40px)}
+table th[colspan].n{width:auto}
+td.n:last-child,th.n:last-child{padding-right:12px}
 tfoot td{font-weight:600;border-top:2px solid var(--fg);border-bottom:0}
-.mono{font-family:var(--mono);font-size:14.5px}
+.mono{font-family:var(--mono);font-size:15.5px}
 .sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
 .stack{display:flex;height:14px;border-radius:4px;overflow:hidden;margin:6px 0 12px;background:var(--line)}
 .stack i{display:block;height:100%}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:14px;color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:15px;color:var(--muted)}
 .fl{align-self:end}
 .fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px 16px}
-label.f{display:grid;grid-template-rows:subgrid;grid-row:span 3;align-content:start;row-gap:4px;font-size:14px;font-weight:500;color:var(--fg);min-width:0}
-label.f small{font-weight:400;color:var(--muted);font-size:13px}
+label.f{display:grid;grid-template-rows:subgrid;grid-row:span 3;align-content:start;row-gap:4px;font-size:15px;font-weight:500;color:var(--fg);min-width:0}
+label.f small{font-weight:400;color:var(--muted);font-size:14px}
 .inp{display:flex;align-items:center;border:1px solid var(--line);border-radius:7px;background:var(--surface2);overflow:hidden}
-.inp span{padding:0 9px;color:var(--muted);font-size:14px;white-space:nowrap}
+.inp span{padding:0 9px;color:var(--muted);font-size:15px;white-space:nowrap}
 input[type=number],input[type=text]{width:100%;min-width:0;border:0;background:transparent;color:var(--fg);font:500 16px var(--font);font-variant-numeric:tabular-nums;padding:8px 10px}
 input[type=number]{text-align:right}
 .btn{border:1px solid var(--line);background:var(--surface);color:var(--fg);font:600 14.5px var(--font);border-radius:7px;padding:7px 13px;cursor:pointer}
 .btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
-.btn.sm{padding:5px 10px;font-size:14px}
+.btn.sm{padding:5px 10px;font-size:15px}
 .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
-.note{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:15px;color:var(--fg)}
+.note{background:var(--accent-soft);border-radius:8px;padding:10px 14px;font-size:16px;color:var(--fg)}
 .note b{font-weight:600}
-.pill{display:inline-block;font-size:13px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
+.pill{display:inline-block;white-space:nowrap;font-size:14px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid currentColor}
 .pill.ok{color:var(--ok)} .pill.warn{color:var(--warn)} .pill.bad{color:var(--bad)}
 .chart text{fill:var(--muted);font:13px var(--font)}
 .chart .vl{fill:var(--fg);font-weight:600}
 .chart .grid{stroke:var(--line)}
-.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--hero2);color:#fff;padding:10px 16px;border-radius:8px;font-size:15px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--hero2);color:#fff;padding:10px 16px;border-radius:8px;font-size:16px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
 .toast.on{opacity:1}
 .pos{color:var(--ok)} .neg{color:var(--bad)}
 @media (max-width:900px){.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.g2{grid-template-columns:minmax(0,1fr)}.hside{align-items:flex-start}.tabs,.hmeta{justify-content:flex-start}}
-@media (max-width:420px){.kpi .v{font-size:22px}}
+@media (max-width:420px){.kpi .v{font-size:23px}}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 
@@ -194,13 +211,13 @@ input[type=number]{text-align:right}
         <nav class="tabs" role="tablist">
           <span class="tg">Estimate</span>
           <button class="tab" role="tab" data-v="summary" aria-selected="true">Dashboard</button>
-          <button class="tab" role="tab" data-v="trans">Transshipment</button>
-          <button class="tab" role="tab" data-v="reefer">Reefer Plug</button>
-          <button class="tab" role="tab" data-v="pricing">Pricing</button>
+          <button class="tab" role="tab" data-v="trans">Transshipment Cost</button>
+          <button class="tab" role="tab" data-v="reefer">Reefer Plug Cost</button>
+          <button class="tab" role="tab" data-v="pricing">Prices &amp; Break-even</button>
           <span class="tg">Actual</span>
           <button class="tab" role="tab" data-v="history">Billing History</button>
           <button class="tab" role="tab" data-v="customers">Customers</button>
-          <button class="tab" role="tab" data-v="histcost">Historical Cost</button>
+          <button class="tab" role="tab" data-v="histcost">Actual vs Cost</button>
           <span class="tg">Setup</span>
           <button class="tab" role="tab" data-v="settings">Considerations</button>
           <button class="tab" role="tab" data-v="saved">Saved</button>
@@ -209,7 +226,7 @@ input[type=number]{text-align:right}
         <div class="hmeta"><button class="hbtn" id="themeBtn">Dark mode</button></div>
       </div>
     </div>
-    <div class="ctx"><b id="basisLbl">Basis</b><span class="sel" id="basis"></span><span class="sub" id="basis2"></span><span class="dash" id="loadedTag">Estimate</span><span class="grow"></span><button class="btn" id="saveCompBtn">Save computation</button><button class="lav" id="copyBtn2">Copy costing for Excel</button><button class="lav" id="boardBtn" style="background:var(--hero2);color:#fff">Board summary (PDF)</button></div>
+    <div class="ctx"><b id="basisLbl">Basis</b><span class="sel" id="basis"></span><span class="sub" id="basis2"></span><span class="dash" id="loadedTag">Estimate</span><span class="ctxb"><button class="btn" id="saveCompBtn">Save computation</button><button class="lav" id="copyBtn2">Copy costing for Excel</button><button class="lav" id="boardBtn" style="background:var(--hero2);color:#fff">Board summary (PDF)</button></span></div>
   </div>
 </header>
 
@@ -355,6 +372,24 @@ function actualPanel(M){
     <div class="tldr">${box('Transshipment',a.tf,a.tCost,'var(--t1)')}${box('Reefer plug',a.rp,a.rCost,'var(--t3)')}${box(inclOthers?'All billing (incl. others '+money(a.ot)+')':'Transshipment + reefer plug',tot,cost,'var(--t4)')}</div>
   </section>`;
 }
+function glossary(){const T=[
+ ['MT','Metric ton: 1,000 kg of fish. Transshipment is priced and costed per MT.'],
+ ['Transshipment','Moving frozen tuna from a fishing vessel into containers or another vessel at the dock.'],
+ ['Reefer','A refrigerated 40-ft container. It keeps the fish frozen and needs a power plug while it waits at the dock.'],
+ ['Plug-day','One reefer plugged in for one day. Reefer plug charges are billed per plug-day.'],
+ ['Pull-down','The first hours after plugging in, when the reefer works hardest to cool the fish down to the set point. It uses more power.'],
+ ['Set point','The temperature the reefer is set to hold, for example −25°C.'],
+ ['kWh and MEC rate','kWh is a unit of electricity. The MEC rate is what Marshalls Energy Company charges per kWh.'],
+ ['Fully burdened labor','The hourly wage plus social security, permits, leave, food and other costs of each worker.'],
+ ['Depreciation','The cost of the dock and equipment spread over the years they are expected to last.'],
+ ['Break-even','The price or volume where income just covers the cost: no profit, no loss.'],
+ ['Margin','What is left from the price after the cost. Shown in dollars and as a % of the price.'],
+ ['Fiscal year (FY)','PII\'s year runs 1 October to 30 September. FY2026 is Oct 2025 to Sep 2026.'],
+ ['Estimate vs actual','Estimate tabs show the cost from your considerations. Actual tabs use the invoices billed.']];
+return more('glossary','What the terms mean',`<div class="gl">${T.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>`)}
+const OPEN=new Set();
+function more(id,title,html){return `<details class="more" id="d-${id}"${OPEN.has(id)?' open':''}><summary>${title}</summary><div class="more-in">${html}</div></details>`}
+document.addEventListener('toggle',e=>{const d=e.target;if(d.classList&&d.classList.contains('more')){const id=d.id.slice(2);d.open?OPEN.add(id):OPEN.delete(id)}},true);
 function vSummary(M){
   const T=M.T,R=M.R;
   return `<div><h1>Dashboard</h1>
@@ -365,6 +400,7 @@ function vSummary(M){
     <button class="step" data-go="pricing"><b>3</b><span><strong>Check prices</strong>margin and break-even tonnage</span></button>
     <button class="step" data-go="histcost"><b>4</b><span><strong>Compare with actual</strong>what was billed against the cost</span></button>
   </div>
+  ${glossary()}
   ${(()=>{const has=S.pricePerMT>0,beM=has?sumM(T.lines)/S.pricePerMT:0,capM=S.mtPerDay*S.opDaysMonth;return `<section class="panel"><div class="ph"><h2>At a glance</h2><span class="sub">estimate from the current considerations</span></div><div class="tldr">
     <div class="tl" style="--oc:var(--t1)"><div class="h">Transshipment</div><p>Moving <b>${num(S.mtPerDay,0)} MT</b> a day costs <b>${money(T.total,2)}</b>, which is <b>${money(T.perMT,2)} per MT</b>. Charge at least this per MT to cover crew, dock and equipment.</p></div>
     <div class="tl" style="--oc:var(--t3)"><div class="h">Reefer plug</div><p>Keeping <b>${M.boxes} reefers</b> frozen for ${M.prof.length} days costs <b>${money(R.batch)}</b>, which is <b>${money(R.perPlugDay,2)} per container per day</b>. ${M.plugsSteady>S.plugCap?'<b>This is more reefers than the '+S.plugCap+' plug points.</b>':'This uses '+M.plugsSteady+' of the '+S.plugCap+' plug points.'}</p></div>
@@ -378,25 +414,22 @@ function vSummary(M){
         <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">labor, depreciation, other</div><button class="go" data-go="trans">View details →</button></div>
         <div data-tip="${esc('Labor '+money(T.lines[0].v,2)+' + depreciation '+money(T.lines[1].v,2)+' + other '+money(T.lines[2].v,2))}" class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${money(T.month,0)} a month</div><button class="go" data-go="trans">View details →</button></div>
       </div>
-      ${stackBar(T.lines,T.total)}
-      ${opTable(T.lines,T.total,'Per MT',S.mtPerDay)}
+      ${more('dash-t','Show the cost breakdown',stackBar(T.lines,T.total)+opTable(T.lines,T.total,'Per MT',S.mtPerDay))}
     </section>
     <section class="panel op" style="--oc:var(--t3)"><div class="ph"><h2>Reefer plug operation</h2><span class="sub">priced per container per day plugged in</span></div>
       <div class="kpis kp2">
         <div data-tip="${esc(money(R.total,2)+' average cost per day ÷ '+M.boxes+' reefers plugged in')}" class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">${money(M.pullDayCost,0)} pull-down day · ${money(M.holdDayCost,0)} frozen day</div><button class="go" data-go="reefer">View details →</button></div>
         <div data-tip="${esc(num(S.reeferMT,0)+' MT ÷ '+S.mtPerBox+' MT per 40-ft reefer, rounded up = '+M.boxes+' reefers, against '+S.plugCap+' plug points')}" class="kpi k4"><div class="l">Reefers plugged in</div><div class="v">${M.plugsSteady} <span class="sub">of ${S.plugCap}</span></div><div class="s">${num(S.reeferMT,0)} MT ÷ ${S.mtPerBox} MT · ${capPill(M)}</div><button class="go" data-go="settings">View details →</button></div>
       </div>
-      ${stackBar(R.lines,R.total)}
-      ${opTable(R.lines,R.total,'Per plug-day',M.plugsSteady)}
+      ${more('dash-r','Show the cost breakdown',stackBar(R.lines,R.total)+opTable(R.lines,R.total,'Per plug-day',M.plugsSteady))}
     </section>
   </div>
-  <section class="panel"><div class="ph"><h2>Both operations together</h2><span class="sub">for reference only; each operation is priced separately</span></div>
+${more("dash-both","Show both operations added together",`  <section class="panel"><div class="ph"><h2>Both operations together</h2><span class="sub">for reference only; each operation is priced separately</span></div>
     <div class="tw"><table><thead><tr><th></th><th class="n">Per day</th><th class="n">Per month (${S.opDaysMonth} d)</th><th class="n">Per year</th><th class="n">Per unit</th></tr></thead><tbody>
       <tr><td>Transshipment operation</td><td class="n">${money(T.total,2)}</td><td class="n">${money(T.month)}</td><td class="n">${money(T.month*12)}</td><td class="n">${money(T.perMT,2)} / MT</td></tr>
       <tr><td>Reefer plug operation</td><td class="n">${money(R.total,2)}</td><td class="n">${money(R.month)}</td><td class="n">${money(R.month*12)}</td><td class="n">—</td></tr>
     </tbody><tfoot><tr><td>Total</td><td class="n">${money(M.total,2)}</td><td class="n">${money(T.month+R.month)}</td><td class="n">${money((T.month+R.month)*12)}</td><td class="n">—</td></tr></tfoot></table></div>
-  </section>
-  ${beVolume(M)}`;
+  </section>`)}`;
 }
 function barChart(rows,valKey,labelFn,colorFn,fmt,unit){
   // compact HTML bar chart: fixed height, labels stay at normal text size at any width
@@ -423,9 +456,9 @@ function totalsTable(lines,total,unit,div){
 }
 function vTrans(M){
   const L=M.L,T=M.T;
-  return `<div><h1>Transshipment operation</h1><p class="lede">Moving ${num(S.mtPerDay,0)} MT a day across the dock: crew, the dock and handling equipment. Costed per MT handled.</p></div>
+  return `<div><h1>Transshipment cost</h1><p class="lede">Moving ${num(S.mtPerDay,0)} MT a day across the dock: crew, the dock and handling equipment. Costed per MT handled.</p></div>
   <div class="kpis">
-    <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">at a full ${num(S.mtPerDay,0)} MT a day · at actual volumes it was ${money(hcRates(M,'all').tPerMT,2)} (Historical Cost)</div></div>
+    <div data-tip="${esc(money(T.total,2)+' cost per day ÷ '+num(S.mtPerDay,0)+' MT a day')}" class="kpi k1"><div class="l">Cost per MT</div><div class="v">${money(T.perMT,2)}</div><div class="s">at a full ${num(S.mtPerDay,0)} MT a day · at actual volumes it was ${money(hcRates(M,'all').tPerMT,2)} (Actual vs Cost tab)</div></div>
     <div data-tip="${esc('Labor '+money(T.lines[0].v,2)+' + depreciation '+money(T.lines[1].v,2)+' + other '+money(T.lines[2].v,2))}" class="kpi k2"><div class="l">Cost per day</div><div class="v">${money(T.total,2)}</div><div class="s">${num(S.mtPerDay,0)} MT · ${S.hoursPerDay} hrs</div></div>
     <div data-tip="${esc(L.nE+' expat × '+S.hoursPerDay+' hrs × '+money(L.rateE,4)+' + '+L.nL+' local × '+S.hoursPerDay+' hrs × '+money(L.rateL,4)+(L.otPremium?' + overtime premium '+money(L.otPremium,2):''))}" class="kpi k3"><div class="l">Labor per day</div><div class="v">${money(L.perDay,2)}</div><div class="s">${L.nE} expat + ${L.nL} local × ${S.hoursPerDay} hrs</div></div>
     <div data-tip="${esc('Each asset: (cost − salvage) ÷ useful life ÷ '+S.dockDays+' days × share charged to transshipment')}" class="kpi k5"><div class="l">Depreciation per day</div><div class="v">${money(T.lines[1].v,2)}</div><div class="s">dock and handling equipment</div></div>
@@ -433,7 +466,7 @@ function vTrans(M){
   <section class="panel"><div class="ph"><h2>How the cost per MT is worked out</h2><span class="sub">per operating day</span></div>
     ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'fuel, utilities…'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
   </section>
-  <div class="g2">
+${more("tr-detail","Show the detailed workings: labor rates, assets, monthly and yearly totals",`  <div class="g2">
   <section class="panel"><div class="ph"><h2>Labor</h2><span class="sub">PII Shipping fully burdened crew rate</span></div>
     <div class="tw"><table><thead><tr><th>Per hour</th><th class="n">Expat</th><th class="n">Local</th></tr></thead><tbody>${L.items.map(i=>`<tr><td>${esc(i[0])}</td><td class="n mono">${num(i[1],4)}</td><td class="n mono">${i[2]?num(i[2],4):'—'}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Fully burdened cost per hour</td><td class="n mono">${num(L.rateE,4)}</td><td class="n mono">${num(L.rateL,4)}</td></tr></tfoot></table></div>
@@ -448,12 +481,12 @@ function vTrans(M){
   <section class="panel"><div class="ph"><h2>Other daily costs</h2><span class="sub">edit in Considerations</span></div>${otherTable('t')}</section>
   </div></div>
   <section class="panel"><div class="ph"><h2>Transshipment cost</h2></div>${totalsTable(T.lines,T.total,'Per MT',S.mtPerDay)}
-    <p class="sub" style="margin:10px 0 0">Monthly and yearly figures multiply daily cost by operating days. Depreciation for idle days is recovered only if "Days a year" in Considerations is set to the actual operating days.</p></section>`;
+    <p class="sub" style="margin:10px 0 0">Monthly and yearly figures multiply daily cost by operating days. Depreciation for idle days is recovered only if "Days a year" in Considerations is set to the actual operating days.</p></section>`)}`;
 }
 function vReefer(M){
   const R=M.R;
   const ph=r=>r.phase==='pull'?'var(--t5)':r.phase==='hold'?'var(--c-power)':'var(--c-mute)';
-  return `<div><h1>Reefer plug operation</h1>
+  return `<div><h1>Reefer plug cost</h1>
   <p class="lede">Keeping containers frozen on the dock until the carrier loads them. A 40-ft reefer draws the most power in its first days, while the compressor pulls the fish down to ${SP()}. Once it reaches set point the compressor cycles and the draw drops. Costed per container per day plugged in.</p></div>
   <div class="kpis">
     <div data-tip="${esc(money(R.total,2)+' average cost per day ÷ '+M.boxes+' reefers plugged in')}" class="kpi k3"><div class="l">Cost per plug-day</div><div class="v">${money(R.perPlugDay,2)}</div><div class="s">break-even plug charge (average)</div></div>
@@ -465,7 +498,7 @@ function vReefer(M){
     ${flow([{l:'Power per container',v:money(M.costBox),s:`${num(M.kwhBox,0)} kWh over ${M.prof.length} days`},'×',{l:'Containers',v:M.boxes,s:'plugged in together'},'+',{l:'Depreciation & other',v:money(R.batch-M.powerBatch),s:`for ${M.prof.length} days`},'=',{l:'Cost of the batch',v:money(R.batch)}])}
     ${flow([{l:'Cost of the batch',v:money(R.batch)},'÷',{l:'Plug-days',v:M.boxes*M.prof.length,s:`${M.boxes} containers × ${M.prof.length} days`},'=',{l:'Cost per plug-day',v:money(R.perPlugDay,2),s:'break-even plug charge',hl:1}])}
   </section>
-  <section class="panel"><div class="ph"><h2>Daily power cost per container, by day on plug</h2><span class="sub">each bar = cost for one full day (24 hours) · ${num(M.kwhBox,0)} kWh · ${money(M.costBox)} per container · MEC ${money(S.rate,4)}/kWh</span></div>
+${more("rf-days","Show the power used day by day (per container and for all containers)",`  <section class="panel"><div class="ph"><h2>Daily power cost per container, by day on plug</h2><span class="sub">each bar = cost for one full day (24 hours) · ${num(M.kwhBox,0)} kWh · ${money(M.costBox)} per container · MEC ${money(S.rate,4)}/kWh</span></div>
     ${barChart(M.prof,'cost',r=>'Day '+r.d,ph,v=>money(v,0),'Power cost per day, one container')}
     <div class="legend" style="margin-top:6px"><span><i class="sw" style="background:var(--t5)"></i>Pull-down</span><span><i class="sw" style="background:var(--c-mute)"></i>Cooling to ${SP()}</span><span><i class="sw" style="background:var(--c-power)"></i>Holding at ${SP()}</span></div>
     <div class="tw" style="margin-top:12px"><table><thead><tr><th>Day</th><th>Stage</th><th class="n">Power draw<br>kW (per hour)</th><th class="n">Power cost<br>per hour</th><th class="n">Energy per day<br>kWh (24 hrs, incl. ${S.lossPct}% losses)</th><th class="n">Power cost<br>per day</th></tr></thead>
@@ -479,11 +512,12 @@ function vReefer(M){
     <tfoot><tr><td colspan="3">Batch total, ${M.prof.length} days</td><td class="n">${num(M.boxes*M.kwhBox,0)}</td><td class="n">${money(M.powerBatch)}</td></tr></tfoot></table></div>
     <p class="note" style="margin:12px 0 0">The ${M.boxes} containers are plugged in together and stay ${M.prof.length} days. Power for the batch is ${M.boxes} × ${money(M.costBox)} = <b>${money(M.powerBatch)}</b>, which averages ${money(M.powerDay,2)} a day or ${money(M.costBox/M.prof.length,2)} per container per day.</p>
   </section>
-  <div class="g2">
+`)}
+${more("rf-detail","Show assets, other costs and monthly and yearly totals",`  <div class="g2">
   <section class="panel"><div class="ph"><h2>Asset depreciation</h2><span class="sub">plug points, panels, gensets</span></div>${assetTable(M,'r')}</section>
   <section class="panel"><div class="ph"><h2>Other daily costs</h2><span class="sub">edit in Considerations</span></div>${otherTable('r')}</section>
   </div>
-  <section class="panel"><div class="ph"><h2>Reefer plug cost</h2><span class="sub">average per day while the ${M.boxes} containers are on plug · batch total ${money(R.batch)}</span></div>${totalsTable(R.lines,R.total,'Per plug-day',M.boxes)}</section>`;
+  <section class="panel"><div class="ph"><h2>Reefer plug cost</h2><span class="sub">average per day while the ${M.boxes} containers are on plug · batch total ${money(R.batch)}</span></div>${totalsTable(R.lines,R.total,'Per plug-day',M.boxes)}</section>`)}`;
 }
 function beComb(M){
   // Combined break-even: every MT is transshipped and its fish waits in reefers on plug.
@@ -500,17 +534,17 @@ function beComb(M){
 }
 function beCombPanel(M){
   const B=beComb(M), ok=isFinite(B.beM);
-  const pill=x=>!isFinite(x)?'<span class="pill bad">Never breaks even</span>':x>B.capM?'<span class="pill bad">Above capacity</span>':x>B.capM*0.85?'<span class="pill warn">Near capacity</span>':'<span class="pill ok">Within capacity</span>';
+  const pill=x=>!isFinite(x)?'<span class="pill bad">Never</span>':x>B.capM?'<span class="pill bad">Over</span>':x>B.capM*0.85?'<span class="pill warn">Near limit</span>':'<span class="pill ok">Yes</span>';
   const prices=[B.priceMT,...[20,30,40,50,60,70].filter(x=>Math.abs(x-B.priceMT)>0.005)].filter(x=>x>0).sort((a,b)=>a-b);
   return `<section class="panel" style="border-top:3px solid var(--t4)"><div class="ph"><h2>Combined break-even: transshipment + reefer plug</h2><span class="sub">using ${B.src}</span></div>
     <div class="kpis">
       <div class="kpi k2" data-tip="${esc('Transshipment labor, depreciation and other '+money(lineM(M.T.lines[0])+lineM(M.T.lines[1])+lineM(M.T.lines[2]))+' + reefer plug assets and other '+money(lineM(M.R.lines[1])+lineM(M.R.lines[2]))+' a month')}"><div class="l">Fixed cost per month</div><div class="v">${money(B.fixedM)}</div><div class="s">${money(B.fixedM*12)} a year · both operations</div></div>
-      <div class="kpi k3" data-tip="${esc(money(B.priceMT,2)+' transshipment + '+money(B.pricePD,2)+' × '+num(B.pdPerMT,2)+' plug-days per MT − power '+money(B.powerMT,2)+' per MT')}"><div class="l">Contribution per MT</div><div class="v">${money(B.contrib,2)}</div><div class="s">revenue ${money(B.revMT,2)} less power ${money(B.powerMT,2)} per MT</div></div>
+      <div class="kpi k3" data-tip="${esc(money(B.priceMT,2)+' transshipment + '+money(B.pricePD,2)+' × '+num(B.pdPerMT,2)+' plug-days per MT − power '+money(B.powerMT,2)+' per MT')}"><div class="l">Left per MT after power</div><div class="v">${money(B.contrib,2)}</div><div class="s">revenue ${money(B.revMT,2)} less power ${money(B.powerMT,2)} per MT</div></div>
       <div class="kpi k1" data-tip="${esc(money(B.fixedM)+' ÷ '+money(B.contrib,2)+' per MT')}"><div class="l">Break-even per month</div><div class="v">${ok?num(B.beM,0)+' MT':'—'}</div><div class="s">${ok?num(B.beM/S.opDaysMonth,0)+' MT a day · '+num(B.beM/S.mtPerBox,0)+' reefers':'price does not cover power'}</div></div>
       <div class="kpi k4"><div class="l">Break-even per year</div><div class="v">${ok?num(B.beM*12,0)+' MT':'—'}</div><div class="s">${ok?pct(B.beM/B.capM)+' of '+num(B.capM*12,0)+' MT capacity · ':''}${pill(B.beM)}</div></div>
     </div>
-    ${flow([{l:'Transshipment price',v:money(B.priceMT,2),s:'per MT'},'+',{l:'Reefer plug income',v:money(B.pricePD*B.pdPerMT,2),s:`${money(B.pricePD,2)} × ${num(B.pdPerMT,2)} plug-days per MT`},'−',{l:'MEC power',v:money(B.powerMT,2),s:'per MT'},'=',{l:'Contribution',v:money(B.contrib,2),s:'per MT'},'→',{l:'Break-even',v:ok?num(B.beM,0)+' MT':'—',s:'a month',hl:1}])}
-    <div class="tw" style="margin-top:14px"><table><thead><tr><th>Transshipment price per MT</th><th class="n">Reefer plug per plug-day</th><th class="n">Contribution per MT</th><th class="n">Break-even MT / month</th><th class="n">MT / year</th><th class="n">Share of capacity</th><th></th></tr></thead><tbody>
+    ${flow([{l:'Transshipment price',v:money(B.priceMT,2),s:'per MT'},'+',{l:'Reefer plug income',v:money(B.pricePD*B.pdPerMT,2),s:`${money(B.pricePD,2)} × ${num(B.pdPerMT,2)} plug-days per MT`},'−',{l:'MEC power',v:money(B.powerMT,2),s:'per MT'},'=',{l:"Left after power",v:money(B.contrib,2),s:'per MT'},'→',{l:'Break-even',v:ok?num(B.beM,0)+' MT':'—',s:'a month',hl:1}])}
+    <div class="tw" style="margin-top:14px"><table><thead><tr><th>Price per MT</th><th class="n">Per plug-day</th><th class="n">Left per MT after power</th><th class="n">Break-even MT / month</th><th class="n">MT / year</th><th class="n">% of capacity</th><th>Fits?</th></tr></thead><tbody>
       ${prices.map(p=>{const c=p+B.pricePD*B.pdPerMT-B.powerMT,v=c>0?B.fixedM/c:Infinity,me=Math.abs(p-B.priceMT)<0.005;return `<tr${me?' style="background:var(--accent-soft)"':''}><td>${money(p,2)}${me?' <span class="sub">'+(B.usePrice?'your price':'FY'+(FY_LAST-1)+' average')+'</span>':''}</td><td class="n">${money(B.pricePD,2)}</td><td class="n">${money(c,2)}</td><td class="n">${isFinite(v)?num(v,0):'—'}</td><td class="n">${isFinite(v)?num(v*12,0):'—'}</td><td class="n">${isFinite(v)?pct(v/B.capM):'—'}</td><td class="n">${pill(v)}</td></tr>`}).join('')}
     </tbody></table></div>
     <p class="sub" style="margin:10px 0 0">Each MT is assumed to wait ${M.prof.length} days on plug in a ${S.mtPerBox} MT reefer, so it uses ${num(B.pdPerMT,2)} plug-days and ${money(B.powerMT,2)} of MEC power. Crew, depreciation and other costs are fixed each month. ${B.usePrice?'':'Enter your own prices above to replace the FY'+(FY_LAST-1)+' averages ('+money(B.avgMT,2)+' per MT, '+money(B.avgPD,2)+' per plug-day).'}</p>
@@ -521,7 +555,7 @@ function beVolume(M){
   const days=S.opDaysMonth, capM=S.mtPerDay*days, capY=capM*12;
   const lab=lineM(M.T.lines[0]), dep=lineM(M.T.lines[1]), oth=lineM(M.T.lines[2]), costM=lab+dep+oth, costY=costM*12;
   const be=p=>p>0?costM/p:Infinity, util=x=>capM?x/capM:0;
-  const pill=x=>!isFinite(x)?'':x>capM?'<span class="pill bad">Above capacity</span>':x>capM*0.85?'<span class="pill warn">Near capacity</span>':'<span class="pill ok">Within capacity</span>';
+  const pill=x=>!isFinite(x)?'':x>capM?'<span class="pill bad">Over</span>':x>capM*0.85?'<span class="pill warn">Near limit</span>':'<span class="pill ok">Yes</span>';
   const prices=[...new Set([S.pricePerMT>0?+S.pricePerMT:null,10,15,20,25,30,40,50].filter(x=>x))].sort((a,b)=>a-b);
   const has=S.pricePerMT>0, x=be(S.pricePerMT), minPrice=capM?costM/capM:0;
   return `<section class="panel" style="border-top:3px solid var(--t1)"><div class="ph"><h2>Transshipment break-even</h2><span class="sub">based on estimated operating cost${has?' · at your price of '+money(S.pricePerMT,2)+'/MT':''}</span></div>
@@ -531,7 +565,7 @@ function beVolume(M){
       <div data-tip="${esc(has?num(x,0)+' MT a month × 12':'Break-even per month × 12')}" class="kpi k3"><div class="l">Break-even per year</div><div class="v">${has?num(x*12,0)+' MT':'—'}</div><div class="s">${has?pct(util(x))+' of '+num(capY,0)+' MT capacity · '+pill(x):'capacity '+num(capY,0)+' MT a year'}</div></div>
       <div data-tip="${esc(money(costM)+' monthly cost ÷ '+num(capM,0)+' MT capacity a month')}" class="kpi k5"><div class="l">Lowest price at full capacity</div><div class="v">${money(minPrice,2)}</div><div class="s">per MT, moving ${num(capM,0)} MT a month</div></div>
     </div>
-    <div class="tw" style="margin-top:14px"><table><thead><tr><th>Price per MT</th><th class="n">Break-even MT / month</th><th class="n">Break-even MT / year</th><th class="n">MT / day</th><th class="n">Share of capacity</th><th></th></tr></thead><tbody>
+    <div class="tw" style="margin-top:14px"><table><thead><tr><th>Price per MT</th><th class="n">Break-even MT / month</th><th class="n">Break-even MT / year</th><th class="n">MT / day</th><th class="n">% of capacity</th><th>Fits?</th></tr></thead><tbody>
       ${prices.map(p=>{const v=be(p);return `<tr${p===+S.pricePerMT?' style="background:var(--accent-soft)"':''}><td>${money(p,2)}${p===+S.pricePerMT?' <span class="sub">your price</span>':''}</td><td class="n" data-tip="${esc(money(costM)+' monthly cost ÷ '+money(p,2)+' per MT')}">${num(v,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT a month × 12')}">${num(v*12,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT ÷ '+days+' operating days')}">${num(v/days,0)}</td><td class="n" data-tip="${esc(num(v,0)+' MT ÷ '+num(capM,0)+' MT capacity a month')}">${pct(util(v))}</td><td class="n">${pill(v)}</td></tr>`}).join('')}
     </tbody></table></div>
     <p class="sub" style="margin:10px 0 0">The crew, dock and equipment cost the same however much cargo moves, so break-even tonnage = operating cost ÷ price per MT. Labor and other costs use ${days} operating days a month; depreciation is the full annual amount (÷ 12 for a month). Capacity is ${num(S.mtPerDay,0)} MT a day. Reefer plug income is separate and not counted here.</p>
@@ -555,7 +589,7 @@ function vPricing(M){
       <div data-tip="${esc('(Your price − break-even price) × units a day')}" class="kpi k4"><div class="l">Margin per day</div><div class="v ${has?cls(marginDay):''}">${has?money(marginDay,2):'—'}</div><div class="s">${has?mp(marginDay,rev)+' of '+money(rev,0)+' revenue':'enter a price above'}</div></div>
     </div>
   </section>`;
-  return `<div><h1>Pricing &amp; margin</h1><p class="lede">Transshipment and the reefer plug charge are costed and priced separately. Transshipment carries its labor, assets and other costs per MT. The reefer plug charge carries MEC power plus its own assets and other costs for each day a container is plugged in.</p></div>
+  return `<div><h1>Prices &amp; break-even</h1><p class="lede">Transshipment and the reefer plug charge are costed and priced separately. Transshipment carries its labor, assets and other costs per MT. The reefer plug charge carries MEC power plus its own assets and other costs for each day a container is plugged in.</p></div>
   <section class="panel"><div class="ph"><h2>Your pricing</h2></div>
     <div class="fgrid">
       ${field('pricePerMT','Transshipment price','$ / MT','0.01')}
@@ -567,16 +601,15 @@ function vPricing(M){
     ${flow([{l:'Transshipment price',v:hasT?money(S.pricePerMT,2):'—',s:'per MT'},'−',{l:'Cost',v:money(tBE,2),s:'per MT'},'=',{l:'Margin per MT',v:hasT?money(S.pricePerMT-tBE,2):'—',s:hasT?mp(S.pricePerMT-tBE,S.pricePerMT)+' of price':'enter a price',hl:1},'×',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'a day'},'=',{l:'Margin per day',v:hasT?money(tM,2):'—'}])}
     ${flow([{l:'Reefer plug charge',v:hasR?money(S.plugPricePerDay,2):'—',s:'per plug-day'},'−',{l:'Cost',v:money(rBE,2),s:'per plug-day'},'=',{l:'Margin per plug-day',v:hasR?money(S.plugPricePerDay-rBE,2):'—',s:hasR?mp(S.plugPricePerDay-rBE,S.plugPricePerDay)+' of price':'enter a price',hl:1},'×',{l:'Reefers',v:plugDays,s:'plugged in'},'=',{l:'Margin per day',v:hasR?money(rM,2):'—'}])}
   </section>
-  <h2 class="grp" style="--oc:var(--t1)">Break-even price by operation</h2>
+<h2 class="grp" style="--oc:var(--t4)">Break-even: how much cargo covers the cost</h2>
+  ${beCombPanel(M)}
+  ${more('pr-tonly','Show the break-even for transshipment on its own',beVolume(M))}
+  <h2 class="grp" style="--oc:var(--t1)">Break-even price: the lowest price that covers the cost</h2>
   <div class="g2">
     ${card('t1','Transshipment','per MT handled',tBE,S.pricePerMT,hasT,tM,tRev,'cost per MT handled')}
     ${card('t3','Reefer plug charge','per plug-day',rBE,S.plugPricePerDay,hasR,rM,rRev,'cost per container per day')}
   </div>
-<h2 class="grp" style="--oc:var(--t4)">Break-even volume</h2>
-${beVolume(M)}
-  ${beCombPanel(M)}
-  <h2 class="grp" style="--oc:var(--t2)">Margin, target prices and quotes</h2>
-  <section class="panel"><div class="ph"><h2>Margin by service</h2><span class="sub">steady operation, ${num(S.mtPerDay,0)} MT and ${plugDays} plug-days a day</span></div>
+  ${more('pr-more','Show the margin table, prices for a target margin and a vessel quote',`  <section class="panel"><div class="ph"><h2>Margin by service</h2><span class="sub">steady operation, ${num(S.mtPerDay,0)} MT and ${plugDays} plug-days a day</span></div>
     <div class="tw"><table><thead><tr><th></th><th class="n">Transshipment</th><th class="n">Reefer plug charge</th><th class="n">Combined</th></tr></thead><tbody>
       <tr><td>Billing unit</td><td class="n">${num(S.mtPerDay,0)} MT a day</td><td class="n">${plugDays} plug-days a day (${M.boxes} containers)</td><td class="n"></td></tr>
       <tr><td>Your price</td><td class="n">${hasT?money(S.pricePerMT,2)+' / MT':'—'}</td><td class="n">${hasR?money(S.plugPricePerDay,2)+' / plug-day':'—'}</td><td class="n"></td></tr>
@@ -605,7 +638,7 @@ ${beVolume(M)}
       <tr><td>Margin %</td><td class="n">${mp(vT.rev-vT.cost,vT.rev)}</td><td class="n">${mp(vR.rev-vR.cost,vR.rev)}</td><td class="n">${mp(vT.rev+vR.rev-vT.cost-vR.cost,vT.rev+vR.rev)}</td></tr>
     </tfoot></table></div>
   </section>
-  </div>`;
+  </div>`)}`;
 }
 function field(k,label,unit,step,hint){
   return `<label class="f"><span class="fl">${label}</span><div class="inp"><input type="number" id="${k}" data-k="${k}" step="${step||'any'}" value="${S[k]}"><span>${unit}</span></div>${hint?`<small>${hint}</small>`:'<small></small>'}</label>`;
@@ -899,7 +932,7 @@ function histAll(M){
   const mx=custs.map(c=>({c,v:fys.map(f=>BILL.filter(r=>r[0]===c&&fyOf(r[2])===f).reduce((t,r)=>t+r[4],0))})).filter(x=>x.v.some(v=>Math.abs(v)>0.5)).sort((a,b)=>b.v.reduce((t,v)=>t+v,0)-a.v.reduce((t,v)=>t+v,0));
   const list=rows.slice().reverse(), shown=histShowAll?list:list.slice(0,25);
   const beY=S.pricePerMT>0?sumM(M.T.lines)*12/S.pricePerMT:0;
-  const fyRow=(x)=>{const a=x.a,p=fyPartial(x.f);return `<tr${histFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td style="white-space:nowrap"><b>FY${x.f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td>
+  const fyRow=(x)=>{const a=x.a,p=fyPartial(x.f);return `<tr${histFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td style="white-space:nowrap"><b>FY${x.f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td>
     <td class="n">${a.inv}</td><td class="n" data-tip="Sum of transfer-fee quantities billed per MT">${num(a.mt,0)}</td><td class="n" data-tip="Transfer-fee lines billed per container">${num(a.tc,0)}</td>
     <td class="n" data-tip="${esc(money(a.tf)+' transfer fees ÷ '+num(a.mt,0)+' MT')}">${rate(a.tf,a.mt)}</td><td class="n">${money(a.tf)}</td>
     <td class="n">${num(a.rc,0)}</td><td class="n">${num(a.pd,0)}</td><td class="n" data-tip="${esc(money(a.rp)+' reefer plug ÷ '+num(a.pd,0)+' plug-days')}">${rate(a.rp,a.pd)}</td><td class="n">${money(a.rp)}</td>
@@ -938,21 +971,21 @@ function histAll(M){
     <div class="tw"><table><thead><tr><th>Customer</th><th class="n">Invoices</th><th class="n">MT</th><th class="n">Containers</th><th class="n">Avg $/MT</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">Total billed</th><th class="n">Share</th></tr></thead>
     <tbody>${byC.map(x=>{const a=x.a,all=byC.reduce((t,y)=>t+y.a.total,0);return `<tr${histCust===x.c?' style="background:var(--accent-soft)"':''}><td><button class="lnk" data-hcust="${esc(x.c)}">${esc(x.c)}</button></td><td class="n">${a.inv}</td><td class="n">${num(a.mt,0)}</td><td class="n">${num(a.tc,0)}</td><td class="n">${rate(a.tf,a.mt)}</td><td class="n">${num(a.rc,0)}</td><td class="n">${num(a.pd,0)}</td><td class="n">${money(a.total)}</td><td class="n" data-tip="${esc(money(a.total)+' ÷ '+money(all))}">${pct(all?a.total/all:0)}</td></tr>`}).join('')}</tbody></table></div>
   </section>
-  <section class="panel"><div class="ph"><h2>Tonnage by customer and fiscal year</h2><span class="sub">MT transshipped</span></div>
+  ${more('bh-ton','Show tonnage by customer and fiscal year',`  <section class="panel"><div class="ph"><h2>Tonnage by customer and fiscal year</h2><span class="sub">MT transshipped</span></div>
     <div class="tw"><table><thead><tr><th>Customer</th>${fys.map(f=>`<th class="n">FY${f}</th>`).join('')}<th class="n">Total</th></tr></thead>
     <tbody>${mx.map(x=>`<tr><td style="white-space:nowrap">${esc(x.c)}</td>${x.v.map((v,i)=>`<td class="n${Math.abs(v)<0.5?' sub':''}">${Math.abs(v)<0.5?'–':num(v,0)}</td>`).join('')}<td class="n"><b>${num(x.v.reduce((t,v)=>t+v,0),0)}</b></td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Total</td>${fys.map(f=>`<td class="n">${num(BILL.filter(r=>fyOf(r[2])===f).reduce((t,r)=>t+r[4],0),0)}</td>`).join('')}<td class="n">${num(BILL.reduce((t,r)=>t+r[4],0),0)}</td></tr></tfoot></table></div>
-  </section>
+  </section>`)}
   <section class="panel"><div class="ph"><h2>Compared with the costing</h2><span class="sub">actual average rates against the current cost estimate</span></div>
-    ${(()=>{const C=hcRates(M,histFY),bt=A.mt?A.tf/A.mt:0,br=A.pd?A.rp/A.pd:0;return flow([{l:'Average billed per MT',v:rate(A.tf,A.mt),s:label},'vs',{l:'Cost per MT at actual volume',v:money(C.tPerMT,2),s:'labor + depreciation (Historical Cost)'},'=',{l:'Margin per MT',v:A.mt?money(bt-C.tPerMT,2):'—',s:bt?pct((bt-C.tPerMT)/bt)+' of the rate':'',hl:1}])+flow([{l:'Average billed per plug-day',v:rate(A.rp,A.pd),s:label},'vs',{l:'Cost per plug-day',v:money(C.rPerPD,2),s:'MEC power at the rate of the month'},'=',{l:'Margin per plug-day',v:A.pd?money(br-C.rPerPD,2):'—',s:br?pct((br-C.rPerPD)/br)+' of the rate':'',hl:1}])})()}
-    <p class="sub" style="margin:10px 0 0">Costs come from the Historical Cost tab: actual volumes, the MEC rate and minimum wage of each month, and today's crew, reefer and asset considerations. The Transshipment and Reefer Plug tabs show cost at a full ${num(S.mtPerDay,0)} MT a day instead, which is why their cost per MT is lower. Average plug-days per reefer billed: ${A.rc?num(A.pd/A.rc,0):'—'} days.</p>
+    ${(()=>{const C=hcRates(M,histFY),bt=A.mt?A.tf/A.mt:0,br=A.pd?A.rp/A.pd:0;return flow([{l:'Average billed per MT',v:rate(A.tf,A.mt),s:label},'vs',{l:'Cost per MT at actual volume',v:money(C.tPerMT,2),s:'labor + depreciation (Actual vs Cost tab)'},'=',{l:'Margin per MT',v:A.mt?money(bt-C.tPerMT,2):'—',s:bt?pct((bt-C.tPerMT)/bt)+' of the rate':'',hl:1}])+flow([{l:'Average billed per plug-day',v:rate(A.rp,A.pd),s:label},'vs',{l:'Cost per plug-day',v:money(C.rPerPD,2),s:'MEC power at the rate of the month'},'=',{l:'Margin per plug-day',v:A.pd?money(br-C.rPerPD,2):'—',s:br?pct((br-C.rPerPD)/br)+' of the rate':'',hl:1}])})()}
+    <p class="sub" style="margin:10px 0 0">Costs come from the Actual vs Cost tab: actual volumes, the MEC rate and minimum wage of each month, and today's crew, reefer and asset considerations. The Transshipment and Reefer Plug tabs show cost at a full ${num(S.mtPerDay,0)} MT a day instead, which is why their cost per MT is lower. Average plug-days per reefer billed: ${A.rc?num(A.pd/A.rc,0):'—'} days.</p>
   </section>
-  <section class="panel"><div class="ph"><h2>Transactions</h2><span class="sub">${num(list.length,0)} invoice${list.length===1?'':'s'} · ${label} · newest first</span></div>
+  ${more('bh-tx','Show the invoice list',`  <section class="panel"><div class="ph"><h2>Transactions</h2><span class="sub">${num(list.length,0)} invoice${list.length===1?'':'s'} · ${label} · newest first</span></div>
     <div class="tw"><table><thead><tr><th>Date</th><th>FY</th><th>Invoice</th><th>Customer</th><th class="n">MT</th><th class="n">Containers</th><th class="n">Transfer fee</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">Reefer plug</th>${inclOthers?'<th class="n">Others</th>':''}<th class="n">Total</th></tr></thead>
     <tbody>${shown.map(r=>{const t=r[3]+r[6]+r[9];return `<tr><td style="white-space:nowrap">${fmtD(r[2])}</td><td>FY${fyOf(r[2])}</td><td class="mono">${esc(r[1])}</td><td>${esc(r[0])}</td><td class="n">${r[4]?num(r[4],0):'–'}</td><td class="n">${r[5]||'–'}</td><td class="n">${r[3]?money(r[3]):'–'}</td><td class="n">${r[8]||'–'}</td><td class="n">${r[7]?num(r[7],0):'–'}</td><td class="n">${r[6]?money(r[6]):'–'}</td>${inclOthers?`<td class="n">${r[9]?money(r[9]):'–'}</td>`:''}<td class="n${t<0?' neg':''}"><b>${money(t)}</b></td></tr>`}).join('')||'<tr><td colspan="12" class="sub">No invoices for this filter</td></tr>'}</tbody></table></div>
     ${list.length>25?`<div class="bar" style="margin-top:10px"><button class="btn" id="histMore">${histShowAll?'Show the latest 25 only':'Show all '+num(list.length,0)+' invoices'}</button></div>`:''}
     <p class="sub" style="margin:10px 0 0">Tonnage is the transfer-fee quantity billed per MT (credit notes reduce it). Containers count transfer-fee lines billed per container; bulk unloading lines add tonnage but no containers. Reefers count reefer-plug lines; plug-days are their billed quantity. Customer name spellings of FCF, Tri Marine and Pacific Shipping are combined, Da Yang Seafood Ltd. and Pte. Ltd. are shown as one customer, and AC Construction is excluded as non-transshipment billing.</p>
-  </section>`;
+  </section>`)}`;
 }
 /* ---------- Customer analysis (from BILL) ---------- */
 let caCust=null, caSort='total';
@@ -1029,7 +1062,7 @@ function custProfile(x,D,M){
       <div class="kpi k1"><div class="l">Tonnage</div><div class="v">${num(x.a.mt,0)} MT</div><div class="s">${num(x.a.tc,0)} containers · ${x.a.tc?num(x.a.mt/x.a.tc,0):'–'} MT each</div></div>
       ${(()=>{const C=hcRates(M,'all');return `<div class="kpi k3" data-tip="${esc('Cost per MT at actual volume, all years: '+money(C.tPerMT,2))}"><div class="l">Average $/MT (transshipment)</div><div class="v">${x.a.cmt?money(x.rateMT,2):'–'}</div><div class="s">${x.a.mt?'cost at actual volume '+money(C.tPerMT,2)+' per MT':'no transfer fees'}</div></div>`})()}
       <div class="kpi k4" data-tip="${esc('Cost per plug-day at historical MEC rates: '+money(hcRates(M,'all').rPerPD,2))}"><div class="l">Reefer plug</div><div class="v">${x.a.pd?money(x.ratePD,2):'–'} <span class="sub">/ plug-day</span></div><div class="s">${num(x.a.rc,0)} reefers · ${x.a.rc?num(x.dwell,0):'–'} days on plug on average</div></div>
-      <div class="kpi k5"><div class="l">Customer since</div><div class="v" style="font-size:21px">${fmtD(x.first)}</div><div class="s">last invoice ${fmtD(x.last)} · ${x.fys} fiscal years</div></div>
+      <div class="kpi k5"><div class="l">Customer since</div><div class="v" style="font-size:22px">${fmtD(x.first)}</div><div class="s">last invoice ${fmtD(x.last)} · ${x.fys} fiscal years</div></div>
     </div>
     <div class="g2" style="margin-top:14px">
       <div><div class="bc-unit">Billed by fiscal year</div><div class="hb">${by.map(y=>`<div class="hbr" style="cursor:default" data-tip="${esc('FY'+y.f+': transfer '+money(y.a.tf)+' · reefer '+money(y.a.rp)+' · others '+money(y.a.ot))}"><span class="hl">FY${y.f}</span><span class="ht"><i style="width:${y.a.tf/maxT*100}%;background:var(--c-labor)"></i><i style="width:${y.a.rp/maxT*100}%;background:var(--c-power)"></i><i style="width:${Math.max(0,y.a.ot)/maxT*100}%;background:var(--c-other)"></i></span><span class="hv">${y.a.total?money(y.a.total):'–'}</span></div>`).join('')}</div></div>
@@ -1079,7 +1112,7 @@ function histReport(M,k){
   const byC=custs.map(c=>({c,rs:all.filter(r=>r[0]===c&&inFY(r))})).filter(x=>x.rs.length).sort((a,b)=>tot(b.rs)-tot(a.rs));
   const T=tot(rows), share=billAll(BILL_RAW.filter(r=>inFY(r)&&inC(r)));
   const maxF=Math.max(...byFY.map(x=>tot(x.rs)),1);
-  const fyLbl=f=>{const p=fyPartial(f);return `<b>FY${f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:12.5px">${fyRange(f)}</div>`};
+  const fyLbl=f=>{const p=fyPartial(f);return `<b>FY${f}</b>${p?` <span class="pill warn" data-tip="Partial year: invoices ${p}">partial</span>`:''}<div class="sub" style="font-size:13.5px">${fyRange(f)}</div>`};
   let kpis,cols,cell,tcols,tcell,extra='',lede;
   if(k==='tf'){
     const mt=sum(rows,4),tc=sum(rows,5);
@@ -1111,7 +1144,7 @@ function histReport(M,k){
   return `<div><h1>${R.name} report</h1><p class="lede">${lede} Fiscal year runs 1 October – 30 September. Source: ${BILL_SRC}.</p></div>
   ${repBar()}
   ${filters}
-  <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">${kpis.map(x=>`<div class="kpi ${x[0]}"><div class="l">${x[1]}</div><div class="v"${String(x[2]).length>14?' style="font-size:20px"':''}>${x[2]}</div><div class="s">${x[3]}</div></div>`).join('')}</div>
+  <div class="kpis" style="grid-template-columns:repeat(5,minmax(0,1fr))">${kpis.map(x=>`<div class="kpi ${x[0]}"><div class="l">${x[1]}</div><div class="v"${String(x[2]).length>14?' style="font-size:21px"':''}>${x[2]}</div><div class="s">${x[3]}</div></div>`).join('')}</div>
   <section class="panel"><div class="ph"><h2>${R.name} billed by fiscal year</h2><span class="sub">${histCust==='all'?'all customers':esc(histCust)} · click a year to filter</span></div>
     <div class="hb">${byFY.map(x=>`<button class="hbr" data-hfy="${x.f}"><span class="hl">FY${x.f}</span><span class="ht"><i style="width:${Math.max(0,tot(x.rs))/maxF*100}%;background:${R.color}"></i></span><span class="hv">${money(tot(x.rs))}</span></button>`).join('')}</div>
   </section>
@@ -1182,7 +1215,7 @@ function vHistCost(M){
   const wageRange=rs=>{const v=[...new Set(rs.map(m=>m.wage))];return v.length===1?money(v[0],2):money(Math.min(...v),2)+'–'+money(Math.max(...v),2)};
   const label=hcFY==='all'?'All fiscal years':'FY'+hcFY+' ('+fyRange(+hcFY)+')';
   const assumed=S.rateHist.filter(x=>x.note&&/assum/i.test(x.note));
-  return `<div><h1>Historical cost</h1><p class="lede">What the billed volumes cost PII each month, using the MEC commercial rate and the minimum wage in force at the time, with today's reefer and crew considerations. Months follow the invoice date. Fiscal year runs 1 October – 30 September.</p></div>
+  return `<div><h1>Actual vs cost</h1><p class="lede">What the billed volumes cost PII each month, using the MEC commercial rate and the minimum wage in force at the time, with today's reefer and crew considerations. Months follow the invoice date. Fiscal year runs 1 October – 30 September.</p></div>
   <section class="panel"><div class="filters">
     <label class="f">Fiscal year<div class="inp"><select id="hcFY"><option value="all"${hcFY==='all'?' selected':''}>All fiscal years</option>${fys.slice().reverse().map(f=>`<option value="${f}"${hcFY==String(f)?' selected':''}>FY${f} (${fyRange(f)})</option>`).join('')}</select></div></label>
     ${othToggle()}<div class="bar" style="justify-content:flex-end"><button class="btn" data-go="settings" data-jumpafter="g-hist">Edit rate and wage history</button><button class="btn pri" id="hcCopy">Copy for Excel</button></div>
@@ -1215,13 +1248,13 @@ function vHistCost(M){
   </section>
   <section class="panel"><div class="ph"><h2>Reefer plug by fiscal year</h2><span class="sub">per year</span></div>
     <div class="tw"><table><thead><tr><th>Fiscal year</th><th class="n">MEC rate / kWh</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">kWh</th><th class="n">Power cost</th>${H.depR?'<th class="n">Plug assets</th>':''}<th class="n">Billed</th><th class="n">Margin</th><th class="n">Margin %</th><th class="n">Avg / month</th></tr></thead>
-    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td><td class="n">${rateRange(x.rs)}</td><td class="n">${num(x.a.rc,0)}</td><td class="n">${num(x.a.pd,0)}</td><td class="n">${num(x.a.kwh,0)}</td><td class="n">${money(x.a.power)}</td>${H.depR?`<td class="n">${money(x.a.depR)}</td>`:''}<td class="n">${money(x.a.rp)}</td><td class="n ${x.a.rM>=0?'pos':'neg'}">${money(x.a.rM)}</td><td class="n">${mPct(x.a.rM,x.a.rp)}</td><td class="n" data-tip="${esc(money(x.a.power)+' power ÷ '+x.a.n+' months')}">${money(x.a.power/x.a.n)}</td></tr>`).join('')}</tbody>
+    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td><td class="n">${rateRange(x.rs)}</td><td class="n">${num(x.a.rc,0)}</td><td class="n">${num(x.a.pd,0)}</td><td class="n">${num(x.a.kwh,0)}</td><td class="n">${money(x.a.power)}</td>${H.depR?`<td class="n">${money(x.a.depR)}</td>`:''}<td class="n">${money(x.a.rp)}</td><td class="n ${x.a.rM>=0?'pos':'neg'}">${money(x.a.rM)}</td><td class="n">${mPct(x.a.rM,x.a.rp)}</td><td class="n" data-tip="${esc(money(x.a.power)+' power ÷ '+x.a.n+' months')}">${money(x.a.power/x.a.n)}</td></tr>`).join('')}</tbody>
     ${(()=>{const t=sumH(H.list);return `<tfoot><tr><td>Total</td><td></td><td class="n">${num(t.rc,0)}</td><td class="n">${num(t.pd,0)}</td><td class="n">${num(t.kwh,0)}</td><td class="n">${money(t.power)}</td>${H.depR?`<td class="n">${money(t.depR)}</td>`:''}<td class="n">${money(t.rp)}</td><td class="n">${money(t.rM)}</td><td class="n">${mPct(t.rM,t.rp)}</td><td class="n">${money(t.power/t.n)}</td></tr></tfoot>`})()}</table></div>
   </section>
-  <section class="panel"><div class="ph"><h2>Reefer plug by month</h2><span class="sub">${label}</span></div>
+  ${more('hc-rm','Show reefer plug month by month',`  <section class="panel"><div class="ph"><h2>Reefer plug by month</h2><span class="sub">${label}</span></div>
     <div class="tw"><table><thead><tr><th>Month</th><th>FY</th><th class="n">MEC rate / kWh</th><th class="n">Reefers</th><th class="n">Plug-days</th><th class="n">kWh</th><th class="n">Power cost</th><th class="n">Billed</th><th class="n">Margin</th></tr></thead>
     <tbody>${rows.slice().reverse().map(m=>`<tr><td style="white-space:nowrap">${fmtYM(m.ym)}</td><td>FY${m.fy}</td><td class="n">${money(m.rate,4)}${(()=>{const x=S.rateHist.slice().sort((a,b)=>a.from<b.from?-1:1).filter(x=>x.from<=m.ym).pop();return x&&/assum/i.test(x.note||'')?' <span class="pill warn" data-tip="Assumed rate: no MEC bill on record for this month">assumed</span>':''})()}</td><td class="n">${m.rc||'–'}</td><td class="n">${m.pd?num(m.pd,0):'–'}</td><td class="n" data-tip="${esc(num(m.pd,0)+' plug-days × '+num(H.holdKwh,0)+' kWh + '+num(m.rc,0)+' reefers × '+num(H.extraKwh,0)+' kWh pull-down')}">${m.kwh?num(m.kwh,0):'–'}</td><td class="n" data-tip="${esc(num(m.kwh,0)+' kWh × '+money(m.rate,4))}">${m.power?money(m.power):'–'}</td><td class="n">${m.rp?money(m.rp):'–'}</td><td class="n ${m.rM>=0?'pos':'neg'}">${money(m.rM)}</td></tr>`).join('')}</tbody></table></div>
-  </section>
+  </section>`)}
   <h2 class="grp" style="--oc:var(--t1)">Transshipment: labor cost at the minimum wage in force</h2>
   <div class="kpis" style="grid-template-columns:repeat(4,minmax(0,1fr))">
     <div class="kpi k2" data-tip="${esc(num(A.mt,0)+' MT × '+num(H.hrsPerMT,2)+' crew-hours per MT × burdened rate for the month')}"><div class="l">Estimated labor</div><div class="v">${money(A.labor)}</div><div class="s">minimum wage ${wageRange(rows)}</div></div>
@@ -1231,7 +1264,7 @@ function vHistCost(M){
   </div>
   <section class="panel"><div class="ph"><h2>Transshipment by fiscal year</h2><span class="sub">${num(H.hrsPerMT,2)} crew-hours per MT (${(+S.expats||0)+(+S.locals||0)} crew × ${S.hoursPerDay} hrs ÷ ${num(S.mtPerDay,0)} MT)</span></div>
     <div class="tw"><table><thead><tr><th>Fiscal year</th><th class="n">Min. wage</th><th class="n">Burdened / hr</th><th class="n">MT</th><th class="n">Labor</th><th class="n">Depreciation</th><th class="n">Billed</th><th class="n">Margin</th><th class="n">Margin %</th></tr></thead>
-    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:12.5px">${fyRange(x.f)}</div></td><td class="n">${wageRange(x.rs)}</td><td class="n">${(()=>{const v=[...new Set(x.rs.map(m=>m.burden.toFixed(4)))];return v.length===1?money(+v[0],4):money(Math.min(...v),2)+'–'+money(Math.max(...v),2)})()}</td><td class="n">${num(x.a.mt,0)}</td><td class="n">${money(x.a.labor)}</td><td class="n">${money(x.a.depT)}</td><td class="n">${money(x.a.tf)}</td><td class="n ${x.a.tM>=0?'pos':'neg'}">${money(x.a.tM)}</td><td class="n">${mPct(x.a.tM,x.a.tf)}</td></tr>`).join('')}</tbody>
+    <tbody>${byFY.map(x=>`<tr${hcFY==String(x.f)?' style="background:var(--accent-soft)"':''}><td><b>FY${x.f}</b><div class="sub" style="font-size:13.5px">${fyRange(x.f)}</div></td><td class="n">${wageRange(x.rs)}</td><td class="n">${(()=>{const v=[...new Set(x.rs.map(m=>m.burden.toFixed(4)))];return v.length===1?money(+v[0],4):money(Math.min(...v),2)+'–'+money(Math.max(...v),2)})()}</td><td class="n">${num(x.a.mt,0)}</td><td class="n">${money(x.a.labor)}</td><td class="n">${money(x.a.depT)}</td><td class="n">${money(x.a.tf)}</td><td class="n ${x.a.tM>=0?'pos':'neg'}">${money(x.a.tM)}</td><td class="n">${mPct(x.a.tM,x.a.tf)}</td></tr>`).join('')}</tbody>
     ${(()=>{const t=sumH(H.list);return `<tfoot><tr><td>Total</td><td></td><td></td><td class="n">${num(t.mt,0)}</td><td class="n">${money(t.labor)}</td><td class="n">${money(t.depT)}</td><td class="n">${money(t.tf)}</td><td class="n">${money(t.tM)}</td><td class="n">${mPct(t.tM,t.tf)}</td></tr></tfoot>`})()}</table></div>
     <p class="sub" style="margin:10px 0 0">Depreciation is charged in every month from ${fmtYM(H.list[0].ym)}, including months with no transshipment. If an asset was bought later, adjust it under Considerations. Others ($${num(sumH(H.list).ot,0)}) carry no estimated cost here.</p>
   </section>`;
@@ -1246,9 +1279,9 @@ function histPanel(){
     <button class="btn sm" data-hdel="${kind}" data-hi="${i}" aria-label="Remove">Remove</button></div>`;
   return `<section class="panel" id="g-hist"><div class="ph"><h2>Rate and wage history</h2><span class="sub">used by the Historical cost tab · each value applies from its month until the next row</span></div>
     <div class="g2">
-      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:15px">MEC commercial rate</h2><button class="btn sm" data-hadd="r">Add a rate</button></div><div style="display:flex;flex-direction:column;gap:8px">${R.map(([x,i])=>row('r',x,i,'rate','/ kWh','0.0001')).join('')}</div>
+      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:16px">MEC commercial rate</h2><button class="btn sm" data-hadd="r">Add a rate</button></div><div style="display:flex;flex-direction:column;gap:8px">${R.map(([x,i])=>row('r',x,i,'rate','/ kWh','0.0001')).join('')}</div>
         <p class="sub" style="margin:8px 0 0">From PII MEC Power Billing (commercial = the higher rate each month). Rows marked "assumed" have no MEC bill on record.</p></div>
-      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:15px">Minimum wage</h2><button class="btn sm" data-hadd="w">Add a wage</button></div><div style="display:flex;flex-direction:column;gap:8px">${W.map(([x,i])=>row('w',x,i,'wage','/ hr','0.01')).join('')}</div>
+      <div><div class="ph" style="margin-bottom:8px"><h2 style="font-size:16px">Minimum wage</h2><button class="btn sm" data-hadd="w">Add a wage</button></div><div style="display:flex;flex-direction:column;gap:8px">${W.map(([x,i])=>row('w',x,i,'wage','/ hr','0.01')).join('')}</div>
         <p class="sub" style="margin:8px 0 0">Social Security and leave scale with the wage; permits, visa, recruitment and food stay as set in Labor.</p></div>
     </div></section>`;
 }
