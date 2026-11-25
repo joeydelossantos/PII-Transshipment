@@ -75,6 +75,9 @@ tr.qsub td{font-weight:600}
 .qchk{display:flex;align-items:center;justify-content:center;width:28px;cursor:pointer}.qchk input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
 .qrow.off .inp{opacity:.5}
 tr.qoff td{color:var(--muted)}
+.qcust{margin-top:16px;padding-top:14px;border-top:1px solid var(--line)}
+tr.qcr{cursor:pointer}tr.qcr:hover td{background:var(--surface2)}tr.qcr.on td{background:var(--accent-soft)}
+.qcrow{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr) auto;gap:8px;align-items:center;max-width:640px}
 .qrow{display:grid;grid-template-columns:auto minmax(0,2fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.2fr) auto;gap:8px;align-items:center}
 @media (max-width:640px){.qrow{grid-template-columns:auto minmax(0,1fr) minmax(0,1fr)}.qrow .qn{grid-column:2/-1}.qrow .qv{grid-column:2}.qrow .qg{grid-column:2/-1}.qrow .btn{grid-column:2/-1}}
 details.more{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
@@ -267,20 +270,21 @@ const DEFAULTS={
   assets:[{n:'Dock',cost:30000000,life:50,salvage:0,share:100,op:'t'},{n:'Reach stacker',cost:350000,life:5,salvage:0,share:100,op:'t'},{n:'Starloader',cost:720000,life:5,salvage:0,share:100,op:'t'},{n:'Reefer plug points & power panels',cost:0,life:10,salvage:0,share:100,op:'r'}],
   dockDays:365,
   // Other daily costs
-  others:[{n:'Reach stacker & Starloader fuel',v:0,op:'t'},{n:'Security & dock utilities',v:0,op:'t'},{n:'Reefer monitoring & repairs',v:0,op:'r'}],
+  others:[{n:'Management fee',v:510,op:'t',std:1},{n:'Reach stacker & Starloader fuel',v:0,op:'t'},{n:'Security & dock utilities',v:0,op:'t'},{n:'Reefer monitoring & repairs',v:0,op:'r'}],
   // MEC commercial rate history (PII MEC Power Billing) and minimum wage history
   rateHist:[{from:'2019-05',rate:0.406,note:'Assumed: no MEC bill on record'},{from:'2023-10',rate:0.406,note:'MEC commercial rate, Oct 2023'},{from:'2024-08',rate:0.463,note:'PII MEC Power Billing'},{from:'2025-05',rate:0.497,note:'PII MEC Power Billing'},{from:'2026-02',rate:0.516,note:'PII MEC Power Billing'},{from:'2026-05',rate:0.626,note:'PII MEC Power Billing'},{from:'2026-06',rate:0.672,note:'PII MEC Power Billing'},{from:'2026-09',rate:0.627,note:'PII MEC Power Billing'}],
   wageHist:[{from:'2019-01',wage:3},{from:'2024-10',wage:4},{from:'2025-10',wage:4.5},{from:'2026-10',wage:5}],
   // Pricing (to be provided by Joey)
   pricePerMT:0, plugPricePerDay:0, plugBilledByCustomer:false, vesselMT:1000,
   // Transshipment quote (one vessel)
-  qMT:1000, qGRT:1000, qMarkup:40, qMode:'all',
-  qItems:[{n:'Tractor truck rental',v:380,b:'box'},{n:'Dockage fee',v:0.1,b:'grttier',min:80,upto:1000},{n:'Line handling',v:400,b:'call'},{n:'Security',v:50,b:'day'},{n:'Light dues',v:100,b:'day'},{n:'Management cost',v:510,b:'day',g:'t'}]
+  qMT:1000, qGRT:1000, qMarkup:40, qMode:'all', qPriceSrc:'cost', qStdT:0, qStdA:0, qCustSel:0,
+  qCust:[{n:'Standard',d:0},{n:'PPF',d:12},{n:'PITP',d:20}],
+  qItems:[{n:'Tractor truck rental',v:380,b:'box'},{n:'Dockage fee',v:0.1,b:'grttier',min:80,upto:1000},{n:'Line handling',v:400,b:'call'},{n:'Security',v:50,b:'day'},{n:'Light dues',v:100,b:'day'}]
 };
 const KEY='pii-transship-v1';
 let HAD_LOCAL=false, APPDEF=null, APPDEF_STAMP='';
 let S; try{const saved=JSON.parse(localStorage.getItem(KEY)||'{}');HAD_LOCAL=Object.keys(saved).length>0;S=Object.assign(structuredClone(DEFAULTS),saved);
-  (S.qItems||[]).forEach(x=>{if(/management/i.test(x.n)&&!x.g)x.g='t';if(/dockage/i.test(x.n)&&x.b==='grtday'&&+x.v===1.5){x.b='grttier';x.v=0.1;x.min=80;x.upto=1000}});
+  (S.qItems||[]).forEach(x=>{if(/dockage/i.test(x.n)&&x.b==='grtday'&&+x.v===1.5){x.b='grttier';x.v=0.1;x.min=80;x.upto=1000}});
   if(saved.setpoint==null&&saved.holdKW!=null){S.holdKW=Math.round(saved.holdKW*(30+25)/(30+20)*100)/100}
   if(!Array.isArray(saved.assets)&&saved.dockCost!=null){S.assets[0]={n:'Dock',cost:saved.dockCost,life:saved.dockLife||50,salvage:saved.dockSalvage||0,share:saved.dockShare??100}}
   S.assets.forEach(a=>{if(!a.op)a.op='t'});S.others.forEach(o=>{if(!o.op)o.op=/reefer/i.test(o.n)?'r':'t'});
@@ -487,7 +491,7 @@ function quoteCalc(M){
   const T=M.T, perMT=v=>S.mtPerDay>0?v/S.mtPerDay:0;
   const tr=[{n:'Labor',rate:perMT(T.lines[0].v),q:mt,unit:'MT',amt:perMT(T.lines[0].v)*mt,t:`${money(T.lines[0].v,2)} labor a day ÷ ${num(S.mtPerDay,0)} MT a day = ${money(perMT(T.lines[0].v),2)} per MT`},
     {n:'Depreciation',rate:perMT(T.lines[1].v),q:mt,unit:'MT',amt:perMT(T.lines[1].v)*mt,t:`${money(T.lines[1].v,2)} depreciation a day ÷ ${num(S.mtPerDay,0)} MT a day = ${money(perMT(T.lines[1].v),2)} per MT`}];
-  if(T.lines[2].v>0)tr.push({n:'Other daily costs (Considerations)',rate:perMT(T.lines[2].v),q:mt,unit:'MT',amt:perMT(T.lines[2].v)*mt,t:'Other daily transshipment costs from the Considerations tab'});
+  S.others.filter(o=>(o.op||'t')==='t'&&+o.v>0).forEach(o=>tr.push({n:o.n,rate:perMT(+o.v),q:mt,unit:'MT',amt:perMT(+o.v)*mt,t:`${money(+o.v,2)} a day (Considerations) ÷ ${num(S.mtPerDay,0)} MT a day = ${money(perMT(+o.v),2)} per MT`}));
   const qty=b=>b==='call'?1:b==='day'?days:b==='box'?boxes:b==='mt'?mt:b==='grtday'?grt*days:0;
   const unit=b=>b==='call'?'call':b==='day'?(days===1?'day':'days'):b==='box'?(boxes===1?'container':'containers'):b==='mt'?'MT':'GRT-days';
   const tier=x=>grt<=(+x.upto||0)?(+x.min||0):grt*(+x.v||0);
@@ -496,25 +500,40 @@ function quoteCalc(M){
   ot.forEach(x=>{x.off=!!S.qItems[x.i].off;x.g=S.qItems[x.i].g==='t'?'t':'o';if(x.off){x.full=x.amt;x.amt=0}});
   const tx=ot.filter(x=>x.g==='t'), ox=ot.filter(x=>x.g!=='t');
   const tCost=tr.reduce((t,x)=>t+x.amt,0)+tx.reduce((t,x)=>t+x.amt,0), oCost=ox.reduce((t,x)=>t+x.amt,0), total=tCost+oCost;
-  const opt=(cost,label)=>{const cmt=mt?cost/mt:0,raw=cmt*(1+mk),price=ceil5(raw),amt=price*mt;return {label,cost,cmt,raw,price,amt,margin:amt-cost,mpct:cost?(amt-cost)/cost:0}};
-  return {mt,grt,mk,daysRaw,days,boxes,tr,ot,tx,ox,tNames:['labor','depreciation',...tx.filter(x=>!x.off).map(x=>x.n.toLowerCase())],tCost,oCost,total,only:opt(tCost,'Transshipment only'),all:opt(total,'All-in')};
+  const cust=S.qCust[S.qCustSel]||{n:'Standard',d:0}, disc=Math.min(100,Math.max(0,+cust.d||0))/100, std=S.qPriceSrc==='std';
+  const opt=(cost,label,k)=>{const cmt=mt?cost/mt:0,raw=cmt*(1+mk),calc=ceil5(raw),base=std?(+(k==='t'?S.qStdT:S.qStdA)||0):calc,price=base*(1-disc),amt=price*mt;
+    return {label,cost,cmt,raw,calc,base,disc,price,amt,margin:amt-cost,mpct:cost?(amt-cost)/cost:0}};
+  return {mt,grt,mk,daysRaw,days,boxes,tr,ot,tx,ox,tNames:['labor','depreciation',...S.others.filter(o=>(o.op||'t')==='t'&&+o.v>0).map(o=>o.n.toLowerCase()),...tx.filter(x=>!x.off).map(x=>x.n.toLowerCase())],tCost,oCost,total,only:opt(tCost,'Transshipment only','t'),all:opt(total,'All-in','all'),cust,disc,std};
 }
 function vQuote(M){
   const Q=quoteCalc(M), sel=S.qMode==='all'?Q.all:Q.only, pm=v=>Q.mt?money(v/Q.mt,2):'—';
   const optCard=(o,k)=>`<div class="qopt${S.qMode===k?' on':''}"><div class="ph"><h2>${o.label}</h2><button class="btn sm${S.qMode===k?' pri':''}" data-qmode="${k}" aria-pressed="${S.qMode===k}">${S.qMode===k?'Quoting this':'Quote this'}</button></div>
     <p class="sub" style="margin:0 0 8px">${k==='t'?(Q.tNames.length>2?Q.tNames.slice(0,-1).join(', ')+' and '+Q.tNames.slice(-1):'Labor and depreciation').replace(/^./,c=>c.toUpperCase())+' only. The vessel pays the other charges directly.':'Labor, depreciation and all other transshipment charges in one price.'}</p>
-    ${flow([{l:'Cost per MT',v:money(o.cmt,2),s:k==='t'?'transshipment cost':'all costs',t:k==='t'?Q.tNames.join(' + '):'transshipment cost + other transshipment cost'},'+',{l:'Markup',v:num(Q.mk*100,0)+'%',s:money(o.raw-o.cmt,2)+' per MT'},'=',{l:'Price per MT',v:money(o.price,2),s:'rounded up from '+money(o.raw,2),hl:1,t:money(o.cmt,2)+' × '+num(1+Q.mk,2)+' = '+money(o.raw,2)+', rounded up to the next $5'}])}
+    ${(()=>{const cm={l:'Cost per MT',v:money(o.cmt,2),s:k==='t'?'transshipment cost':'all costs',t:k==='t'?Q.tNames.join(' + '):'transshipment cost + other transshipment cost'};
+      const fin={l:'Price per MT',v:money(o.price,2),hl:1};
+      const dc=Q.disc>0?['−',{l:esc(Q.cust.n)+' discount',v:num(Q.disc*100,0)+'%',s:money(o.base-o.price,2)+' per MT'},'=']:['='];
+      if(Q.std){fin.s=money(o.base,2)+' less '+num(Q.disc*100,0)+'%';return flow([{l:'Standard price',v:money(o.base,2),s:'per MT, entered above',hl:Q.disc>0?0:1},...(Q.disc>0?[...dc,fin]:[])])+`<div class="qline"><span>Cost per MT</span><b data-tip="${esc(cm.t)}">${money(o.cmt,2)}</b></div>`}
+      const stdBox={l:Q.disc>0?'Standard price':'Price per MT',v:money(o.calc,2),s:'rounded up from '+money(o.raw,2),t:money(o.cmt,2)+' × '+num(1+Q.mk,2)+' = '+money(o.raw,2)+', rounded up to the next $5',hl:Q.disc>0?0:1};
+      return flow([cm,'+',{l:'Markup',v:num(Q.mk*100,0)+'%',s:money(o.raw-o.cmt,2)+' per MT'},'=',stdBox,...(Q.disc>0?['−',{l:esc(Q.cust.n)+' discount',v:num(Q.disc*100,0)+'%',s:money(o.calc-o.price,2)+' per MT'},'=',{...fin,s:money(o.calc,2)+' less '+num(Q.disc*100,0)+'%'}]:[])])})()}
     <div class="qline"><span>Quote for ${num(Q.mt,0)} MT</span><b>${money(o.amt)}</b></div>
     <div class="qline"><span>Margin</span><b class="${o.margin>=0?'pos':'neg'}" data-tip="${esc(money(o.margin)+' margin ÷ '+money(o.cost)+' cost')}">${money(o.margin)} · ${pct(o.mpct)} of cost</b></div></div>`;
   const row=(x,cls='')=>x.off?`<tr class="qoff"><td>${esc(x.n)} <span class="pill">not included</span></td><td class="sub">${QBASIS[x.b]}</td><td class="n">${x.b==='call'?'1 call':num(x.q,0)+' '+x.unit}</td><td class="n">${money(x.rate,2)}</td><td class="n" data-tip="${esc('Would be '+money(x.full)+' if included')}">–</td><td class="n">–</td></tr>`:`<tr${cls}><td>${esc(x.n)}</td><td class="sub">${x.b?QBASIS[x.b]:'per MT'}</td><td class="n">${x.b==='call'?'1 call':num(x.q,0)+' '+x.unit}</td><td class="n">${money(x.rate,2)}</td><td class="n" data-tip="${esc(x.t)}">${money(x.amt)}</td><td class="n">${pm(x.amt)}</td></tr>`;
   return `<div><h1>Transshipment quote</h1><p class="lede">Price one vessel. Enter the tonnage and the boat's GRT; the cost is worked out per MT and marked up to a quote.</p></div>
   <section class="panel"><div class="ph"><h2>The vessel</h2><span class="sub">at ${num(S.mtPerDay,0)} MT a day and ${num(S.mtPerBox,0)} MT per container (Considerations)</span></div>
-    <div class="fgrid">${field('qMT','Estimated tonnage','MT','any','fish to transship')}${field('qGRT','Boat GRT','GRT','any','gross registered tonnage')}${field('qMarkup','Markup','%','any','standard is 40%')}</div>
+    <div class="fgrid">${field('qMT','Estimated tonnage','MT','any','fish to transship')}${field('qGRT','Boat GRT','GRT','any','gross registered tonnage')}${S.qPriceSrc==='std'?'':field('qMarkup','Markup','%','any','standard is 40%')}
+      <label class="f"><span class="fl">Customer</span><div class="inp"><select id="qCustSel">${S.qCust.map((c,i)=>`<option value="${i}"${i===S.qCustSel?' selected':''}>${esc(c.n)}${+c.d?' · '+num(+c.d,0)+'% off':''}</option>`).join('')}</select></div><small>discount comes off the price</small></label></div>
+    <div class="bar" style="margin-top:14px;gap:8px;align-items:center"><span class="sub">Price from</span>
+      <button class="btn sm${S.qPriceSrc!=='std'?' pri':''}" data-qsrc="cost" aria-pressed="${S.qPriceSrc!=='std'}">Cost + markup</button>
+      <button class="btn sm${S.qPriceSrc==='std'?' pri':''}" data-qsrc="std" aria-pressed="${S.qPriceSrc==='std'}">Standard price</button></div>
+    ${S.qPriceSrc==='std'?`<div class="fgrid" style="margin-top:12px">${field('qStdT','Standard price, transshipment only','$ / MT','any','before any customer discount')}${field('qStdA','Standard price, all-in','$ / MT','any','before any customer discount')}</div>`:''}
     <div class="bar" style="margin-top:12px;gap:8px"><span class="pill" data-tip="${esc(num(Q.mt,0)+' MT ÷ '+num(S.mtPerDay,0)+' MT a day = '+num(Q.daysRaw,2)+', rounded up to whole days')}">${Q.days} day${Q.days===1?'':'s'} at the dock</span><span class="pill" data-tip="${esc(num(Q.mt,0)+' MT ÷ '+num(S.mtPerBox,0)+' MT per container, rounded up')}">${num(Q.boxes,0)} container${Q.boxes===1?'':'s'}</span></div>
+    <div class="qcust"><div class="ph" style="margin-bottom:6px"><h2 style="font-size:15px">Price per MT by customer</h2><span class="sub">${Q.std?'from the standard price':'cost + '+num(Q.mk*100,0)+'%, rounded up to $5'} · click a row to quote it</span></div>
+      <div class="tw"><table><thead><tr><th>Customer</th><th class="n">Discount</th><th class="n">Transshipment only</th><th class="n">All-in</th><th class="n">Quote, ${S.qMode==='all'?'all-in':'transshipment only'}</th></tr></thead>
+      <tbody>${S.qCust.map((c,i)=>{const d=Math.min(100,Math.max(0,+c.d||0))/100,pt=Q.only.base*(1-d),pa=Q.all.base*(1-d),pq=(S.qMode==='all'?pa:pt)*Q.mt;return `<tr class="qcr${i===S.qCustSel?' on':''}" data-qcsel="${i}"><td><b>${esc(c.n)}</b></td><td class="n">${d?num(d*100,0)+'%':'–'}</td><td class="n" data-tip="${esc(money(Q.only.base,2)+(d?' less '+num(d*100,0)+'%':''))}">${money(pt,2)}</td><td class="n" data-tip="${esc(money(Q.all.base,2)+(d?' less '+num(d*100,0)+'%':''))}">${money(pa,2)}</td><td class="n">${money(pq)}</td></tr>`}).join('')}</tbody></table></div></div>
   </section>
   <div class="kpis">
     <div class="kpi k1"><div class="l">Total cost</div><div class="v">${money(Q.total)}</div><div class="s">${pm(Q.total)} per MT · all costs</div></div>
-    <div class="kpi k2"><div class="l">Price per MT</div><div class="v">${money(sel.price,2)}</div><div class="s">${sel.label}</div></div>
+    <div class="kpi k2"><div class="l">Price per MT</div><div class="v">${money(sel.price,2)}</div><div class="s">${sel.label}${Q.disc>0?' · '+esc(Q.cust.n)+' '+num(Q.disc*100,0)+'% off':''}</div></div>
     <div class="kpi k3"><div class="l">Quote</div><div class="v">${money(sel.amt)}</div><div class="s">${num(Q.mt,0)} MT × ${money(sel.price,2)}</div></div>
     <div class="kpi k4"><div class="l">Margin</div><div class="v ${sel.margin>=0?'pos':'neg'}">${money(sel.margin)}</div><div class="s">${pct(sel.mpct)} of cost</div></div>
   </div>
@@ -538,6 +557,13 @@ function vQuote(M){
       <div class="inp qg"><select id="qg${i}" data-qi="${i}" data-qf="g" aria-label="Counts in"><option value="o"${x.g!=='t'?' selected':''}>Other cost</option><option value="t"${x.g==='t'?' selected':''}>Transshipment cost</option></select></div>
       <button class="btn sm" data-qdel="${i}" aria-label="Remove ${esc(x.n)}">Remove</button>
       ${x.b==='grttier'?`<div class="qtier"><span class="sub">Minimum</span><div class="inp"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qm${i}" data-qi="${i}" data-qf="min" value="${fmtIn(x.min??0)}" aria-label="Minimum per day"><span>/day</span></div><span class="sub">for boats up to</span><div class="inp"><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qu${i}" data-qi="${i}" data-qf="upto" value="${fmtIn(x.upto??0)}" aria-label="GRT limit for the minimum"><span>GRT</span></div><span class="sub">above that, the rate × GRT a day</span></div>`:''}</div>`).join('')||'<p class="sub">No other costs yet.</p>'}</div>
+  </section>
+  <section class="panel"><div class="ph"><h2>Customer discounts</h2><button class="btn sm" id="qCustAdd">Add a customer</button></div>
+    <p class="sub" style="margin:0 0 10px">The discount comes off the price per MT, whether the price is from cost + markup or the standard price.</p>
+    <div style="display:flex;flex-direction:column;gap:8px">${S.qCust.map((c,i)=>`<div class="qcrow">
+      <div class="inp"><input type="text" id="qcn${i}" data-qc="${i}" data-qcf="n" value="${esc(c.n)}" style="text-align:left" aria-label="Customer name"${i===0?' readonly':''}></div>
+      <div class="inp"><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qcd${i}" data-qc="${i}" data-qcf="d" value="${fmtIn(c.d)}" aria-label="Discount"${i===0?' readonly':''}><span>% off</span></div>
+      ${i===0?'<span class="sub" style="padding:0 8px">no discount</span>':`<button class="btn sm" data-qcdel="${i}" aria-label="Remove ${esc(c.n)}">Remove</button>`}</div>`).join('')}</div>
   </section>`;
 }
 function vTrans(M){
@@ -550,7 +576,7 @@ function vTrans(M){
     <div data-tip="${esc('Each asset: (cost − salvage) ÷ useful life ÷ '+S.dockDays+' days × share charged to transshipment')}" class="kpi k5"><div class="l">Depreciation per day</div><div class="v">${money(T.lines[1].v,2)}</div><div class="s">dock and handling equipment</div></div>
   </div>
   <section class="panel"><div class="ph"><h2>How the cost per MT is worked out</h2><span class="sub">per operating day</span></div>
-    ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'fuel, utilities…'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
+    ${flow([{l:'Labor',v:money(L.perDay,2),s:`${L.n} crew × ${S.hoursPerDay} hrs`},'+',{l:'Depreciation',v:money(T.lines[1].v,2),s:'dock and equipment'},'+',{l:'Other costs',v:money(T.lines[2].v,2),s:'management fee and other daily costs'},'=',{l:'Cost per day',v:money(T.total,2)},'÷',{l:'Tonnage',v:num(S.mtPerDay,0)+' MT',s:'moved a day'},'=',{l:'Cost per MT',v:money(T.perMT,2),s:'break-even price',hl:1}])}
   </section>
 ${more("tr-detail","Show the detailed workings: labor rates, assets, monthly and yearly totals",`  <div class="g2">
   <section class="panel"><div class="ph"><h2>Labor</h2><span class="sub">PII Shipping fully burdened crew rate</span></div>
@@ -799,14 +825,24 @@ function otherPanel(op){
   const rows=S.others.map((o,i)=>[o,i]).filter(([o])=>(o.op||'t')===op);
   return `<section class="panel"><div class="ph"><h2>${name} other daily costs</h2><button class="btn sm" data-addother="${op}">Add a cost line</button></div>
     <div style="display:flex;flex-direction:column;gap:8px">${rows.map(([o,i])=>`<div class="bar" style="flex-wrap:nowrap">
-      <div class="inp" style="flex:2;min-width:0"><input type="text" id="on${i}" data-o="${i}" data-f="n" value="${esc(o.n)}" style="text-align:left"></div>
+      <div class="inp" style="flex:2;min-width:0"><input type="text" id="on${i}" data-o="${i}" data-f="n" value="${esc(o.n)}" style="text-align:left"${o.std?' readonly title="Standard cost: the name is fixed"':''}></div>
       <div class="inp" style="flex:1;min-width:0"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="ov${i}" data-o="${i}" data-f="v" value="${fmtIn(o.v)}"><span>/day</span></div>
-      <button class="btn sm" data-del="${i}" aria-label="Remove ${esc(o.n)}">Remove</button></div>`).join('')||`<p class="sub">No other costs yet.</p>`}</div>
+      ${o.std?'<span class="pill" style="min-width:76px;text-align:center" title="Standard: always part of the transshipment cost">standard</span>':`<button class="btn sm" data-del="${i}" aria-label="Remove ${esc(o.n)}">Remove</button>`}</div>`).join('')||`<p class="sub">No other costs yet.</p>`}</div>
   </section>`;
 }
 
 /* ---------- Render & events ---------- */
+function fixS(){
+  if(!Array.isArray(S.others))S.others=[];if(!Array.isArray(S.qItems))S.qItems=[];
+  if(S.others.some(o=>o.std))return;
+  const ex=S.others.find(o=>(o.op||'t')==='t'&&/management/i.test(o.n));
+  const qi=S.qItems.findIndex(x=>/management/i.test(x.n));
+  const v=qi>=0&&S.qItems[qi].b==='day'?+S.qItems[qi].v||0:510;
+  if(qi>=0)S.qItems.splice(qi,1);
+  if(ex){ex.std=1;ex.n='Management fee';if(!(+ex.v>0))ex.v=v}else S.others.unshift({n:'Management fee',v,op:'t',std:1});
+}
 function render(){
+  fixS();
   const M=model();
   const fn={summary:vSummary,trans:vTrans,quote:vQuote,reefer:vReefer,pricing:vPricing,settings:vSettings,history:vHistory,histcost:vHistCost,customers:vCustomers,saved:vSaved}[view]||vSummary;
   const lt=$('#loadedTag');lt.textContent=['history','customers','histcost'].includes(view)?'Actual':loaded?('Loaded: '+loaded.name+(loaded.dirty?' (changed)':'')):'Estimate';
@@ -844,6 +880,8 @@ $('#app').addEventListener('change',e=>{
   else if(el.dataset.o!=null){const o=S.others[+el.dataset.o];o[el.dataset.f]=el.dataset.f==='v'?(pnum(el.value)||0):el.value;save();render();}
   else if(el.dataset.hk){const L=el.dataset.hk==='r'?S.rateHist:S.wageHist,x=L[+el.dataset.hi],f=el.dataset.hf;if(f==='from'||f==='note')x[f]=el.value;else{const v=pnum(el.value);if(isNaN(v)||v<0){toast('Enter a number of zero or more');render();return}x[f]=v}save();render();}
   else if(el.dataset.qi!=null){const x=S.qItems[+el.dataset.qi],f=el.dataset.qf;if(f==='on'){x.off=!el.checked}else if(['v','min','upto'].includes(f)){const v=pnum(el.value);x[f]=isNaN(v)||v<0?0:v}else if(f==='b'&&el.value==='grttier'){x.b='grttier';if(x.min==null)x.min=80;if(x.upto==null)x.upto=1000}else x[f]=el.value;save();render();}
+  else if(el.id==='qCustSel'){S.qCustSel=+el.value;save();render();}
+  else if(el.dataset.qc!=null){const c=S.qCust[+el.dataset.qc];if(el.dataset.qcf==='d'){const v=pnum(el.value);c.d=isNaN(v)||v<0?0:Math.min(100,v)}else c.n=el.value||c.n;save();render();}
   else if(el.id==='othChk'){setOthers(el.checked);histShowAll=false;render();toast(el.checked?'Others included':'Others excluded');}
   else if(el.id==='hcFY'){hcFY=el.value;render();}
   else if(el.id==='histFY'){histFY=el.value;histShowAll=false;render();}
@@ -867,6 +905,10 @@ $('#app').addEventListener('click',e=>{
   const hcf=e.target.closest('[data-hcfy]');if(hcf){hcFY=hcFY===hcf.dataset.hcfy?'all':hcf.dataset.hcfy;render();return}
   if(e.target.dataset.hadd){const L=e.target.dataset.hadd==='r'?S.rateHist:S.wageHist;const last=L.slice().sort((a,b)=>a.from<b.from?-1:1).pop()||{};L.push(e.target.dataset.hadd==='r'?{from:new Date().toISOString().slice(0,7),rate:last.rate||S.rate,note:''}:{from:new Date().toISOString().slice(0,7),wage:last.wage||S.hourly});save();render();return}
   if(e.target.dataset.hdel){const L=e.target.dataset.hdel==='r'?S.rateHist:S.wageHist;if(L.length>1){L.splice(+e.target.dataset.hi,1);save();render()}else toast('Keep at least one row');return}
+  const qcs=e.target.closest('[data-qcsel]');if(qcs){S.qCustSel=+qcs.dataset.qcsel;save();render();return}
+  if(e.target.dataset.qsrc){S.qPriceSrc=e.target.dataset.qsrc;if(S.qPriceSrc==='std'){const Q=quoteCalc(model());if(!(+S.qStdT>0))S.qStdT=Q.only.calc;if(!(+S.qStdA>0))S.qStdA=Q.all.calc}save();render();return}
+  if(e.target.id==='qCustAdd'){S.qCust.push({n:'New customer',d:0});save();render();setTimeout(()=>document.getElementById('qcn'+(S.qCust.length-1))?.select(),0);return}
+  if(e.target.dataset.qcdel!=null){const i=+e.target.dataset.qcdel;S.qCust.splice(i,1);if(S.qCustSel===i)S.qCustSel=0;else if(S.qCustSel>i)S.qCustSel--;save();render();return}
   if(e.target.dataset.qmode){S.qMode=e.target.dataset.qmode;save();render();return}
   if(e.target.id==='qAdd'){S.qItems.push({n:'New cost',v:0,b:'call'});save();render();setTimeout(()=>document.getElementById('qn'+(S.qItems.length-1))?.select(),0);return}
   if(e.target.dataset.qdel!=null){S.qItems.splice(+e.target.dataset.qdel,1);save();render();return}
