@@ -65,6 +65,18 @@ main{padding-block:16px 48px}
 h1{font-size:22px;font-weight:600;margin:0;text-wrap:balance}
 h2{font-size:16px;font-weight:600;margin:0}
 .lede{color:var(--muted);margin:2px 0 0;max-width:72ch;font-size:15px}
+.qopt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.qopt.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.qline{display:flex;justify-content:space-between;gap:12px;padding-top:8px;border-top:1px solid var(--line);font-size:15px}
+.qline b{font-variant-numeric:tabular-nums}
+tr.qsec td{font-weight:600;background:var(--surface2);font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted)}
+tr.qsub td{font-weight:600}
+.qtier{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:-2px 0 6px}.qtier .inp{width:150px}
+.qchk{display:flex;align-items:center;justify-content:center;width:28px;cursor:pointer}.qchk input{width:20px;height:20px;accent-color:var(--accent);cursor:pointer}
+.qrow.off .inp{opacity:.5}
+tr.qoff td{color:var(--muted)}
+.qrow{display:grid;grid-template-columns:auto minmax(0,2fr) minmax(0,1fr) minmax(0,1.3fr) minmax(0,1.2fr) auto;gap:8px;align-items:center}
+@media (max-width:640px){.qrow{grid-template-columns:auto minmax(0,1fr) minmax(0,1fr)}.qrow .qn{grid-column:2/-1}.qrow .qv{grid-column:2}.qrow .qg{grid-column:2/-1}.qrow .btn{grid-column:2/-1}}
 details.more{background:var(--surface);border:1px solid var(--line);border-radius:10px;min-width:0}
 details.more>summary{list-style:none;cursor:pointer;padding:12px 16px;font-weight:600;display:flex;align-items:center;gap:10px;color:var(--fg)}
 details.more>summary::-webkit-details-marker{display:none}
@@ -218,6 +230,7 @@ input[type=number],input.numin{text-align:right}
           <span class="tg">Estimate</span>
           <button class="tab" role="tab" data-v="summary" aria-selected="true">Dashboard</button>
           <button class="tab" role="tab" data-v="trans">Transshipment Cost</button>
+          <button class="tab" role="tab" data-v="quote">Transshipment Quote</button>
           <button class="tab" role="tab" data-v="reefer">Reefer Plug Cost</button>
           <button class="tab" role="tab" data-v="pricing">Prices &amp; Break-even</button>
           <span class="tg">Actual</span>
@@ -259,11 +272,15 @@ const DEFAULTS={
   rateHist:[{from:'2019-05',rate:0.406,note:'Assumed: no MEC bill on record'},{from:'2023-10',rate:0.406,note:'MEC commercial rate, Oct 2023'},{from:'2024-08',rate:0.463,note:'PII MEC Power Billing'},{from:'2025-05',rate:0.497,note:'PII MEC Power Billing'},{from:'2026-02',rate:0.516,note:'PII MEC Power Billing'},{from:'2026-05',rate:0.626,note:'PII MEC Power Billing'},{from:'2026-06',rate:0.672,note:'PII MEC Power Billing'},{from:'2026-09',rate:0.627,note:'PII MEC Power Billing'}],
   wageHist:[{from:'2019-01',wage:3},{from:'2024-10',wage:4},{from:'2025-10',wage:4.5},{from:'2026-10',wage:5}],
   // Pricing (to be provided by Joey)
-  pricePerMT:0, plugPricePerDay:0, plugBilledByCustomer:false, vesselMT:1000
+  pricePerMT:0, plugPricePerDay:0, plugBilledByCustomer:false, vesselMT:1000,
+  // Transshipment quote (one vessel)
+  qMT:1000, qGRT:1000, qMarkup:40, qMode:'all',
+  qItems:[{n:'Tractor truck rental',v:380,b:'box'},{n:'Dockage fee',v:0.1,b:'grttier',min:80,upto:1000},{n:'Line handling',v:400,b:'call'},{n:'Security',v:50,b:'day'},{n:'Light dues',v:100,b:'day'},{n:'Management cost',v:510,b:'day',g:'t'}]
 };
 const KEY='pii-transship-v1';
 let HAD_LOCAL=false, APPDEF=null, APPDEF_STAMP='';
 let S; try{const saved=JSON.parse(localStorage.getItem(KEY)||'{}');HAD_LOCAL=Object.keys(saved).length>0;S=Object.assign(structuredClone(DEFAULTS),saved);
+  (S.qItems||[]).forEach(x=>{if(/management/i.test(x.n)&&!x.g)x.g='t';if(/dockage/i.test(x.n)&&x.b==='grtday'&&+x.v===1.5){x.b='grttier';x.v=0.1;x.min=80;x.upto=1000}});
   if(saved.setpoint==null&&saved.holdKW!=null){S.holdKW=Math.round(saved.holdKW*(30+25)/(30+20)*100)/100}
   if(!Array.isArray(saved.assets)&&saved.dockCost!=null){S.assets[0]={n:'Dock',cost:saved.dockCost,life:saved.dockLife||50,salvage:saved.dockSalvage||0,share:saved.dockShare??100}}
   S.assets.forEach(a=>{if(!a.op)a.op='t'});S.others.forEach(o=>{if(!o.op)o.op=/reefer/i.test(o.n)?'r':'t'});
@@ -388,6 +405,7 @@ function glossary(){const T=[
  ['kWh and MEC rate','kWh is a unit of electricity. The MEC rate is what Marshalls Energy Company charges per kWh.'],
  ['Fully burdened labor','The hourly wage plus social security, permits, leave, food and other costs of each worker.'],
  ['Depreciation','The cost of the dock and equipment spread over the years they are expected to last.'],
+ ['GRT','Gross registered tonnage: the size of a vessel. Dockage is a minimum of $80 a day up to 1,000 GRT, then $0.10 per GRT a day.'],
  ['Break-even','The price or volume where income just covers the cost: no profit, no loss.'],
  ['Margin','What is left from the price after the cost. Shown in dollars and as a % of the price.'],
  ['Fiscal year (FY)','PII\'s year runs 1 October to 30 September. FY2026 is Oct 2025 to Sep 2026.'],
@@ -459,6 +477,68 @@ function totalsTable(lines,total,unit,div){
   return `<div class="tw"><table><thead><tr><th>Element</th><th class="n">Per day</th><th class="n">Per month</th><th class="n">Per year</th><th class="n">${unit}</th></tr></thead>
     <tbody>${lines.map(l=>`<tr><td>${l.n}</td><td class="n">${money(l.v,2)}</td><td class="n" data-tip="${esc(l.dep?money(l.v*S.dockDays)+' a year ÷ 12':money(l.v,2)+' a day × '+S.opDaysMonth+' operating days')}">${money(lineM(l))}</td><td class="n" data-tip="${esc(money(lineM(l))+' a month × 12')}">${money(lineM(l)*12)}</td><td class="n">${money(div?l.v/div:0,2)}</td></tr>`).join('')}</tbody>
     <tfoot><tr><td>Total</td><td class="n">${money(total,2)}</td><td class="n">${money(sumM(lines))}</td><td class="n">${money(sumM(lines)*12)}</td><td class="n">${money(div?total/div:0,2)}</td></tr></tfoot></table></div>`;
+}
+/* ---------- Transshipment quote (one vessel) ---------- */
+const QBASIS={call:'per vessel call',day:'per day',box:'per container',mt:'per MT',grtday:'per GRT per day',grttier:'per day by GRT (minimum)'};
+const ceil5=v=>Math.ceil(v/5-1e-9)*5;
+function quoteCalc(M){
+  const mt=Math.max(0,+S.qMT||0), grt=Math.max(0,+S.qGRT||0), mk=(+S.qMarkup||0)/100;
+  const daysRaw=S.mtPerDay>0?mt/S.mtPerDay:0, days=Math.ceil(daysRaw-1e-9), boxes=Math.ceil(mt/S.mtPerBox-1e-9);
+  const T=M.T, perMT=v=>S.mtPerDay>0?v/S.mtPerDay:0;
+  const tr=[{n:'Labor',rate:perMT(T.lines[0].v),q:mt,unit:'MT',amt:perMT(T.lines[0].v)*mt,t:`${money(T.lines[0].v,2)} labor a day ÷ ${num(S.mtPerDay,0)} MT a day = ${money(perMT(T.lines[0].v),2)} per MT`},
+    {n:'Depreciation',rate:perMT(T.lines[1].v),q:mt,unit:'MT',amt:perMT(T.lines[1].v)*mt,t:`${money(T.lines[1].v,2)} depreciation a day ÷ ${num(S.mtPerDay,0)} MT a day = ${money(perMT(T.lines[1].v),2)} per MT`}];
+  if(T.lines[2].v>0)tr.push({n:'Other daily costs (Considerations)',rate:perMT(T.lines[2].v),q:mt,unit:'MT',amt:perMT(T.lines[2].v)*mt,t:'Other daily transshipment costs from the Considerations tab'});
+  const qty=b=>b==='call'?1:b==='day'?days:b==='box'?boxes:b==='mt'?mt:b==='grtday'?grt*days:0;
+  const unit=b=>b==='call'?'call':b==='day'?(days===1?'day':'days'):b==='box'?(boxes===1?'container':'containers'):b==='mt'?'MT':'GRT-days';
+  const tier=x=>grt<=(+x.upto||0)?(+x.min||0):grt*(+x.v||0);
+  const ot=S.qItems.map((x,i)=>{if(x.b==='grttier'){const d=tier(x);return {i,n:x.n,b:x.b,rate:d,q:days,unit:days===1?'day':'days',amt:d*days,t:(grt<=(+x.upto||0)?`${num(grt,0)} GRT is ${num(+x.upto||0,0)} GRT or less: minimum ${money(+x.min||0,2)} a day`:`${num(grt,0)} GRT × ${money(+x.v||0,2)} = ${money(d,2)} a day`)+` × ${days} days`}}
+    const q=qty(x.b);return {i,n:x.n,b:x.b,rate:+x.v||0,q,unit:unit(x.b),amt:(+x.v||0)*q,t:x.b==='grtday'?`${money(+x.v||0,2)} × ${num(grt,0)} GRT × ${days} days`:`${money(+x.v||0,2)} × ${num(q,0)} ${unit(x.b)}`}});
+  ot.forEach(x=>{x.off=!!S.qItems[x.i].off;x.g=S.qItems[x.i].g==='t'?'t':'o';if(x.off){x.full=x.amt;x.amt=0}});
+  const tx=ot.filter(x=>x.g==='t'), ox=ot.filter(x=>x.g!=='t');
+  const tCost=tr.reduce((t,x)=>t+x.amt,0)+tx.reduce((t,x)=>t+x.amt,0), oCost=ox.reduce((t,x)=>t+x.amt,0), total=tCost+oCost;
+  const opt=(cost,label)=>{const cmt=mt?cost/mt:0,raw=cmt*(1+mk),price=ceil5(raw),amt=price*mt;return {label,cost,cmt,raw,price,amt,margin:amt-cost,mpct:cost?(amt-cost)/cost:0}};
+  return {mt,grt,mk,daysRaw,days,boxes,tr,ot,tx,ox,tNames:['labor','depreciation',...tx.filter(x=>!x.off).map(x=>x.n.toLowerCase())],tCost,oCost,total,only:opt(tCost,'Transshipment only'),all:opt(total,'All-in')};
+}
+function vQuote(M){
+  const Q=quoteCalc(M), sel=S.qMode==='all'?Q.all:Q.only, pm=v=>Q.mt?money(v/Q.mt,2):'—';
+  const optCard=(o,k)=>`<div class="qopt${S.qMode===k?' on':''}"><div class="ph"><h2>${o.label}</h2><button class="btn sm${S.qMode===k?' pri':''}" data-qmode="${k}" aria-pressed="${S.qMode===k}">${S.qMode===k?'Quoting this':'Quote this'}</button></div>
+    <p class="sub" style="margin:0 0 8px">${k==='t'?(Q.tNames.length>2?Q.tNames.slice(0,-1).join(', ')+' and '+Q.tNames.slice(-1):'Labor and depreciation').replace(/^./,c=>c.toUpperCase())+' only. The vessel pays the other charges directly.':'Labor, depreciation and all other transshipment charges in one price.'}</p>
+    ${flow([{l:'Cost per MT',v:money(o.cmt,2),s:k==='t'?'transshipment cost':'all costs',t:k==='t'?Q.tNames.join(' + '):'transshipment cost + other transshipment cost'},'+',{l:'Markup',v:num(Q.mk*100,0)+'%',s:money(o.raw-o.cmt,2)+' per MT'},'=',{l:'Price per MT',v:money(o.price,2),s:'rounded up from '+money(o.raw,2),hl:1,t:money(o.cmt,2)+' × '+num(1+Q.mk,2)+' = '+money(o.raw,2)+', rounded up to the next $5'}])}
+    <div class="qline"><span>Quote for ${num(Q.mt,0)} MT</span><b>${money(o.amt)}</b></div>
+    <div class="qline"><span>Margin</span><b class="${o.margin>=0?'pos':'neg'}" data-tip="${esc(money(o.margin)+' margin ÷ '+money(o.cost)+' cost')}">${money(o.margin)} · ${pct(o.mpct)} of cost</b></div></div>`;
+  const row=(x,cls='')=>x.off?`<tr class="qoff"><td>${esc(x.n)} <span class="pill">not included</span></td><td class="sub">${QBASIS[x.b]}</td><td class="n">${x.b==='call'?'1 call':num(x.q,0)+' '+x.unit}</td><td class="n">${money(x.rate,2)}</td><td class="n" data-tip="${esc('Would be '+money(x.full)+' if included')}">–</td><td class="n">–</td></tr>`:`<tr${cls}><td>${esc(x.n)}</td><td class="sub">${x.b?QBASIS[x.b]:'per MT'}</td><td class="n">${x.b==='call'?'1 call':num(x.q,0)+' '+x.unit}</td><td class="n">${money(x.rate,2)}</td><td class="n" data-tip="${esc(x.t)}">${money(x.amt)}</td><td class="n">${pm(x.amt)}</td></tr>`;
+  return `<div><h1>Transshipment quote</h1><p class="lede">Price one vessel. Enter the tonnage and the boat's GRT; the cost is worked out per MT and marked up to a quote.</p></div>
+  <section class="panel"><div class="ph"><h2>The vessel</h2><span class="sub">at ${num(S.mtPerDay,0)} MT a day and ${num(S.mtPerBox,0)} MT per container (Considerations)</span></div>
+    <div class="fgrid">${field('qMT','Estimated tonnage','MT','any','fish to transship')}${field('qGRT','Boat GRT','GRT','any','gross registered tonnage')}${field('qMarkup','Markup','%','any','standard is 40%')}</div>
+    <div class="bar" style="margin-top:12px;gap:8px"><span class="pill" data-tip="${esc(num(Q.mt,0)+' MT ÷ '+num(S.mtPerDay,0)+' MT a day = '+num(Q.daysRaw,2)+', rounded up to whole days')}">${Q.days} day${Q.days===1?'':'s'} at the dock</span><span class="pill" data-tip="${esc(num(Q.mt,0)+' MT ÷ '+num(S.mtPerBox,0)+' MT per container, rounded up')}">${num(Q.boxes,0)} container${Q.boxes===1?'':'s'}</span></div>
+  </section>
+  <div class="kpis">
+    <div class="kpi k1"><div class="l">Total cost</div><div class="v">${money(Q.total)}</div><div class="s">${pm(Q.total)} per MT · all costs</div></div>
+    <div class="kpi k2"><div class="l">Price per MT</div><div class="v">${money(sel.price,2)}</div><div class="s">${sel.label}</div></div>
+    <div class="kpi k3"><div class="l">Quote</div><div class="v">${money(sel.amt)}</div><div class="s">${num(Q.mt,0)} MT × ${money(sel.price,2)}</div></div>
+    <div class="kpi k4"><div class="l">Margin</div><div class="v ${sel.margin>=0?'pos':'neg'}">${money(sel.margin)}</div><div class="s">${pct(sel.mpct)} of cost</div></div>
+  </div>
+  <h2 class="grp" style="--oc:var(--t2)">Choose what to quote</h2>
+  <div class="g2">${optCard(Q.only,'t')}${optCard(Q.all,'all')}</div>
+  <section class="panel"><div class="ph"><h2>What the cost is made of</h2><span class="sub">hover an amount to see how it is worked out</span></div>
+    <div class="tw"><table><thead><tr><th>Cost</th><th>Basis</th><th class="n">Quantity</th><th class="n">Rate</th><th class="n">Amount</th><th class="n">Per MT</th></tr></thead>
+    <tbody><tr class="qsec"><td colspan="6">Transshipment cost</td></tr>${Q.tr.map(x=>row(x)).join('')}${Q.tx.map(x=>row(x)).join('')}
+    <tr class="qsub"><td colspan="4">Transshipment cost</td><td class="n">${money(Q.tCost)}</td><td class="n">${pm(Q.tCost)}</td></tr>
+    <tr class="qsec"><td colspan="6">Other transshipment cost</td></tr>${Q.ox.map(x=>row(x)).join('')||'<tr><td colspan="6" class="sub">No other costs</td></tr>'}
+    <tr class="qsub"><td colspan="4">Other transshipment cost</td><td class="n">${money(Q.oCost)}</td><td class="n">${pm(Q.oCost)}</td></tr></tbody>
+    <tfoot><tr><td colspan="4">Total cost</td><td class="n">${money(Q.total)}</td><td class="n">${pm(Q.total)}</td></tr></tfoot></table></div>
+  </section>
+  <section class="panel"><div class="ph"><h2>Added costs</h2><button class="btn sm" id="qAdd">Add a line item</button></div>
+    <p class="sub" style="margin:0 0 10px">Tick the costs to include in the quote. Choose whether each one counts in the transshipment cost (part of both quotes) or the other cost (all-in only). Days and containers come from the tonnage above.</p>
+    <div style="display:flex;flex-direction:column;gap:8px">${S.qItems.map((x,i)=>`<div class="qrow${x.off?' off':''}">
+      <label class="qchk" title="Include in the quote"><input type="checkbox" id="qc${i}" data-qi="${i}" data-qf="on"${x.off?'':' checked'} aria-label="Include ${esc(x.n)} in the quote"></label>
+      <div class="inp qn"><input type="text" id="qn${i}" data-qi="${i}" data-qf="n" value="${esc(x.n)}" style="text-align:left" aria-label="Cost name"></div>
+      <div class="inp qv"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qv${i}" data-qi="${i}" data-qf="v" value="${fmtIn(x.v)}" aria-label="Rate"></div>
+      <div class="inp qb"><select id="qb${i}" data-qi="${i}" data-qf="b" aria-label="Charged">${Object.entries(QBASIS).map(([k,l])=>`<option value="${k}"${x.b===k?' selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="inp qg"><select id="qg${i}" data-qi="${i}" data-qf="g" aria-label="Counts in"><option value="o"${x.g!=='t'?' selected':''}>Other cost</option><option value="t"${x.g==='t'?' selected':''}>Transshipment cost</option></select></div>
+      <button class="btn sm" data-qdel="${i}" aria-label="Remove ${esc(x.n)}">Remove</button>
+      ${x.b==='grttier'?`<div class="qtier"><span class="sub">Minimum</span><div class="inp"><span>$</span><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qm${i}" data-qi="${i}" data-qf="min" value="${fmtIn(x.min??0)}" aria-label="Minimum per day"><span>/day</span></div><span class="sub">for boats up to</span><div class="inp"><input type="text" inputmode="decimal" autocomplete="off" class="numin" id="qu${i}" data-qi="${i}" data-qf="upto" value="${fmtIn(x.upto??0)}" aria-label="GRT limit for the minimum"><span>GRT</span></div><span class="sub">above that, the rate × GRT a day</span></div>`:''}</div>`).join('')||'<p class="sub">No other costs yet.</p>'}</div>
+  </section>`;
 }
 function vTrans(M){
   const L=M.L,T=M.T;
@@ -728,7 +808,7 @@ function otherPanel(op){
 /* ---------- Render & events ---------- */
 function render(){
   const M=model();
-  const fn={summary:vSummary,trans:vTrans,reefer:vReefer,pricing:vPricing,settings:vSettings,history:vHistory,histcost:vHistCost,customers:vCustomers,saved:vSaved}[view]||vSummary;
+  const fn={summary:vSummary,trans:vTrans,quote:vQuote,reefer:vReefer,pricing:vPricing,settings:vSettings,history:vHistory,histcost:vHistCost,customers:vCustomers,saved:vSaved}[view]||vSummary;
   const lt=$('#loadedTag');lt.textContent=['history','customers','histcost'].includes(view)?'Actual':loaded?('Loaded: '+loaded.name+(loaded.dirty?' (changed)':'')):'Estimate';
   const active=document.activeElement?.id;const pos=active&&document.activeElement.selectionStart;
   $('#app').innerHTML=`<div class="view">${fn(M)}</div>`;
@@ -754,7 +834,7 @@ $('#app').addEventListener('change',e=>{
     else toast('Set point must be colder than the outside temperature');
     save();render();return}
   if(el.dataset.k){const v=pnum(el.value);if(!isNaN(v)&&v>=0){S[el.dataset.k]=v}else{toast('Enter a number of zero or more');}
-    if(['mtPerDay','mtPerBox','reeferMT','dockDays','periods','periodHours'].includes(el.dataset.k)&&!(S[el.dataset.k]>0)){S[el.dataset.k]=DEFAULTS[el.dataset.k];toast('This value must be above zero; restored the default')}
+    if(['qMT','mtPerDay','mtPerBox','reeferMT','dockDays','periods','periodHours'].includes(el.dataset.k)&&!(S[el.dataset.k]>0)){S[el.dataset.k]=DEFAULTS[el.dataset.k];toast('This value must be above zero; restored the default')}
     if(el.dataset.k==='dwell')S.dwell=Math.max(1,Math.round(S.dwell));
     save();render();}
   else if(el.dataset.a!=null){const a=S.assets[+el.dataset.a],f=el.dataset.f;
@@ -763,6 +843,7 @@ $('#app').addEventListener('change',e=>{
     save();render();}
   else if(el.dataset.o!=null){const o=S.others[+el.dataset.o];o[el.dataset.f]=el.dataset.f==='v'?(pnum(el.value)||0):el.value;save();render();}
   else if(el.dataset.hk){const L=el.dataset.hk==='r'?S.rateHist:S.wageHist,x=L[+el.dataset.hi],f=el.dataset.hf;if(f==='from'||f==='note')x[f]=el.value;else{const v=pnum(el.value);if(isNaN(v)||v<0){toast('Enter a number of zero or more');render();return}x[f]=v}save();render();}
+  else if(el.dataset.qi!=null){const x=S.qItems[+el.dataset.qi],f=el.dataset.qf;if(f==='on'){x.off=!el.checked}else if(['v','min','upto'].includes(f)){const v=pnum(el.value);x[f]=isNaN(v)||v<0?0:v}else if(f==='b'&&el.value==='grttier'){x.b='grttier';if(x.min==null)x.min=80;if(x.upto==null)x.upto=1000}else x[f]=el.value;save();render();}
   else if(el.id==='othChk'){setOthers(el.checked);histShowAll=false;render();toast(el.checked?'Others included':'Others excluded');}
   else if(el.id==='hcFY'){hcFY=el.value;render();}
   else if(el.id==='histFY'){histFY=el.value;histShowAll=false;render();}
@@ -786,6 +867,9 @@ $('#app').addEventListener('click',e=>{
   const hcf=e.target.closest('[data-hcfy]');if(hcf){hcFY=hcFY===hcf.dataset.hcfy?'all':hcf.dataset.hcfy;render();return}
   if(e.target.dataset.hadd){const L=e.target.dataset.hadd==='r'?S.rateHist:S.wageHist;const last=L.slice().sort((a,b)=>a.from<b.from?-1:1).pop()||{};L.push(e.target.dataset.hadd==='r'?{from:new Date().toISOString().slice(0,7),rate:last.rate||S.rate,note:''}:{from:new Date().toISOString().slice(0,7),wage:last.wage||S.hourly});save();render();return}
   if(e.target.dataset.hdel){const L=e.target.dataset.hdel==='r'?S.rateHist:S.wageHist;if(L.length>1){L.splice(+e.target.dataset.hi,1);save();render()}else toast('Keep at least one row');return}
+  if(e.target.dataset.qmode){S.qMode=e.target.dataset.qmode;save();render();return}
+  if(e.target.id==='qAdd'){S.qItems.push({n:'New cost',v:0,b:'call'});save();render();setTimeout(()=>document.getElementById('qn'+(S.qItems.length-1))?.select(),0);return}
+  if(e.target.dataset.qdel!=null){S.qItems.splice(+e.target.dataset.qdel,1);save();render();return}
   if(e.target.id==='repCopy'){copyReport();return}
   if(e.target.dataset.hrep){histRep=e.target.dataset.hrep;histShowAll=false;render();window.scrollTo(0,0);return}
   if(e.target.id==='saveNew'){saveComputation(nm());return}
