@@ -283,7 +283,7 @@ const DEFAULTS={
   pricePerMT:0, plugPricePerDay:0, plugBilledByCustomer:false, vesselMT:1000,
   // Transshipment quote (one vessel)
   qMT:1000, qGRT:1000, qMarkup:40, qMode:'all', qPriceSrc:'cost', qStdT:0, qStdA:0, qCustSel:0,
-  qCust:[{n:'Standard',d:0},{n:'PPF',d:12},{n:'PITP',d:20}],
+  qCust:[{n:'Standard',d:0},{n:'PPF',d:12},{n:'PPF - Bin',d:50},{n:'PITP',d:20}],
   qItems:[{n:'Tractor truck rental',v:380,b:'box'},{n:'Dockage fee',v:0.1,b:'grttier',min:80,upto:1000},{n:'Line handling',v:400,b:'call'},{n:'Security',v:50,b:'day'},{n:'Light dues',v:100,b:'day'}]
 };
 const KEY='pii-transship-v1';
@@ -854,6 +854,7 @@ function otherPanel(op){
 function markTw(){document.querySelectorAll('#app .tw').forEach(t=>{if(t.scrollWidth>t.clientWidth+1&&!t.hasAttribute('tabindex')){t.tabIndex=0;t.setAttribute('role','region');t.setAttribute('aria-label',(t.closest('section,details')?.querySelector('h2,summary')?.textContent||'Table').trim().slice(0,60)+' (scrolls sideways)')}})}
 function fixS(){
   if(!Array.isArray(S.others))S.others=[];if(!Array.isArray(S.qItems))S.qItems=[];
+  if(!S.qBinAdded&&Array.isArray(S.qCust)){if(!S.qCust.some(c=>/bin/i.test(c.n))){const k=S.qCust.findIndex(c=>c.n==='PPF');const at=k>=0?k+1:S.qCust.length;S.qCust.splice(at,0,{n:'PPF - Bin',d:50});if(S.qCustSel>=at)S.qCustSel++}S.qBinAdded=1}
   const sd=S.others.find(o=>o.std);
   if(sd){if(sd.hr==null){sd.hr=Math.round((+sd.v||0)/(1.9*(+S.hoursPerDay||12))*100)/100;sd.oh=90}if(sd.oh==null)sd.oh=90;sd.b='day';sd.v=(+sd.hr||0)*(1+(+sd.oh||0)/100)*(+S.hoursPerDay||0);return}
   const ex=S.others.find(o=>(o.op||'t')==='t'&&/management/i.test(o.n));
